@@ -9,16 +9,18 @@ import com.azortis.azorbot.Main;
 
 import java.util.*;
 
-/* Example Command Class
+/* TODO: Example Command Class
+
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class WikiCreate extends AzorbotCommand {
+// TODO: Replace "CommandName" with name of the command
+public class CommandName extends AzorbotCommand {
     // Constructor
-    public WikiCreate() {
+    public CommandName() {
         super(
                 "CommandName",
                 new String[]{"Alias1", "Alias2", "Alias3"},
@@ -36,6 +38,37 @@ public class WikiCreate extends AzorbotCommand {
         Main.info("Command ran!");
     }
 }
+
+
+
+*/
+
+
+/* TODO: Example Category Class
+
+import com.azortis.azorbot.Main;
+import com.azortis.azorbot.util.AzorbotCommand;
+
+// TODO: Replace "CategoryName" with name of the category
+public class CategoryName extends AzorbotCommand {
+    // Constructor
+    public Wiki() {
+        super(
+                "CategoryName",
+                new String[]{"Alias1", "Alias2"},
+                new String[]{}, // Add role name here. Empty: always / 1+: at least one.
+                "CategoryName command category",
+                "CategoryName <subcommand>",
+                new AzorbotCommand[]{
+                        new SubCommand1(),
+                        new SubCommand2(),
+                        new SubCommand3()
+                }
+        );
+    }
+}
+
+
 
 */
 
@@ -74,14 +107,14 @@ public class AzorbotCommand extends ListenerAdapter {
     }
 
     // Creator sets name, command aliases, requires any of entered roles, adds a category description,
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String category, AzorbotCommand[] subcommands) {
+    public AzorbotCommand(String name, String[] commands, String[] roles, String description, String category, AzorbotCommand[] subcommands) {
         if (commands == null || commands.length == 0) commands = new String[]{name};
         if (roles == null) roles = new String[]{};
         this.name = name;
         this.commands = Arrays.asList(commands);
         this.roles = Arrays.asList(roles);
         this.description = !description.equals("") ? description : "This command has no description";
-        this.needsArguments = needsArguments;
+        this.needsArguments = true;
         this.example = null;
         this.category = category;
         this.subcommands = Arrays.asList(subcommands);
@@ -89,7 +122,7 @@ public class AzorbotCommand extends ListenerAdapter {
 
     // Override me!
     public void handle(List<String> args, GuildMessageReceivedEvent e) {
-        e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten.");
+        e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten!");
     }
 
     // Handles prefix, handles bot users.
