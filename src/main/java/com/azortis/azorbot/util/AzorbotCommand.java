@@ -328,10 +328,13 @@ public class AzorbotCommand extends ListenerAdapter {
     }
 
     /**
-     * Handles: Bot authors, required permissions, argument preprocessing, command check
+     * Handles: Prefix, Bot authors, required permissions, argument preprocessing, command check
      * @param e The guild message event that needs to be processed
      */
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+
+        // Check prefix
+        if (!e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
 
         // Prevent bot user
         if (e.getAuthor().isBot()) return;
@@ -425,6 +428,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param command The command that needs to be checked
      */
     private boolean checkCommand(String command){
+        if (command.equalsIgnoreCase(name)) return true;
         for (String cmd : getCommands()){
             if (command.equalsIgnoreCase(cmd)) {
                 return true;

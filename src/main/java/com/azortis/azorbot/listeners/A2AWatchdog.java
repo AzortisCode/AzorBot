@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class A2AWatchdog extends ListenerAdapter {
-    private static final int defaultThreshold = 30;
+    private static final int defaultThreshold = 80;
     private static final List<String> defaultDefinitions = Arrays.asList(
             "Can someone please help?",
             "Hey I have a question",
@@ -54,6 +54,8 @@ public class A2AWatchdog extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+        if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
+
         ExtractedResult r = FuzzySearch.extractOne(e.getMessage().getContentDisplay(), definitions);
 
         // Make sure the bypass character was not added and score was passed
@@ -71,6 +73,8 @@ public class A2AWatchdog extends ListenerAdapter {
         embed.setDescription("Please do not ask if you can ask your question, just ask!\n" +
                 "We love to help, but if we don't know your question, we cannot help efficiently.");
         embed.addField("Ask To Ask", "[Ask To Ask website](https://dontasktoask.com/)", false);
+        embed.addField("Error", "If you believe this should not happen, " +
+                "please re-write your message with a `#` in front", false);
         embed.send();
     }
 

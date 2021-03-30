@@ -1,7 +1,7 @@
 package com.azortis.azorbot;
 
 import com.azortis.azorbot.commands.*;
-import com.azortis.azorbot.listeners.A2AWatchdog;
+import com.azortis.azorbot.listeners.*;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -60,10 +60,12 @@ public class Main extends ListenerAdapter {
 
         // Listeners
         jda.addEventListener(new A2AWatchdog());
+        jda.addEventListener(new Prefix());
 
         // Commands
         jda.addEventListener(new Ping());
         jda.addEventListener(new Shutdown());
+        jda.addEventListener(new Links());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
