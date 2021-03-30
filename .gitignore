@@ -45,7 +45,7 @@ buildNumber.properties
 .gradle/*
 
 # Build crap
-build/*
+./build/*
 *.bin
 *.env
 *-Definitions.txt
