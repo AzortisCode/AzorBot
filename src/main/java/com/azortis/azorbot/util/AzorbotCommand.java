@@ -18,16 +18,17 @@ import com.azortis.azorbot.util.AzorbotCommand;
 import java.util.List;
 
 // TODO: Replace "CommandName" with name of the command
+import com.azortis.azorbot.util.AzorbotCommand;
+
 public class CommandName extends AzorbotCommand {
-    // Constructor
-    public CommandName() {
+    public CommandName(){
         super(
                 "CommandName",
-                new String[]{"Alias1", "Alias2", "Alias3"},
-                new String[]{}, // Add role name here. Empty: always / 1+: at least one.
+                new String[]{"Alias1", "Alias2", "Alias2"},
+                new String[]{"Role1", "Role2"},
                 "CommandDescription",
-                false, // Weather command needs arguments or not
-                "CommandName run example"
+                true,
+                "!parent CommandName param1"
         );
     }
 
