@@ -12,11 +12,9 @@ public class Shutdown extends AzorbotCommand {
     public Shutdown() {
         super(
                 "Shutdown",
-                new String[]{"x", "sd", "kill"},
-                new String[]{}, // Add role name here. Empty: always / 1+: at least one.
-                "Shuts down the bot",
-                false, // Weather command needs arguments or not
-                null
+                new String[]{"x", "sd", "kill", "stop", "exit", "die"},
+                new String[]{"Admin", "Developer"}, // Add role name here. Empty: always / 1+: at least one.
+                "Shuts down the bot"
         );
     }
 

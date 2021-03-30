@@ -8,6 +8,7 @@ import com.azortis.azorbot.util.AzorbotEmbed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Commands extends AzorbotCommand {
 
@@ -19,10 +20,7 @@ public class Commands extends AzorbotCommand {
         super(
                 "commands",
                 new String[]{"commands", "command", "cmd", "help", "?"},
-                new String[]{}, // Always permitted if empty. User must have at least one if specified.
-                "Sends the command help page (this one)",
-                false,
-                null
+                "Sends the command help page (this one)"
         );
         setCommands(processCMDs(jda));
     }
@@ -43,6 +41,7 @@ public class Commands extends AzorbotCommand {
 
         // Loop over and add all commands with their respective information
         for (AzorbotCommand command : botCommands) {
+            if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
             if (command.getCommands().size() < 2) {
                 embed.addField(cmd, "`*no aliases*`\n" + command.getDescription(), true);

@@ -12,12 +12,7 @@ public class Ping extends AzorbotCommand {
     public Ping() {
         super(
                 "Ping",
-                new String[]{},
-                new String[]{}, // Add role name here. Empty: always / 1+: at least one.
-                "Pong",
-                false, // Weather command needs arguments or not
-                ""
-                // For an example for a category, see command.Wiki
+                "Pong"
         );
     }
 

@@ -70,61 +70,267 @@ public class CategoryName extends AzorbotCommand {
 
 
 */
-
+@Getter
 public class AzorbotCommand extends ListenerAdapter {
 
-    @Getter
     public String name;
-    @Getter
     public List<String> commands;
-    @Getter
     public List<String> roles;
-    @Getter
     public String description;
-    @Getter
     public boolean needsArguments;
-    @Getter
     public String example;
-    @Getter
-    public String category;
-    @Getter
+    public boolean category;
     public List<AzorbotCommand> subcommands;
 
-
-    // Creator sets name, command aliases, requires any one of entered roles, and adds a description and example
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String example) {
-        if (commands == null || commands.length == 0) commands = new String[]{name};
-        if (roles == null) roles = new String[]{};
+    /**
+     * Command creator
+     * @param name Name of the command
+     * @param description Description of the command
+     */
+    public AzorbotCommand(String name, String description) {
+        // Name
         this.name = name;
-        this.commands = Arrays.asList(commands);
-        this.roles = Arrays.asList(roles);
+
+        // Description
         this.description = !description.equals("") ? description : "This command has no description";
-        this.needsArguments = needsArguments;
-        this.example = example;
-        this.category = null;
+
+        // Other
+        this.commands = new ArrayList<>(Collections.singleton(name));
+        this.roles = new ArrayList<>();
+        this.needsArguments = false;
+        this.example = null;
+        this.category = false;
         this.subcommands = null;
     }
 
-    // Creator sets name, command aliases, requires any of entered roles, adds a category description,
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description, String category, AzorbotCommand[] subcommands) {
-        if (commands == null || commands.length == 0) commands = new String[]{name};
-        if (roles == null) roles = new String[]{};
+    /**
+     * Command creator
+     * @param name Name of the command
+     * @param commands Array of aliases for the command
+     * @param description Description of the command
+     */
+    public AzorbotCommand(String name, String[] commands, String description) {
+        // Name
         this.name = name;
-        this.commands = Arrays.asList(commands);
-        this.roles = Arrays.asList(roles);
+
+        // Commands
+        if (commands == null || commands.length == 0) {
+            this.commands = new ArrayList<>(Collections.singleton(name));
+        } else {
+            this.commands = Arrays.asList(commands);
+        }
+
+        // Description
         this.description = !description.equals("") ? description : "This command has no description";
-        this.needsArguments = true;
+
+        // Other
+        this.roles = new ArrayList<>();
+        this.needsArguments = false;
         this.example = null;
-        this.category = category;
-        this.subcommands = Arrays.asList(subcommands);
+        this.category = false;
+        this.subcommands = null;
     }
 
-    // Override me!
+    /**
+     * Command creator
+     * @param name Name of the command
+     * @param commands Array of aliases for the command
+     * @param roles Array of roles the command requires (only one is enough for permission)
+     * @param description Description of the command
+     */
+    public AzorbotCommand(String name, String[] commands, String[] roles, String description) {
+        // Name
+        this.name = name;
+
+        // Commands
+        if (commands == null || commands.length == 0) {
+            this.commands = new ArrayList<>(Collections.singleton(name));
+        } else {
+            this.commands = Arrays.asList(commands);
+        }
+
+        // Roles
+        if (roles == null) {
+            this.roles = new ArrayList<>();
+        } else {
+            this.roles = Arrays.asList(roles);
+        }
+
+        // Description
+        this.description = !description.equals("") ? description : "This command has no description";
+
+        // Other
+        this.needsArguments = false;
+        this.example = null;
+        this.category = false;
+        this.subcommands = null;
+    }
+
+    /**
+     * Command creator
+     * @param name Name of the command
+     * @param commands Array of aliases for the command
+     * @param roles Array of roles the command requires (only one is enough for permission)
+     * @param description Description of the command
+     * @param needsArguments Toggle for requiring arguments (helps with preventing argument-less calls)
+     */
+    public AzorbotCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments) {
+        // Name
+        this.name = name;
+
+        // Commands
+        if (commands == null || commands.length == 0) {
+            this.commands = new ArrayList<>(Collections.singleton(name));
+        } else {
+            this.commands = Arrays.asList(commands);
+        }
+
+        // Roles
+        if (roles == null) {
+            this.roles = new ArrayList<>();
+        } else {
+            this.roles = Arrays.asList(roles);
+        }
+
+        // Description
+        this.description = !description.equals("") ? description : "This command has no description";
+
+        // Needs arguments
+        this.needsArguments = needsArguments;
+
+        // Other
+        this.example = null;
+        this.category = false;
+        this.subcommands = null;
+    }
+
+    /**
+     * Command creator (with example)
+     * @param name Name of the command
+     * @param commands Array of aliases for the command
+     * @param roles Array of roles the command requires (only one is enough for permission)
+     * @param description Description of the command
+     * @param needsArguments Toggle for requiring arguments (helps with preventing argument-less calls)
+     * @param example Example of command usage.
+     */
+    public AzorbotCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String example) {
+        // Name
+        this.name = name;
+
+        // Commands
+        if (commands == null || commands.length == 0) {
+            this.commands = new ArrayList<>(Collections.singleton(name));
+        } else {
+            this.commands = Arrays.asList(commands);
+        }
+
+        // Roles
+        if (roles == null) {
+            this.roles = new ArrayList<>();
+        } else {
+            this.roles = Arrays.asList(roles);
+        }
+
+        // Description
+        this.description = !description.equals("") ? description : "This command has no description";
+
+        // Needs arguments
+        this.needsArguments = needsArguments;
+
+        // Example
+        this.example = example;
+
+        // Other
+        this.category = false;
+        this.subcommands = null;
+    }
+
+    /**
+     * Command category creator
+     * @param name Name of the category
+     * @param commands Array of command aliases for this category
+     * @param description Description of the category
+     * @param subcommands Array of commands that this category contains
+     */
+    public AzorbotCommand(String name, String[] commands, String description, AzorbotCommand[] subcommands) {
+        // Name
+        this.name = name;
+
+        // Commands
+        if (commands == null || commands.length == 0) {
+            this.commands = new ArrayList<>(Collections.singleton(name));
+        } else {
+            this.commands = Arrays.asList(commands);
+        }
+
+        // Description
+        this.description = !description.equals("") ? description : "This category has no description";
+
+        // Subcommands
+        this.subcommands = Arrays.asList(subcommands);
+
+        // Category
+        this.category = true;
+
+        // Other
+        this.roles = new ArrayList<>();
+        this.example = null;
+        this.needsArguments = true;
+    }
+
+    /**
+     * Command category creator
+     * @param name Name of the category
+     * @param commands Array of command aliases for this category
+     * @param roles Roles required for accessing this category
+     * @param description Description of the category
+     * @param subcommands Array of commands that this category contains
+     */
+    public AzorbotCommand(String name, String[] commands, String[] roles, String description, AzorbotCommand[] subcommands) {
+        // Name
+        this.name = name;
+
+        // Commands
+        if (commands == null || commands.length == 0) {
+            this.commands = new ArrayList<>(Collections.singleton(name));
+        } else {
+            this.commands = Arrays.asList(commands);
+        }
+
+        // Roles
+        if (roles == null) {
+            this.roles = new ArrayList<>();
+        } else {
+            this.roles = Arrays.asList(roles);
+        }
+
+        // Description
+        this.description = !description.equals("") ? description : "This category has no description";
+
+        // Subcommands
+        this.subcommands = Arrays.asList(subcommands);
+
+        // Category
+        this.category = true;
+
+        // Other
+        this.example = null;
+        this.needsArguments = true;
+    }
+
+    /**
+     * Override me!
+     * @param args Command arguments
+     * @param e Guild message even that needs to be processed
+     */
     public void handle(List<String> args, GuildMessageReceivedEvent e) {
         e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten!");
     }
 
-    // Handles prefix, handles bot users.
+    /**
+     * Handles: Bot authors, required permissions, argument preprocessing, command check
+     * @param e The guild message event that needs to be processed
+     */
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
         // Prevent bot user
@@ -143,10 +349,13 @@ public class AzorbotCommand extends ListenerAdapter {
         continueToHandle(args, e);
     }
 
-    // Handle
+    /**
+     * Handle: command permissions (again, but required for some instances. Not particularly slow)
+     * parameters, subcommands, category mentions, etc.
+     * @param args Arguments as passed in the original command (preprocessed list)
+     * @param e Guild message event that needs to be processed
+     */
     public void continueToHandle(List<String> args, GuildMessageReceivedEvent e){
-
-
 
         // Check for permissions (again, but required when passing to here directly)
         if (getRoles() != null && getRoles().size() != 0){
@@ -159,7 +368,7 @@ public class AzorbotCommand extends ListenerAdapter {
         // If it doesn't require arguments just pass it with null
         if (!needsArguments) {
             handle(null, e);
-        } else if (getCategory() != null) {
+        } else if (category) {
             // If it's a category do:
             if (args.size() < 2) {
                 sendCategoryHelp(e.getMessage());
@@ -188,8 +397,11 @@ public class AzorbotCommand extends ListenerAdapter {
         }
     }
 
-    /* Checks if the author has any of the specified roles, or if the ID matches */
-    private boolean noPermission(List<Role> roles, String ID){
+    /**
+     * Checks if the author has any of the specified roles, or if the ID matches
+     * @param roles The list of roles that the user has
+     * @param ID The user ID that needs to be checked for specific perms*/
+    public boolean noPermission(List<Role> roles, String ID){
         if (getRoles() != null && getRoles().size() != 0) {
             for (Role userRole : roles) {
                 String userRoleName = userRole.getName();
@@ -208,7 +420,10 @@ public class AzorbotCommand extends ListenerAdapter {
         return true;
     }
 
-    /* Checks if the specified command is this command */
+    /**
+     * Checks if the specified command is this command
+     * @param command The command that needs to be checked
+     */
     private boolean checkCommand(String command){
         for (String cmd : getCommands()){
             if (command.equalsIgnoreCase(cmd)) {
@@ -218,7 +433,10 @@ public class AzorbotCommand extends ListenerAdapter {
         return false;
     }
 
-    /* Sends a help message for this command's usage in the specified message's channel */
+    /**
+     * Sends a help message for this command's usage in the specified message's channel
+     * @param message The message object as delivered with the original event
+     */
     public void sendHelp(Message message) {
         AzorbotEmbed embed = new AzorbotEmbed(getName() + " Command Usage", message);
 
@@ -246,12 +464,22 @@ public class AzorbotCommand extends ListenerAdapter {
         embed.send(message);
     }
 
-    /* Sends a category help message for this category in the channel of the specified message */
+    /**
+     * Sends a category help message for this category in the channel of the specified message
+     * @param message The message object as delivered with the original event
+     */
     protected void sendCategoryHelp(Message message) {
+
+        // Make a new embed
         AzorbotEmbed embed = new AzorbotEmbed(getName() + " Command Usage", message);
 
+        // Loop over all commands and add fields for all of them
         getSubcommands().forEach(command -> {
+
+            // Collect command
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
+
+            // Process command properties
             if (command.getCommands().size() < 2) {
                 embed.addField(cmd, "`*no aliases*`\n" + command.getDescription(), true);
             } else {

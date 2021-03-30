@@ -1,6 +1,7 @@
 package com.azortis.azorbot;
 
 import com.azortis.azorbot.commands.*;
+import com.azortis.azorbot.listeners.A2AWatchdog;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -16,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.security.auth.login.LoginException;
-import java.io.File;
 import java.net.http.WebSocket;
 
 public class Main extends ListenerAdapter {
@@ -57,8 +58,12 @@ public class Main extends ListenerAdapter {
         // Log incoming messages
         jda.addEventListener(new Main());
 
+        // Listeners
+        jda.addEventListener(new A2AWatchdog());
+
         // Commands
         jda.addEventListener(new Ping());
+        jda.addEventListener(new Shutdown());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
@@ -88,7 +93,7 @@ public class Main extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent e) {
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
         if (!e.getAuthor().isBot()) {
             // Updates configurations
             Main.LOGGER.info(e.getAuthor().getName() + ": " + e.getMessage().getContentDisplay());

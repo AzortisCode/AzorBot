@@ -12,10 +12,31 @@ import java.util.concurrent.TimeUnit;
 
 public class AzorbotEmbed extends EmbedBuilder {
     private final Message message;
-    /*
-        Creates a new default AzorbotEmbed object.
-        String `title` - the title of the embed
-        String `name` - the name greeted in the top of the embed
+
+    /**
+     * Creates a default, empty, AzorbotEmbed object.
+     */
+    public AzorbotEmbed() {
+        this.message = null;
+        this.setColor(Color.decode(Main.botColor))
+                .setFooter(Main.botCompany);
+    }
+
+    /**
+     * Creates a default AzorbotEmbed object.
+     * @param title The title of the embed
+     */
+    public AzorbotEmbed(String title) {
+        this.message = null;
+        this.setTitle(title)
+                .setColor(Color.decode(Main.botColor))
+                .setFooter(Main.botCompany);
+    }
+
+    /**
+     * Creates a default AzorbotEmbed object.
+     * @param title The title of the embed
+     * @param name The name greeted in the top of the embed
      */
     public AzorbotEmbed(String title, String name) {
         this.message = null;
@@ -24,10 +45,11 @@ public class AzorbotEmbed extends EmbedBuilder {
                 .setColor(Color.decode(Main.botColor))
                 .setFooter(Main.botCompany);
     }
-    /*
-        Creates a new default AzorbotEmbed object.
-        String `title` - the title of the embed
-        String `message` - the message used to greet the user with
+
+    /**
+     * Creates a default AzorbotEmbed object.
+     * @param title The title of the embed
+     * @param message Message used to greet used and make further command easier
      */
     public AzorbotEmbed(String title, Message message) {
         this.message = message;
@@ -36,20 +58,11 @@ public class AzorbotEmbed extends EmbedBuilder {
                 .setColor(Color.decode(Main.botColor))
                 .setFooter(Main.botCompany);
     }
-    /*
-        Creates a new default AzorbotEmbed object.
-        String `title` - the title of the embed
-     */
-    public AzorbotEmbed(String title) {
-        this.message = null;
-        this.setTitle(title)
-                .setColor(Color.decode(Main.botColor))
-                .setFooter(Main.botCompany);
-    }
-    /*
-        Creates a new shortened AzorbotEmbed object.
-        String `title` - the title of the embed
-        boolean `useShort` - toggles footer
+
+    /**
+     * Creates a default AzorbotEmbed object.
+     * @param title The title of the embed
+     * @param useShort Toggles if there should be a mention of the bot company
      */
     public AzorbotEmbed(String title, boolean useShort){
         this.message = null;
@@ -58,70 +71,107 @@ public class AzorbotEmbed extends EmbedBuilder {
             this.setFooter(Main.botCompany);
         }
     }
-    /*
-        Creates a new default AzorbotEmbed object.
-        This has no title (unless set later)
+
+
+    /**
+     * Send the embed in the channel of the original message, if passed with the initial command.
      */
-    public AzorbotEmbed() {
-        this.message = null;
-        this.setColor(Color.decode(Main.botColor))
-                .setFooter(Main.botCompany);
-    }
-
-    // Send embed in the channel of the message already saved. Does not send if no message was specified.
     public void send(){
-        this.send(this.message, null, false, 0);
+        this.send(this.message, null, false, 0, null);
     }
 
-    // Send embed in the channel of the message already saved. Does not send if no message was specified. Adds reactions
+    /**
+     * Send the embed in the channel of the original message, if passed with the initial command, with added reactions
+     * @param reactions And add these reactions to the message
+     */
     public void send(List<String> reactions){
         this.send(this.message, null, false, 0, reactions);
     }
 
-    // Send embed in `channel`
+    /**
+     * Send the embed
+     * @param channel The channel where the embed is sent to
+     */
     public void send(TextChannel channel) {
-        this.send(null, channel, false, 0);
+        this.send(null, channel, false, 0, null);
     }
-    // Send embed in `channel` with reactions `reactions`
+
+    /**
+     * Send the embed 
+     * @param channel The channel where the embed is sent to
+     * @param reactions And add these reactions to the message
+     */
     public void send(TextChannel channel, List<String> reactions) {
         this.send(null, channel, false, 0, reactions);
     }
 
-    // Send embed in channel of `message`
+    /**
+     * Send the embed
+     * @param message In the channel of this message
+     */
     public void send(Message message) {
         this.send(message, false);
     }
-    // Send embed in channel of `message` with reactions `reactions`
+
+    /**
+     * Send the embed 
+     * @param message In the channel of this message
+     * @param reactions And add these reactions to the message
+     */
     public void send(Message message, List<String> reactions) {
         this.send(message, false, reactions);
     }
 
 
-    // Send embed in channel of `message` and delete original if `deletesMSG`
+    /**
+     * Send the embed
+     * @param message In the channel of this message
+     * @param deleteMSG And delete the specified message
+     */
     public void send(Message message, boolean deleteMSG) {
         this.send(message, deleteMSG, 0);
     }
-    // Send embed in channel of `message` and delete original if `deletesMSG` with reactions `reactions`
+
+    /**
+     * Send the embed 
+     * @param message In the channel of this message
+     * @param deleteMSG And delete the specified message
+     * @param reactions And add these reactions to the message
+     */
     public void send(Message message, boolean deleteMSG, List<String> reactions) {
         this.send(message, deleteMSG, 0, reactions);
     }
 
 
-    // Send embed in channel of `message` and delete original if `deleteMSG` after `deleteAfterMS`
+    /**
+     * Send the embed
+     * @param message In the channel of this message
+     * @param deleteMSG And delete the specified message
+     * @param deleteAfterMS After X ms
+     */
     public void send(Message message, boolean deleteMSG, int deleteAfterMS) {
-        this.send(message, null, deleteMSG, deleteAfterMS);
+        this.send(message, null, deleteMSG, deleteAfterMS, null);
     }
-    // Send embed in channel of `message` and delete original if `deleteMSG` after `deleteAfterMS` with reactions `reactions`
+
+    /**
+     * Send the embed 
+     * @param message In the channel of this message
+     * @param deleteMSG And delete the specified message
+     * @param deleteAfterMS After X ms
+     * @param reactions And add these reactions to the message
+     */
     public void send(Message message, boolean deleteMSG, int deleteAfterMS, List<String> reactions) {
         this.send(message, null, deleteMSG, deleteAfterMS, reactions);
     }
 
-
-    // Send embed in channel of `message` (if null, send in `channel` instead), delete if `deleteMSG` after `deleteAfterMS`
-    public void send(Message message, TextChannel channel, boolean deleteMSG, int deleteAfterMS) {
-        send(message, channel, deleteMSG, deleteAfterMS, null);
-    }
-    // Send embed in channel of `message` (if null, send in `channel` instead), delete if `deleteMSG` after `deleteAfterMS`, with reactions `reactions`
+    /**
+     * Send the embed
+     * @param message In the channel of this message
+     * @param channel Or, if message is null, in this channel
+     * @param deleteMSG And delete the message
+     * @param deleteAfterMS After X ms
+     * @param reactions And add these reactions to the message
+     */
     public void send(Message message, TextChannel channel, boolean deleteMSG, int deleteAfterMS, List<String> reactions) {
         if (reactions == null) reactions = new ArrayList<>();
         if (message == null && channel == null) {
