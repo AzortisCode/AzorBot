@@ -21,6 +21,6 @@ public class Shutdown extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e) {
-        Main.info("Command ran!");
+        Main.shutdown();
     }
 }

@@ -29,6 +29,10 @@ public class Links extends AzorbotCommand {
                         "[Wiki](https://docs.azortis.com/)\n" +
                         "[Spigot](https://www.spigotmc.org/threads/orbis-dimension-engine.493384/)",
                 false
+        ).addField(
+                "Server Optimization",
+                "[YouHaveTrouble's Minecraft Server Optimization Guide](https://github.com/YouHaveTrouble/minecraft-optimization)",
+                false
         );
         embed.send();
     }
