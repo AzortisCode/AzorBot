@@ -28,7 +28,6 @@ public class CommandName extends AzorbotCommand {
                 "CommandDescription",
                 false, // Weather command needs arguments or not
                 "CommandName run example"
-                // For an example for a category, see command.Wiki
         );
     }
 

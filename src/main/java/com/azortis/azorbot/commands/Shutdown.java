@@ -1,29 +1,28 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class Ping extends AzorbotCommand {
+// TODO: Replace "CommandName" with name of the command
+public class Shutdown extends AzorbotCommand {
     // Constructor
-    public Ping() {
+    public Shutdown() {
         super(
-                "Ping",
-                new String[]{},
+                "Shutdown",
+                new String[]{"x", "sd", "kill"},
                 new String[]{}, // Add role name here. Empty: always / 1+: at least one.
-                "Pong",
+                "Shuts down the bot",
                 false, // Weather command needs arguments or not
-                ""
-                // For an example for a category, see command.Wiki
+                null
         );
     }
 
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e) {
-        new AzorbotEmbed("Pong!", true).send(e.getChannel());
+        Main.info("Command ran!");
     }
 }
