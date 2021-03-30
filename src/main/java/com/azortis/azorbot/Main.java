@@ -1,8 +1,7 @@
 package com.azortis.azorbot;
 
-import com.azortis.azorbot.commands.Commands;
+import com.azortis.azorbot.commands.*;
 import lombok.Getter;
-import lombok.NonNull;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -50,10 +49,14 @@ public class Main extends ListenerAdapter {
         jda.getPresence().setStatus(OnlineStatus.ONLINE);
         jda.getPresence().setActivity(Activity.watching("over Azortis: `/help`"));
 
+
         /// Listener Registrar
 
         // Log incoming messages
         jda.addEventListener(new Main());
+
+        // Commands
+        jda.addEventListener(new Ping());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
