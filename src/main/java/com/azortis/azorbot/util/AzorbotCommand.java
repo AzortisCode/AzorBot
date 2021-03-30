@@ -28,7 +28,7 @@ public class CommandName extends AzorbotCommand {
                 new String[]{"Role1", "Role2"},
                 "CommandDescription",
                 true,
-                "!parent CommandName param1"
+                "parent CommandName param1"
         );
     }
 
@@ -383,6 +383,10 @@ public class AzorbotCommand extends ListenerAdapter {
                 Main.info(subs.toString());
                 // Pass to subcommands
                 for (AzorbotCommand sub : getSubcommands()) {
+                    if (sub.getName().equalsIgnoreCase(args.get(1))){
+                        sub.continueToHandle(args.subList(1, args.size()), e);
+                        return;
+                    }
                     for (String commandAlias : sub.getCommands()){
                         if (commandAlias.equalsIgnoreCase(args.get(1))){
                             sub.continueToHandle(args.subList(1, args.size()), e);

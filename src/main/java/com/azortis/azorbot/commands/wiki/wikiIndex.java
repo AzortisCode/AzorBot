@@ -10,7 +10,7 @@ public class wikiIndex extends AzorbotCommand {
                 null,
                 "Prints the index of the entered wiki",
                 true,
-                "!wiki index Orbis"
+                "wiki index Orbis"
         );
     }
 }
