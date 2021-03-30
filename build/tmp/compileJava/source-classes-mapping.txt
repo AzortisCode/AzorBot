@@ -4,5 +4,7 @@ com/azortis/azorbot/commands/Commands.java
  com.azortis.azorbot.commands.Commands
 com/azortis/azorbot/util/AzorbotEmbed.java
  com.azortis.azorbot.util.AzorbotEmbed
+com/azortis/azorbot/commands/Ping.java
+ com.azortis.azorbot.commands.Ping
 com/azortis/azorbot/Main.java
  com.azortis.azorbot.Main
