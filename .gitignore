@@ -41,7 +41,8 @@ data/wikis
 release.properties
 buildNumber.properties
 
-# Maven crap
-# https://github.com/takari/maven-wrapper#usage-without-binary-jar
-.mvn/wrapper/maven-wrapper.jar
-.mvn/timing.properties
+# Gradle crap
+.gradle/*
+
+# Build crap
+build/*
