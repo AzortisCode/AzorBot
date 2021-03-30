@@ -16,7 +16,7 @@ public class Commands extends AzorbotCommand {
     private AzorbotCommand[] botCommands = null;
 
     // Constructor
-    public Commands(JDA jda) {
+    public Commands(JDA jda){
         super(
                 "commands",
                 new String[]{"command", "cmd", "help", "?"},
@@ -27,7 +27,7 @@ public class Commands extends AzorbotCommand {
 
     // Handle
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e) {
+    public void handle(List<String> args, GuildMessageReceivedEvent e){
 
         // Init embed
         AzorbotEmbed embed = new AzorbotEmbed("༼ つ ◕_◕ ༽つ **" + Main.botName + " Info Page!**", e.getMessage());
@@ -40,10 +40,10 @@ public class Commands extends AzorbotCommand {
         );
 
         // Loop over and add all commands with their respective information
-        for (AzorbotCommand command : botCommands) {
+        for (AzorbotCommand command : botCommands){
             if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
-            if (command.getCommands().size() < 2) {
+            if (command.getCommands().size() < 2){
                 embed.addField(cmd, "`*no aliases*`\n" + command.getDescription(), true);
             } else {
                 StringBuilder body = new StringBuilder();
@@ -81,16 +81,16 @@ public class Commands extends AzorbotCommand {
 
     /// Other functions
     // Sets the commands
-    public void setCommands(List<AzorbotCommand> commands) {
+    public void setCommands(List<AzorbotCommand> commands){
         botCommands = commands.toArray(new AzorbotCommand[0]);
     }
 
     // Gets all listeners of the specified JDA
-    public List<AzorbotCommand> processCMDs(JDA jda) {
+    public List<AzorbotCommand> processCMDs(JDA jda){
         List<AzorbotCommand> foundCommands = new ArrayList<>();
         jda.getRegisteredListeners().forEach(c -> {
 
-            if (c instanceof AzorbotCommand && c.getClass().getPackageName().contains(".commands")) {
+            if (c instanceof AzorbotCommand && c.getClass().getPackageName().contains(".commands")){
                 foundCommands.add((AzorbotCommand) c);
             }
         });

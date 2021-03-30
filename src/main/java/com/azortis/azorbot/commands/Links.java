@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Links extends AzorbotCommand {
 
-    public Links() {
+    public Links(){
         super(
                 "Links",
                 new String[]{"Link", "URL"},
@@ -21,7 +21,7 @@ public class Links extends AzorbotCommand {
 
     // Handle
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e) {
+    public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("Here you go!", e.getMessage());
         embed.addField(
                 "Orbis",

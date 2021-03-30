@@ -48,7 +48,7 @@ public class FileManager {
         Scanner reader;
         try {
             reader = new Scanner(file);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e){
             Main.error("Failed creating fileScanner");
             e.printStackTrace();
             return null;
@@ -57,14 +57,14 @@ public class FileManager {
         // Read from file
         List<String> file = new ArrayList<>();
         try {
-            while (reader.hasNextLine()) {
+            while (reader.hasNextLine()){
                 file.add(reader.nextLine());
             }
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e){
             Main.error("Not found next line to write");
             e.printStackTrace();
             return null;
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException e){
             Main.error("");
             e.printStackTrace();
             return null;
@@ -86,23 +86,23 @@ public class FileManager {
      *
      * @return boolean value based on params and file creation / checks
      */
-    public boolean checkExists(boolean createIfNot, boolean returnCreationInfo) {
+    public boolean checkExists(boolean createIfNot, boolean returnCreationInfo){
 
         // Check if the file exists
-        if (!file.exists()) {
+        if (!file.exists()){
 
             // Create if should create
-            if (createIfNot) {
+            if (createIfNot){
                 try {
 
                     // If new file was properly created
-                    if (file.createNewFile()) {
+                    if (file.createNewFile()){
                         Main.info("Created blank definitions file for A2A Watchdog");
 
                         // Return if asked
                         return returnCreationInfo;
                     }
-                } catch (IOException e) {
+                } catch (IOException e){
                     Main.error("While creating definitions file for A2A Watchdog");
                     e.printStackTrace();
                     // Return that file failed to create
@@ -135,7 +135,7 @@ public class FileManager {
         FileWriter writer;
         try {
             writer = new FileWriter(file);
-        } catch (IOException e) {
+        } catch (IOException e){
             Main.error("Failed creating fileWriter");
             e.printStackTrace();
             return false;
@@ -146,7 +146,7 @@ public class FileManager {
         in.forEach(line -> {
             try {
                 writer.write(line + "\n");
-            } catch (IOException e) {
+            } catch (IOException e){
                 Main.error("Failed writing a line to file");
                 e.printStackTrace();
                 success.set(false);
@@ -156,7 +156,7 @@ public class FileManager {
         // Close writer
         try {
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException e){
             Main.error("Failed closing writer");
             e.printStackTrace();
             return false;

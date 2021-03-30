@@ -9,7 +9,7 @@ import java.util.List;
 // TODO: Replace "CommandName" with name of the command
 public class Shutdown extends AzorbotCommand {
     // Constructor
-    public Shutdown() {
+    public Shutdown(){
         super(
                 "Shutdown",
                 new String[]{"x", "sd", "kill", "stop", "exit", "die"},
@@ -20,7 +20,7 @@ public class Shutdown extends AzorbotCommand {
 
     // Handle
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e) {
+    public void handle(List<String> args, GuildMessageReceivedEvent e){
         Main.shutdown();
     }
 }

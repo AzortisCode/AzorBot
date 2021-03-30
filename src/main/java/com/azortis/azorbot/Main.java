@@ -37,7 +37,7 @@ public class Main extends ListenerAdapter {
     private static JDA      jda;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         // Try logging in
         if (!login()) return;
@@ -97,15 +97,15 @@ public class Main extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-        if (!e.getAuthor().isBot()) {
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
+        if (!e.getAuthor().isBot()){
             // Updates configurations
             Main.LOGGER.info(e.getAuthor().getName() + ": " + e.getMessage().getContentDisplay());
         }
     }
 
     @Override
-    public void onReady(@NotNull ReadyEvent e) {
+    public void onReady(@NotNull ReadyEvent e){
         LOGGER.info("{} IS FUCKING READY", botName);
     }
 

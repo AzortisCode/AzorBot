@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Ping extends AzorbotCommand {
     // Constructor
-    public Ping() {
+    public Ping(){
         super(
                 "Ping",
                 "Pong"
@@ -18,7 +18,7 @@ public class Ping extends AzorbotCommand {
 
     // Handle
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e) {
+    public void handle(List<String> args, GuildMessageReceivedEvent e){
         new AzorbotEmbed("Pong!", true).send(e.getChannel());
     }
 }

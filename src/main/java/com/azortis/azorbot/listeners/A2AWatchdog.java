@@ -48,12 +48,12 @@ public class A2AWatchdog extends ListenerAdapter {
     /**
      * Creates a new A2A Watchdog
      */
-    public A2AWatchdog() {
+    public A2AWatchdog(){
         getSetDefinitions();
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
 
         ExtractedResult r = FuzzySearch.extractOne(e.getMessage().getContentDisplay(), definitions);
@@ -85,7 +85,7 @@ public class A2AWatchdog extends ListenerAdapter {
     private void getSetDefinitions(){
 
         // Make sure file exists
-        if (!file.checkExists(true, false)) {
+        if (!file.checkExists(true, false)){
 
             // If not, create a new default definitions file
             Main.info("Created new definitions file with default definitions");
