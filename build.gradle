@@ -21,6 +21,7 @@ repositories {
 dependencies {
     compile "net.dv8tion:JDA:$jdaVersion"
     compile("ch.qos.logback:logback-classic:1.2.3")
+    compile 'io.github.cdimascio:java-dotenv:3.0.0'
 }
 
 compileJava.options.encoding = 'UTF-8'

@@ -12,6 +12,7 @@
     <orderEntry type="module" module-name="AzorBot.main" />
     <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_252" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.cdimascio:java-dotenv:3.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.projectlombok:lombok:1.18.16" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:16.0.1" level="project" />
@@ -21,6 +22,7 @@
     <orderEntry type="library" name="Gradle: club.minnced:opus-java:pom:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.10" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.1.0" level="project" />
