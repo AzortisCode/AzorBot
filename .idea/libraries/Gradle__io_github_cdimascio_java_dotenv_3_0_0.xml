@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.github.cdimascio:java-dotenv:3.0.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.cdimascio/java-dotenv/3.0.0/2d2122c2cb134b97665453109aed3ecf7e06d3d4/java-dotenv-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.cdimascio/java-dotenv/3.0.0/c437358bb0724a078a900e143cb2fa17a19011d/java-dotenv-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
