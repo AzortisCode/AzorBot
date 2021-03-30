@@ -13,8 +13,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.security.auth.login.LoginException;
+import java.io.File;
 import java.net.http.WebSocket;
 
 public class Main extends ListenerAdapter {
@@ -27,17 +29,17 @@ public class Main extends ListenerAdapter {
     public static       String botName;
     public static       Long   botID;
 
-    private static final String token = "NzQwNTA1OTYyNjg2OTcxOTI1.Xyp_6w.syj-5iYuqswE4MwltVumZAqFeYY";
     private static final boolean DEBUG = true;
+    private static       String  token;
 
     @Getter
     private static JDA      jda;
 
 
-    public static void main(String[] args) throws LoginException {
+    public static void main(String[] args) {
 
-        // Log into Discord & build JDA
-        jda     = JDABuilder.createDefault(token).build();
+        // Try logging in
+        if (!login()) return;
 
         // Save bot info
         botID   = jda.getSelfUser().getIdLong();
@@ -63,6 +65,27 @@ public class Main extends ListenerAdapter {
         jda.addEventListener(new Commands(jda));
     }
 
+    private static boolean login(){
+        // Load token from env file
+        Dotenv dotenv = Dotenv.configure()
+                .ignoreIfMalformed()
+                .ignoreIfMissing()
+                .load();
+
+        // Get token from env
+        token = dotenv.get("token");
+
+        // Log into Discord & build JDA
+        try {
+            jda = JDABuilder.createDefault(token).build();
+        } catch (LoginException e){
+            warn("Failed to load bot. Did you forget to create an environment file?");
+            warn("Please create a new `.env` file with as content `token=<token>`");
+            warn("Otherwise, please double-check the token in the .env file");
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
