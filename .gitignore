@@ -21,3 +21,27 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Target and out folder
+target/*
+out/*
+
+# Pom temp files
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+dependency-reduced-pom.xml
+
+# Wiki data
+data/wikis/*
+data/wikis
+
+# Release and build temp files
+release.properties
+buildNumber.properties
+
+# Maven crap
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
