@@ -43,7 +43,7 @@ public class Commands extends AzorbotCommand {
         for (AzorbotCommand command : botCommands){
             if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
-            if (command.getCommands().size() < 2){
+            if (command.getCommands().size() == 0){
                 embed.addField(cmd, "`*no aliases*`\n" + command.getDescription(), true);
             } else {
                 StringBuilder body = new StringBuilder();
@@ -51,9 +51,9 @@ public class Commands extends AzorbotCommand {
                         .append("\n`")
                         .append(Main.prefix)
                         .append(
-                                command.getCommands().size() == 2 ?
-                                        command.getCommands().get(1) :
-                                        " " + command.getCommands().subList(1, command.getCommands().size()).toString()
+                                command.getCommands().size() == 1 ?
+                                        command.getCommands().get(0) :
+                                        " " + command.getCommands().toString()
                                                 .replace("[", "").replace("]", "")
                         )
                         .append("`\n")
@@ -79,13 +79,19 @@ public class Commands extends AzorbotCommand {
         embed.send(e.getMessage(), true, 1000);
     }
 
-    /// Other functions
-    // Sets the commands
+    /**
+     * Sets commands
+     * @param commands Commands
+     */
     public void setCommands(List<AzorbotCommand> commands){
         botCommands = commands.toArray(new AzorbotCommand[0]);
     }
 
-    // Gets all listeners of the specified JDA
+    /**
+     * Gets all commands found in
+     * @param jda The JDA
+     * @return The list of commands
+     */
     public List<AzorbotCommand> processCMDs(JDA jda){
         List<AzorbotCommand> foundCommands = new ArrayList<>();
         jda.getRegisteredListeners().forEach(c -> {
