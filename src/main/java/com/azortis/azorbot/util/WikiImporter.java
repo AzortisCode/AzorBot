@@ -13,10 +13,10 @@ import java.util.*;
 
 @Getter
 public class WikiImporter {
+    private final String name;
     private final String path;
     private final Map<String, List<String>> pages = new HashMap<>();
     private final JSONObject wiki;
-
 
     /**
      * Imports a wiki
@@ -24,22 +24,21 @@ public class WikiImporter {
      * @param path and path as path to raw github repo
      */
     public WikiImporter (String name, String path) {
-        this.path = path;
-        wiki = create(name);
+        this.name = name;
+        this.path = path.replace("SUMMARY.md","");
+        wiki = create();
         if (wiki == null) {
             Main.error("Wiki" + name + " has an issue during creation");
             return;
         }
-        Main.info(wiki.toString(4));
         Main.info("Created wiki page for " + name);
     }
 
     /**
      * Get and scrape wiki from path
-     * @param name Uses this name
      * @return JSONObject with processed lines
      */
-    private JSONObject create(String name){
+    private JSONObject create(){
         URL url;
         try {
             url = new URL(path + "SUMMARY.md");
@@ -51,7 +50,11 @@ public class WikiImporter {
         List<String> siteContent;
         siteContent = scrape(url);
         assert siteContent != null;
-        return new JSONObject(TableOfContents(siteContent));
+        Main.debug(siteContent.toString());
+        JSONObject wiki = new JSONObject(TableOfContents(siteContent));
+        wiki.put("path", path);
+        wiki.put("name", name);
+        return wiki;
     }
 
     /**
@@ -105,7 +108,7 @@ public class WikiImporter {
                 // Set the new category
                 category = line.replace("## ", "");
 
-                // If the new category is "links", continue
+                // If the new category is "links", forget until new category
                 if (category.equalsIgnoreCase("links")) {
                     forget = true;
                 }
@@ -143,7 +146,7 @@ public class WikiImporter {
         }
 
         // Add the last category
-        if (category != null){
+        if (category != null && !category.equalsIgnoreCase("links")){
 
             // Remove the category name from each item
             subCategory.forEach(item -> item.remove(1));

@@ -5,157 +5,138 @@ import lombok.Getter;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-@Getter
 public class WikiIndexed {
     // Global wiki variables
-    private static final String absolutePath = "wikis/";
+    private static final String absolutePath = "wikis/{}.json";
+    @Getter
     private static final List<WikiIndexed> wikis = new ArrayList<>();
 
     // This wiki's variables
+    private final FileManager file;
+    @Getter
     private final String name;
+    @Getter
+    private final String gitPath;
+    @Getter
     private JSONObject wiki;
-    private boolean updated = false;
-    private LocalDateTime updatedDate = null;
-    private final String creationInfo;
+    @Getter
+    private LocalDateTime updatedDate;
 
-    // Load wiki
-    private WikiIndexed(File wiki, boolean update){
-        this.name = wiki.getName().replace(".json", "");
-        this.wiki = load(wiki);
-        if (this.wiki == null) {
-            this.creationInfo = "FAILED";
-        } else {
-            this.creationInfo = "Successfully loaded";
-        }
-        if (update) Main.info(update());
-    }
-
-    public WikiIndexed(String name, String rawTextURL){
-        String creationInfo;
+    /**
+     * Creates a new blank wiki with
+     * @param name Name
+     * @param gitPath and raw github page path
+     */
+    public WikiIndexed(String name, String gitPath){
         this.name = name;
-        this.wiki = null;
-        creationInfo = create(rawTextURL);
-        this.creationInfo = creationInfo;
+        this.gitPath = gitPath;
+        this.file = new FileManager(absolutePath.replace("{}", name));
+        this.file.checkExists(true, false);
+        this.load();
+        wikis.add(this);
     }
 
-    private String create(String rawTextURL) {
+    /**
+     * Gets the indexed wiki inside an embed
+     * @param name Name of the wiki to index
+     * @param embed Embed to write the index to
+     */
+    public static void getIndex(String name, AzorbotEmbed embed) {
+        WikiIndexed wiki = findWiki(name);
+        if (wiki == null){
+            embed.setDescription("No wiki found by that name. Please double-check\n" +
+                    "Loaded wikis are: `" + wikis.toString() + "`");
+        } else {
+            embed.setDescription(wiki.getWiki().toString(4));
+            embed.addField("Last updated on", wiki.getUpdatedDate().toString(), false);
+        }
+    }
+
+    /**
+     * Updates this wiki instance
+     * @return Status indicator (true if successful, false if failed)
+     */
+    public static boolean update(String name){
+        WikiIndexed wiki = findWiki(name);
+        if (wiki == null){
+            return false;
+        } else {
+            return wiki.load();
+        }
+    }
+
+    /**
+     * Finds wiki by name
+     * @param name The name to find
+     * @return The found wiki (can be null if none)
+     */
+    private static WikiIndexed findWiki(String name){
         for (WikiIndexed wiki : wikis){
-            if (wiki.getName().equalsIgnoreCase(name)) {
-                return "This wiki already exists!";
+            if (wiki.getName().equalsIgnoreCase(name)){
+                return wiki;
             }
         }
-        File path = new File(absolutePath + name + ".json");
-        try {
-            path.createNewFile();
-        } catch (IOException ex) {
-            Main.error("Failed to create wiki file at: " + path.getAbsolutePath());
-            return "FAILED";
-        }
-        wiki = new JSONObject();
-        WikiImporter importer = new WikiImporter(name, rawTextURL);
-        wiki.put("name", name)
-                .put("path", path.getAbsolutePath())
-                .put("URL", rawTextURL.replace("SUMMARY.md", ""))
-                .put("index", importer.getWiki());
-        Main.debug("Generated wiki json object: \n" + wiki.toString(4));
-        if (!save()) return "FAILED";
-        JSONObject newWiki = load();
-        if (newWiki == null) {
-            Main.error("Failed to load wiki from: " + path.getAbsolutePath());
-            return "FAILED";
-        } else {
-            wiki = newWiki;
-            return "Successfully created";
-        }
-    }
-
-    // Saves this wiki
-    private boolean save(){
-        Main.info("Saving");
-        Main.info("Current wiki:\n" + wiki.toString(4));
-        File toFile = new File(absolutePath + name + ".json");
-        FileWriter fw;
-        try {
-            fw = new FileWriter(toFile);
-        } catch (IOException ex){
-            Main.error("Failed to open fileWriter at: " + toFile.getAbsolutePath());
-            return false;
-        }
-        try {
-            fw.write(wiki.toString(4));
-            fw.flush();
-        } catch (IOException ex) {
-            Main.error("Failed to write file for " + wiki + ": " + toFile.getAbsolutePath());
-            return false;
-        }
-        return true;
-    }
-
-
-    // Loads this wiki from saved path & name
-    private JSONObject load() {
-        return load(new File(absolutePath + name + ".json"));
-    }
-
-    // Loads this wiki from `fromFile`
-    private static JSONObject load(File fromFile){
-        //TODO: Load from fromFile
         return null;
     }
 
-    // Updates the wiki
-    private String update() {
-        if (wiki == null) {
-            return "Empty wiki";
+    /**
+     * Loads all existing wikis
+     */
+    public static void loadAll() {
+        // Check all existing wikis
+        for (File wiki : new File(absolutePath.replace("{}.json", "")).listFiles()){
+            // If not a json file, continue
+            if (!wiki.getName().endsWith(".json")) continue;
+
+            // Load into file manager, get/cleanup string, turn into json
+            FileManager wManager = new FileManager(wiki);
+            String wString = wManager.read().toString()
+                    .replace(",", "\n")
+                    .replace("\n\n", ",\n")
+                    .replace("[","")
+                    .replace("]", "");
+            JSONObject wJson = new JSONObject(wString);
+
+            // Check if is wiki
+            if (!isWikiJSON(wJson)) continue;
+
+            // Add wiki (automatically added to wikis)
+            new WikiIndexed(wJson.getString("name"), wJson.getString("path"));
         }
-        String old = wiki.toString();
-        if (!wiki.has("URL")) {
-            new File(absolutePath + name + ".json").delete();
-            return "Corrupt save file. Deleting";
-        }
-        String status = create(wiki.getString("URL"));
-        if (!status.equalsIgnoreCase("Successfully created")) return status;
-        wiki = new JSONObject();
-        WikiImporter importer = new WikiImporter(name, wiki.getString("URL"));
-        wiki.put("name", name)
-                .put("path", absolutePath + name + ".json")
-                .put("URL", wiki.getString("URL"))
-                .put("index", importer.getWiki());
-        Main.info(wiki.toString(4));
-        updated = true;
-        updatedDate = LocalDateTime.now();
-        if (!save()) return "Failed to save";
-        if (wiki.toString().equalsIgnoreCase(old)) return "Nothing changed";
-        return "Successfully updated wiki";
     }
 
-    // Load all wikis in wikis folder and builds a nice info message
-    public static String loadAll() {
-        File f = new File(absolutePath);
-        f.mkdirs();
-        StringBuilder status = new StringBuilder("LoadAll: ");
-        File[] files = f.listFiles();
-        if (files == null || files.length == 0) return "No wikis loaded";
-        for (File file : files){
-            if (file.isFile() && file.getName().endsWith(".json")){
-                WikiIndexed newWiki = new WikiIndexed(file, true);
-                if (newWiki.wiki != null) {
-                    status.append("+")
-                            .append(file.getName())
-                            .append(" ");
-                } else {
-                    status.append("-error:")
-                            .append(file.getName())
-                            .append(" ");
-                }
-            }
+    /**
+     * Checks if the specified json object is a wiki
+     * @param wikiJson The Json object to check
+     * @return True if it is a wiki, false if not
+     */
+    private static boolean isWikiJSON(JSONObject wikiJson){
+        if (wikiJson.has("path") && wikiJson.has("name")) return true;
+        Main.warn("Checked wiki JSON but was no wiki:\n" +
+                wikiJson.toString(2) + "\n" +
+                "Only keys are: " + wikiJson.keySet().toString());
+        return false;
+    }
+
+    /**
+     * (re)loads this wiki
+     * @return True if new definitions, False if the same
+     */
+    private boolean load(){
+        this.updatedDate = LocalDateTime.now();
+        this.wiki = new WikiImporter(this.name, this.gitPath).getWiki();
+        Main.debug(this.file.read().toString());
+        Main.debug(Arrays.toString(wiki.toString(4).split("\n")));
+        if (this.file.read().toString().equalsIgnoreCase(Arrays.toString(wiki.toString(4).split("\n")))) {
+            return false;
+        } else {
+            this.file.write(Arrays.asList(wiki.toString(4).split("\n")));
+            return true;
         }
-        return status.toString().equalsIgnoreCase("LoadAll: ") ? "No wikis loaded" : status.toString();
     }
 }

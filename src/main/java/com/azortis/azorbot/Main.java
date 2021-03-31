@@ -2,6 +2,7 @@ package com.azortis.azorbot;
 
 import com.azortis.azorbot.commands.*;
 import com.azortis.azorbot.listeners.*;
+import com.azortis.azorbot.util.WikiIndexed;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -9,7 +10,6 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +29,10 @@ public class Main extends ListenerAdapter {
     public static       User   botUser;
     public static       String botName;
     public static       Long   botID;
+    public static       String GitBookUser;
+    public static       String GitBookPass;
 
     private static final boolean DEBUG = true;
-    private static       String  token;
 
     @Getter
     private static JDA      jda;
@@ -69,10 +70,14 @@ public class Main extends ListenerAdapter {
         jda.addEventListener(new Tester());
         jda.addEventListener(new Wiki());
         jda.addEventListener(new XYProblem());
+        jda.addEventListener(new GitBookLogin());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
         jda.addEventListener(new Commands(jda));
+
+        // Load wikis
+        WikiIndexed.loadAll();
     }
 
     private static boolean login(){
@@ -83,7 +88,9 @@ public class Main extends ListenerAdapter {
                 .load();
 
         // Get token from env
-        token = dotenv.get("token");
+        String token = dotenv.get("token");
+        GitBookUser = dotenv.get("GitBookUser");
+        GitBookPass = dotenv.get("GitBookPass");
 
         // Log into Discord & build JDA
         try {

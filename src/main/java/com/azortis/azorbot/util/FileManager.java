@@ -95,15 +95,24 @@ public class FileManager {
             if (createIfNot){
                 try {
 
-                    // If new file was properly created
-                    if (file.createNewFile()){
-                        Main.info("Created blank definitions file for A2A Watchdog");
+                    if (!file.exists()) {
 
-                        // Return if asked
-                        return returnCreationInfo;
+                        Main.info("Creating new file for: " + file.getName());
+
+                        if (file.getParentFile().mkdirs()) {
+                            Main.info("Created parent directories");
+                        }
+
+                        // If new file was properly created
+                        if (file.createNewFile()) {
+                            Main.info("Created new file");
+
+                            // Return if asked
+                            return returnCreationInfo;
+                        }
                     }
                 } catch (IOException e){
-                    Main.error("While creating definitions file for A2A Watchdog");
+                    Main.error("Exception while creating new file or folders");
                     e.printStackTrace();
                     // Return that file failed to create
                     return false;
