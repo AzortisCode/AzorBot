@@ -68,6 +68,7 @@ public class Main extends ListenerAdapter {
         jda.addEventListener(new Links());
         jda.addEventListener(new Tester());
         jda.addEventListener(new Wiki());
+        jda.addEventListener(new XYProblem());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
