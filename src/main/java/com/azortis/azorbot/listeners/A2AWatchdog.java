@@ -66,7 +66,7 @@ public class A2AWatchdog extends ListenerAdapter {
 
     /**
      * Constructs and sends an A2A information message
-     * @param msg
+     * @param msg Message's channel which is sent to
      */
     private void constructAndSendA2A(Message msg){
         AzorbotEmbed embed = new AzorbotEmbed("Please do not ask to ask!", msg);
