@@ -34,8 +34,8 @@ pom.xml.next
 dependency-reduced-pom.xml
 
 # Wiki data
-data/wikis/*
-data/wikis
+wikis/*
+wikis
 
 # Release and build temp files
 release.properties
@@ -45,7 +45,7 @@ buildNumber.properties
 .gradle/*
 
 # Build crap
-./build/*
+build
 *.bin
 *.env
 *-Definitions.txt
