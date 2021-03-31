@@ -1,0 +1,2 @@
+Add functionality for screenshots channel's messages, replies to be auto-ported to a ss-discussions channel
+Add wiki functionality i.e. indexation
