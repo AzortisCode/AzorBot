@@ -62,7 +62,7 @@ public class AzorbotEmbed extends EmbedBuilder {
      * @param deleteAfterMS after X ms 
      */
     public void send(boolean deleteMSG, int deleteAfterMS){
-        this.send(null, deleteMSG, deleteAfterMS);
+        this.send(this.message, deleteMSG, deleteAfterMS);
     }
 
     /**
