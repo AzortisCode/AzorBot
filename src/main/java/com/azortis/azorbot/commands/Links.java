@@ -31,6 +31,6 @@ public class Links extends AzorbotCommand {
                 "[YouHaveTrouble's Minecraft Server Optimization Guide](https://github.com/YouHaveTrouble/minecraft-optimization)",
                 false
         );
-        embed.send();
+        embed.send(true);
     }
 }

@@ -18,6 +18,6 @@ public class Ping extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        new AzorbotEmbed("Pong!", true).send(e.getChannel());
+        new AzorbotEmbed("Pong!", e.getMessage(), true).send();
     }
 }

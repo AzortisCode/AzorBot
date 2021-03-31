@@ -18,6 +18,6 @@ public class Tester extends AzorbotCommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        new AzorbotEmbed("Test", true).send(e.getChannel());
+        new AzorbotEmbed("Test", e.getMessage(), true).send();
     }
 }

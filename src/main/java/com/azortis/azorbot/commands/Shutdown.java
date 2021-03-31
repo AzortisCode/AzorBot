@@ -1,5 +1,6 @@
 package com.azortis.azorbot.commands;
 
+import com.azortis.azorbot.util.AzorbotEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
@@ -21,6 +22,7 @@ public class Shutdown extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
+        new AzorbotEmbed("Shutting down", e.getMessage()).send(true);
         Main.shutdown();
     }
 }

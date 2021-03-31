@@ -121,7 +121,7 @@ public class Main extends ListenerAdapter {
         LOGGER.warn("{} IS SHUTTING DOWN", botName);
         jda.getPresence().setStatus(OnlineStatus.OFFLINE);
         jda.shutdown();
-        System.exit(1);
+        System.exit(0);
     }
 
     public static void warn(String message){

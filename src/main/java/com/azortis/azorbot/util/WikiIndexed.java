@@ -49,8 +49,10 @@ public class WikiIndexed {
     public static void getIndex(String name, AzorbotEmbed embed) {
         WikiIndexed wiki = findWiki(name);
         if (wiki == null){
+            StringBuilder wikiList = new StringBuilder();
+            wikis.forEach(w -> wikiList.append(w.getName()).append(" "));
             embed.setDescription("No wiki found by that name. Please double-check\n" +
-                    "Loaded wikis are: `" + wikis.toString() + "`");
+                    "Loaded wikis are: `" + wikiList.toString().trim() + "`");
         } else {
             embed.setDescription(wiki.getWiki().toString(4));
             embed.addField("Last updated on", wiki.getUpdatedDate().toString(), false);

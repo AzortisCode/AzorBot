@@ -21,6 +21,6 @@ public class XYProblem extends AzorbotCommand {
         AzorbotEmbed embed = new AzorbotEmbed("XY-Problem", e.getMessage());
         embed.setDescription("Please ask about your problem, rather than about your solution.\n" +
                 "[XY-Problem](https://xyproblem.info/)");
-        embed.send();
+        embed.send(true);
     }
 }

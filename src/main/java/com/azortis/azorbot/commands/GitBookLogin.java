@@ -20,9 +20,10 @@ public class GitBookLogin extends AzorbotCommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("GitBook login details");
+        AzorbotEmbed embed = new AzorbotEmbed("GitBook login details", e.getMessage());
         embed.setDescription("Username: `" + Main.GitBookUser + "`\n" +
                 "Password: `" + Main.GitBookPass + "`");
         Objects.requireNonNull(e.getMember()).getUser().openPrivateChannel().flatMap(channel -> channel.sendMessage(embed.build())).queue();
+        new AzorbotEmbed("Sending login to DMS :)", e.getMessage()).send(true);
     }
 }

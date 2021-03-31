@@ -76,7 +76,7 @@ public class Commands extends AzorbotCommand {
         }
 
         // Send the embed
-        embed.send(e.getMessage(), true, 1000);
+        embed.send(true, 1000);
     }
 
     /**
