@@ -1,13 +1,10 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 import com.azortis.azorbot.util.AzorbotEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Links extends AzorbotCommand {
 

@@ -18,7 +18,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 import java.util.List;
 
 // TODO: Replace "CommandName" with name of the command
-import com.azortis.azorbot.util.AzorbotCommand;
 
 public class CommandName extends AzorbotCommand {
     public CommandName(){
@@ -46,8 +45,6 @@ public class CommandName extends AzorbotCommand {
 
 /* TODO: Example Category Class
 
-import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotCommand;
 
 // TODO: Replace "CategoryName" with name of the category
 public class CategoryName extends AzorbotCommand {
@@ -401,7 +398,7 @@ public class AzorbotCommand extends ListenerAdapter {
             // Pass to (overwritten) handle
         } else {
             Main.info("Final command. Running: " + getName());
-            handle(args, e);
+            handle(args.subList(1, args.size()), e);
         }
     }
 
