@@ -7,7 +7,7 @@ public class ExecutionTimer {
     /**
      * Creates a new execution timer that immediately starts running
      */
-    public ExecutionTimer() {
+    public ExecutionTimer(){
         reset();
         start = System.currentTimeMillis();
     }
@@ -15,14 +15,14 @@ public class ExecutionTimer {
     /**
      * Stops the execution timer
      */
-    public void end() {
+    public void end(){
         end = System.currentTimeMillis();
     }
 
     /**
      * Stops the execution timer
      */
-    public void stop() {
+    public void stop(){
         end = System.currentTimeMillis();
     }
 
@@ -30,7 +30,7 @@ public class ExecutionTimer {
      * Gets the duration
      * @return duration in MS
      */
-    public long durationLong() {
+    public long durationLong(){
         return (end - start);
     }
 
@@ -38,7 +38,7 @@ public class ExecutionTimer {
      * Build duration string
      * @return String with duration in format
      */
-    public String duration() {
+    public String duration(){
         return duration("command");
     }
 
@@ -55,7 +55,7 @@ public class ExecutionTimer {
     /**
      * Resets the timer
      */
-    public void reset() {
+    public void reset(){
         start = 0;
         end = 0;
     }
