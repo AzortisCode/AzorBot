@@ -9,8 +9,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-// TODO: Replace "wikiDelete" with name of the command
-
 public class wikiDelete extends AzorbotCommand {
     public wikiDelete(){
         super(
