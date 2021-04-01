@@ -16,7 +16,7 @@ public class wikiCreate extends AzorbotCommand {
                 null,
                 "Creates a new wiki",
                 true,
-                "wiki create Orbis https://raw.githubusercontent.com/AzortisCode/OrbisDocumentation/master/SUMMARY.md"
+                "wiki create Orbis https://docs.azortis.com/ https://raw.githubusercontent.com/AzortisCode/OrbisDocumentation/master/SUMMARY.md"
         );
     }
 
@@ -24,19 +24,22 @@ public class wikiCreate extends AzorbotCommand {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("Wiki creation", e.getMessage());
-        if (args.size() == 1){
-            embed.setDescription("You forgot to specify the raw GitPath");
+        if (args.size() == 1) {
+            embed.setDescription("You forgot to specify the raw GitPath and Docs page");
+            sendHelp(e.getMessage());
+        } else if (args.size() == 2) {
+            embed.setDescription("You forgot to specify the Docs page");
             sendHelp(e.getMessage());
         } else if (args.get(0).length() < 4) {
             embed.setDescription("The specified wiki name is too short (min 4 characters)");
-        } else if (!args.get(1).contains("https://raw.githubusercontent.com/")) {
+        } else if (!args.get(2).contains("https://raw.githubusercontent.com/")) {
             embed.setDescription("Your GitPath does not contain the required main path:\n`" + args.get(1) + "`");
 
             help(e.getMessage());
         } else {
             embed.setDescription("Created new wiki " + args.get(0));
             embed.addField("Loaded wikis: ", WikiIndexed.getWikis().toString(), false);
-            new WikiIndexed(args.get(0), args.get(1));
+            new WikiIndexed(args.get(0), args.get(2), args.get(1));
         }
         embed.send(true, 60000);
     }
@@ -62,7 +65,9 @@ public class wikiCreate extends AzorbotCommand {
                 "4. Navigate to the github repository\n" +
                 "5. Navigate into the `SUMMARY.md` file\n" +
                 "6. Click the `raw` button on the top right (next to `blame`, below `history`)\n" +
-                "7. Copy the URL at the top and paste it in the command here");
+                "7. Copy the URL at the top and paste it in the command here\n" +
+                "\n" +
+                "You will also need to paste the webpage for your docs after the command");
         embed.send();
     }
 }
