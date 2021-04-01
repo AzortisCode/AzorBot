@@ -391,6 +391,10 @@ public class AzorbotCommand extends ListenerAdapter {
                         }
                     }
                 }
+                new AzorbotEmbed(
+                        "Could not find subcommand " + args.get(0) + " under " + getName() + ", please double-check",
+                        e.getMessage()
+                ).send(true, 15000);
             }
             // Check for arg size to see if help should be sent
         } else if (args.size() < 2){
