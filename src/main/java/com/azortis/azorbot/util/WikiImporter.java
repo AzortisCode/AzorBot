@@ -15,6 +15,7 @@ import java.util.*;
 public class WikiImporter {
     private final String name;
     private final String path;
+    private final String docs;
     private final Map<String, List<String>> pages = new HashMap<>();
     private final JSONObject wiki;
 
@@ -23,9 +24,10 @@ public class WikiImporter {
      * @param name with name as name
      * @param path and path as path to raw github repo
      */
-    public WikiImporter (String name, String path) {
+    public WikiImporter (String name, String path, String docs) {
         this.name = name;
         this.path = path.replace("SUMMARY.md","");
+        this.docs = docs;
         wiki = create();
         if (wiki == null) {
             Main.error("Wiki" + name + " has an issue during creation");
@@ -54,6 +56,7 @@ public class WikiImporter {
         JSONObject wiki = new JSONObject(TableOfContents(siteContent));
         wiki.put("path", path);
         wiki.put("name", name);
+        wiki.put("docs", docs);
         return wiki;
     }
 
