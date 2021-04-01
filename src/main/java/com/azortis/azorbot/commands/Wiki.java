@@ -23,7 +23,8 @@ public class Wiki extends AzorbotCommand {
                         new wikiList(),
                         new wikiInfo(),
                         new wikiGitPath(),
-                        new wikiSearch()
+                        new wikiSearch(),
+                        new wikiDelete()
                 }
         );
     }
@@ -43,6 +44,6 @@ public class Wiki extends AzorbotCommand {
             sendHelp(e.getMessage());
             return;
         }
-        wikiSearch.process(args, embed);
+        wikiSearch.process(args, e, embed);
     }
 }
