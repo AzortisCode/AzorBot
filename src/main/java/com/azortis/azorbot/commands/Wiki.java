@@ -22,7 +22,8 @@ public class Wiki extends AzorbotCommand {
                         new wikiUpdate(),
                         new wikiList(),
                         new wikiInfo(),
-                        new wikiGitPath()
+                        new wikiGitPath(),
+                        new wikiSearch()
                 }
         );
     }
@@ -36,43 +37,12 @@ public class Wiki extends AzorbotCommand {
     @Override
     public void categoryCommand(@Nonnull List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("Wiki search", e.getMessage());
-
-        // Check if any wikis are loaded
-        if (WikiIndexed.getWikis().size() == 0) {
-            embed.setDescription("Failed to search for wiki, there are none loaded");
+        if (args.size() == 0) {
+            embed.setDescription("Please specify the wiki and/or query");
             embed.send(true, 15000);
+            sendHelp(e.getMessage());
             return;
         }
-
-        // Store wiki into here
-        WikiIndexed wiki;
-
-        if (WikiIndexed.getWikis().size() == 1){
-
-            wiki = WikiIndexed.getWikis().get(0);
-
-            // Only one wiki loaded. Check if the first parameter is the name of the wiki.
-            if (wiki.getName().equalsIgnoreCase(args.get(0))){
-
-                // First parameter is wiki, rest is query. Remove first parameter
-                args = args.subList(1, args.size());
-            }
-        } else {
-            wiki = WikiIndexed.findWiki(args.get(0));
-
-            if (wiki == null) {
-                embed.setDescription("Failed to search for wiki, specified wiki: " + args.get(0) + " can not be found");
-                embed.send(true, 15000);
-                return;
-            } else {
-                args = args.subList(1, args.size());
-            }
-        }
-
-        // Store search results for arguments in embed
-        wiki.search(args, embed);
-
-        // Send embed
-        embed.send(true, 30000);
+        wikiSearch.process(args, embed);
     }
 }

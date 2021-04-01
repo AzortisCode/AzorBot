@@ -208,6 +208,6 @@ public class WikiIndexed {
      * @param embed and stores results in this embed
      */
     public void search(List<String> args, AzorbotEmbed embed) {
-
+        embed.addField(args.get(0), "", false);
     }
 }
