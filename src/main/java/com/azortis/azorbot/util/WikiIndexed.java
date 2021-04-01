@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Getter
 public class WikiIndexed {
     // Global wiki variables
     private static final String absolutePath = "wikis/{}.json";
@@ -18,15 +19,10 @@ public class WikiIndexed {
 
     // This wiki's variables
     private final FileManager file;
-    @Getter
     private final String name;
-    @Getter
     private final String docs;
-    @Getter
     private final String gitPath;
-    @Getter
     private JSONObject wiki;
-    @Getter
     private LocalDateTime updatedDate;
 
     /**
@@ -177,18 +173,49 @@ public class WikiIndexed {
     }
 
     /**
+     * Gets the loaded wikis
+     * @return List of loaded wikis
+     */
+    public static String getLoadedWikis() {
+        if (wikis.size() == 0){
+            return "*none*";
+        }
+        StringBuilder wikiString = new StringBuilder();
+        wikis.forEach(wiki -> wikiString.append(wiki.getName()).append(" "));
+        return wikiString.toString().strip();
+    }
+
+    /**
      * (re)loads this wiki
      * @return True if new definitions, False if the same
      */
     private boolean load(){
+
+        // Get date
         this.updatedDate = LocalDateTime.now();
-        this.wiki = new WikiImporter(this.name, this.gitPath, this.docs).getWiki();
-        Main.debug(this.file.read().toString());
-        Main.debug(Arrays.toString(wiki.toString(4).split("\n")));
-        if (this.file.read().toString().equalsIgnoreCase(Arrays.toString(wiki.toString(4).split("\n")))) {
+
+        // Load importer
+        WikiImporter importer = new WikiImporter(this.name, this.gitPath, this.docs);
+
+        // Get wiki from importer
+        this.wiki = importer.getWiki();
+
+        // Create JSONObject which we will use to compare and write
+        JSONObject newWiki = this.wiki;
+
+        // Save files into JSONObject
+        newWiki.put("pages", importer.getPages());
+
+        // Read from saved file
+        List<String> fromFile = this.file.read();
+        String fromImport = newWiki.toString(4);
+
+        // Check for equality
+        if (fromFile.toString().equalsIgnoreCase(fromImport)) {
             return false;
         } else {
-            this.file.write(Arrays.asList(wiki.toString(4).split("\n")));
+            // Write to file if not equal
+            this.file.write(Collections.singletonList(fromImport));
             return true;
         }
     }
@@ -210,5 +237,14 @@ public class WikiIndexed {
     public void search(List<String> args, AzorbotEmbed embed) {
         // TODO: Create search
         embed.addField(args.get(0), "", false);
+    }
+
+    /**
+     * Deletes this wiki
+     * @return true if successful
+     */
+    public boolean delete() {
+        wikis.remove(this);
+        return file.delete();
     }
 }
