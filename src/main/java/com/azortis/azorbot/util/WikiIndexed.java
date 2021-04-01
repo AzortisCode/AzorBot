@@ -111,14 +111,14 @@ public class WikiIndexed {
 
     /**
      * Updates this wiki instance
-     * @return Status indicator (true if successful, false if failed)
+     * @return Status indicator (null if not found, yes if new changes, no if no new changes)
      */
-    public static boolean update(String name){
+    public static String update(String name){
         WikiIndexed wiki = findWiki(name);
         if (wiki == null){
-            return false;
+            return "null";
         } else {
-            return wiki.load();
+            return wiki.load() ? "yes" : "no";
         }
     }
 
@@ -127,7 +127,7 @@ public class WikiIndexed {
      * @param name The name to find
      * @return The found wiki (can be null if none)
      */
-    private static WikiIndexed findWiki(String name){
+    public static WikiIndexed findWiki(String name){
         for (WikiIndexed wiki : wikis){
             if (wiki.getName().equalsIgnoreCase(name)){
                 return wiki;
@@ -200,5 +200,14 @@ public class WikiIndexed {
      */
     private static String capitalize(String str){
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    /**
+     * Searches for a query stored in
+     * @param args these arguments (list of words)
+     * @param embed and stores results in this embed
+     */
+    public void search(List<String> args, AzorbotEmbed embed) {
+
     }
 }
