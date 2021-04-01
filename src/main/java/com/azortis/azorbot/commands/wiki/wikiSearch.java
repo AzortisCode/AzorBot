@@ -30,11 +30,11 @@ public class wikiSearch extends AzorbotCommand {
             sendHelp(e.getMessage());
             return;
         }
-        process(args, embed);
+        process(args, e, embed);
     }
 
 
-    public static void process(List<String> args, AzorbotEmbed embed){
+    public static void process(List<String> args, GuildMessageReceivedEvent e, AzorbotEmbed embed){
 
         // Check if any wikis are loaded
         if (WikiIndexed.getWikis().size() == 0) {
@@ -68,9 +68,12 @@ public class wikiSearch extends AzorbotCommand {
             }
         }
 
+        // Treat as wiki index request if no parameters are specified
         if (args.size() == 0){
-            embed.setDescription("Please also enter a query");
-            embed.send(true, 15000);
+            new wikiIndex().handle(args, e);
+            embed.setTitle("");
+            embed.setDescription("Treating command as index request");
+            embed.send(true);
             return;
         }
 

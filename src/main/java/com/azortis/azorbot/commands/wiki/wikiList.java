@@ -21,9 +21,7 @@ public class wikiList extends AzorbotCommand {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("List of wikis", e.getMessage());
-        WikiIndexed.getWikis().forEach(wiki -> {
-            embed.addField(wiki.getName(), "", true);
-        });
+        embed.setDescription("Loaded wikis are: `" + WikiIndexed.getLoadedWikis() + "`");
         embed.send(true);
     }
 }

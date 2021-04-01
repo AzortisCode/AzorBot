@@ -37,10 +37,8 @@ public class wikiUpdate extends AzorbotCommand {
                     timer.duration("update"));
             embed.send(true);
         } else if (status.equalsIgnoreCase("null")) {
-            StringBuilder loadedWikis = new StringBuilder();
-            WikiIndexed.getWikis().forEach(wiki -> loadedWikis.append(wiki.getName()).append(" "));
             embed.setDescription("Failed to update {} wiki.\n".replace("{}", args.get(0)) +
-                    "Existing wikis are: `" + loadedWikis.toString().strip() + "`\n\n" +
+                    "Existing wikis are: `" + WikiIndexed.getLoadedWikis() + "`\n\n" +
                     "Did you perhaps want to create a new one?\n" +
                     "Here is the command help for creating a new wiki:");
             embed.send(true, 15000);

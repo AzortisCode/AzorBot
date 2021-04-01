@@ -35,10 +35,10 @@ public class wikiCreate extends AzorbotCommand {
             embed.setDescription("The specified wiki name is too short (min 4 characters)");
         } else if (!args.get(2).contains("https://raw.githubusercontent.com/")) {
             embed.setDescription("Your GitPath does not contain the required main path:\n`" + args.get(1) + "`");
-            embed.addField("GitPath Help", "You can request GitPath help with `" + Main.prefix + "wiki gitpath`", false);
+            embed.addField("GitPath Help", "You can request GitPath help with `" + Main.prefix + "wiki GitPath`", false);
         } else {
             embed.setDescription("Created new wiki " + args.get(0));
-            embed.addField("Loaded wikis: ", WikiIndexed.getWikis().toString(), false);
+            embed.addField("Loaded wikis: ", WikiIndexed.getLoadedWikis(), false);
             new WikiIndexed(args.get(0), args.get(2), args.get(1));
         }
         embed.send(true, 60000);
