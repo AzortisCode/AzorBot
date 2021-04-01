@@ -174,4 +174,11 @@ public class FileManager {
         // Return successful
         return success.get();
     }
+
+    /**
+     * Deletes the managed file
+     */
+    public boolean delete(){
+        return file.delete();
+    }
 }
