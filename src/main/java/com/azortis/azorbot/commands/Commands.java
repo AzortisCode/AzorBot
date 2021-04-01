@@ -19,7 +19,7 @@ public class Commands extends AzorbotCommand {
     public Commands(JDA jda){
         super(
                 "commands",
-                new String[]{"command", "cmd", "help", "?"},
+                new String[]{"command", "cmd", "help", "?", ""},
                 "Sends the command help page (this one)"
         );
         setCommands(processCMDs(jda));
