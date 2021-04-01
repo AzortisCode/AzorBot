@@ -410,7 +410,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param args Uses these arguments to deduct the subcommand
      * @param e Uses this to send the message in the right channel
      */
-    public void categoryCommand(@NonNull List<String> args, GuildMessageReceivedEvent e) {
+    public void categoryCommand(@NonNull List<String> args, GuildMessageReceivedEvent e){
         new AzorbotEmbed(
                 "Could not find subcommand " + args.get(0) + " under " + getName() + ", please double-check",
                 e.getMessage()
@@ -527,7 +527,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * Command debug logs
      * @param msg Message to send
      */
-    private void info(String msg){
+    public static void info(String msg){
         Main.LOGGER.info("CMD {}", msg);
     }
 }
