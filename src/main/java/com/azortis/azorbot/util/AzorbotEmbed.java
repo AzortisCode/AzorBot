@@ -53,7 +53,7 @@ public class AzorbotEmbed extends EmbedBuilder {
      * @param deleteMSG If true, delete original message
      */
     public void send(boolean deleteMSG){
-        this.send(null, deleteMSG);
+        this.send(this.message, deleteMSG);
     }
 
     /**
