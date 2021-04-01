@@ -200,15 +200,9 @@ public class WikiIndexed {
         // Get wiki from importer
         this.wiki = importer.getWiki();
 
-        // Create JSONObject which we will use to compare and write
-        JSONObject newWiki = this.wiki;
-
-        // Save files into JSONObject
-        newWiki.put("pages", importer.getPages());
-
         // Read from saved file
         List<String> fromFile = this.file.read();
-        String fromImport = newWiki.toString(4);
+        String fromImport = this.wiki.toString(4);
 
         // Check for equality
         if (fromFile.toString().equalsIgnoreCase(fromImport)) {
