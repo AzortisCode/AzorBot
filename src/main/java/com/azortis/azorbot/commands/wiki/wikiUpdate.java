@@ -25,11 +25,13 @@ public class wikiUpdate extends AzorbotCommand {
         AzorbotEmbed embed = new AzorbotEmbed("Wiki update message", e.getMessage());
         if (WikiIndexed.update(args.get(0))){
             embed.setDescription("Successfully updated {} wiki".replace("{}", args.get(0)));
+            embed.send(true);
         } else {
             embed.setDescription("Failed to update {} wiki.\n".replace("{}", args.get(0)) +
                     "Existing wikis are: `" + WikiIndexed.getWikis().toString() + "`\n\n" +
                     "Did you perhaps want to create a new one?\n" +
                     "Here is the command help for creating a new wiki:");
+            embed.send(true, 15000);
             new wikiCreate().sendHelp(e.getMessage());
         }
     }

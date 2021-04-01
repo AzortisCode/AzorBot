@@ -24,6 +24,6 @@ public class wikiList extends AzorbotCommand {
         WikiIndexed.getWikis().forEach(wiki -> {
             embed.addField(wiki.getName(), "", true);
         });
-        embed.send();
+        embed.send(true);
     }
 }

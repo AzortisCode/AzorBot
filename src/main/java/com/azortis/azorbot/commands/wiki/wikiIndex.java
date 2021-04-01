@@ -23,6 +23,6 @@ public class wikiIndex extends AzorbotCommand {
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("{} wiki index".replace("{}", args.get(0)), e.getMessage());
         WikiIndexed.getIndex(args.get(0), embed);
-        embed.send();
+        embed.send(true);
     }
 }

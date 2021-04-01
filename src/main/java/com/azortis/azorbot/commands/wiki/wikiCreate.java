@@ -38,7 +38,7 @@ public class wikiCreate extends AzorbotCommand {
             embed.addField("Loaded wikis: ", WikiIndexed.getWikis().toString(), false);
             new WikiIndexed(args.get(0), args.get(1));
         }
-        embed.send();
+        embed.send(true, 60000);
     }
 
     @Override
