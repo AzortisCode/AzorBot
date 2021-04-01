@@ -1,6 +1,7 @@
 package com.azortis.azorbot.util;
 
 import lombok.Getter;
+import lombok.NonNull;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -391,10 +392,7 @@ public class AzorbotCommand extends ListenerAdapter {
                         }
                     }
                 }
-                new AzorbotEmbed(
-                        "Could not find subcommand " + args.get(0) + " under " + getName() + ", please double-check",
-                        e.getMessage()
-                ).send(true, 15000);
+                categoryCommand(args.subList(1, args.size()), e);
             }
             // Check for arg size to see if help should be sent
         } else if (args.size() < 2){
@@ -404,6 +402,19 @@ public class AzorbotCommand extends ListenerAdapter {
             Main.info("Final command. Running: " + getName());
             handle(args.subList(1, args.size()), e);
         }
+    }
+
+    /**
+     * By default, send a help message for this command.
+     * Can be overwritten to have a category which has its own command implementation.
+     * @param args Uses these arguments to deduct the subcommand
+     * @param e Uses this to send the message in the right channel
+     */
+    public void categoryCommand(@NonNull List<String> args, GuildMessageReceivedEvent e) {
+        new AzorbotEmbed(
+                "Could not find subcommand " + args.get(0) + " under " + getName() + ", please double-check",
+                e.getMessage()
+        ).send(true, 15000);
     }
 
     /**
