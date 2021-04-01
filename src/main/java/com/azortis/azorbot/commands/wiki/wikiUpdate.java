@@ -31,12 +31,12 @@ public class wikiUpdate extends AzorbotCommand {
             embed.setDescription("Successfully updated {} wiki".replace("{}", args.get(0)) + "\n" +
                     timer.duration("update"));
             embed.send(true);
-        } else if (status.equalsIgnoreCase("no")) {
+        } else if (status.equalsIgnoreCase("no")){
             embed.setDescription("Attempted updating {} wiki".replace("{}", args.get(0)) + "\n" +
                     "But found no new changes." + "\n" +
                     timer.duration("update"));
             embed.send(true);
-        } else if (status.equalsIgnoreCase("null")) {
+        } else if (status.equalsIgnoreCase("null")){
             embed.setDescription("Failed to update {} wiki.\n".replace("{}", args.get(0)) +
                     "Existing wikis are: `" + WikiIndexed.getLoadedWikis() + "`\n\n" +
                     "Did you perhaps want to create a new one?\n" +
