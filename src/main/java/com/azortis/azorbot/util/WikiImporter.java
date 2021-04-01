@@ -23,12 +23,12 @@ public class WikiImporter {
      * @param name with name as name
      * @param path and path as path to raw github repo
      */
-    public WikiImporter (String name, String path, String docs) {
+    public WikiImporter (String name, String path, String docs){
         this.name = name;
         this.path = path.replace("SUMMARY.md","");
         this.docs = docs;
         wiki = create();
-        if (wiki == null) {
+        if (wiki == null){
             Main.error("Wiki" + name + " has an issue during creation");
             return;
         }
@@ -43,7 +43,7 @@ public class WikiImporter {
         URL url;
         try {
             url = new URL(path + "SUMMARY.md");
-        } catch (IOException e) {
+        } catch (IOException e){
             Main.error("Failed retrieving page for (" + name + "): " + path + "SUMMARY.md");
             Main.error("Failed to import wiki. Exiting wiki importer");
             return null;
@@ -98,7 +98,7 @@ public class WikiImporter {
                     subCategory.forEach(item -> item.remove(1));
 
                     // Process the category
-                    map.put(category, processCategory(subCategory));
+                    map.put(category, processCategory(subCategory, null));
 
                     // Reset the subArray
                     subCategory = new ArrayList<>();
@@ -111,7 +111,7 @@ public class WikiImporter {
                 category = line.replace("## ", "");
 
                 // If the new category is "links", forget until new category
-                if (category.equalsIgnoreCase("links")) {
+                if (category.equalsIgnoreCase("links")){
                     forget = true;
                 }
             }
@@ -133,7 +133,7 @@ public class WikiImporter {
             List<String> info = getKeyAndPath(line);
 
             // If the line belongs in a category
-            if (category != null) {
+            if (category != null){
 
                 // Add it to the category
                 subCategory.add(info);
@@ -154,7 +154,7 @@ public class WikiImporter {
             subCategory.forEach(item -> item.remove(1));
 
             // Process the category
-            map.put(category, processCategory(subCategory));
+            map.put(category, processCategory(subCategory, null));
         }
 
         // Return the map
@@ -166,7 +166,7 @@ public class WikiImporter {
      * @param s Path to page to index to
      * @return Map with: path (full path), page (array of strings)
      */
-    private Map<String, Object> makePage(String s) {
+    private Map<String, Object> makePage(String s){
         s = path + s;
         Map<String, Object> page = new HashMap<>();
         // Try retrieving the page from github
@@ -174,7 +174,7 @@ public class WikiImporter {
             List<String> PGs = Objects.requireNonNull(scrape(new URL(s)));
             PGs.forEach(l -> l = l.replace(":", "#69420#"));
             page.put("page", PGs);
-        } catch (IOException e) {
+        } catch (IOException e){
             Main.error("Exception while retrieving page information for page: " + s);
             page.put("page", new ArrayList<>());
         }
@@ -187,10 +187,15 @@ public class WikiImporter {
      * @param content a selection of lines
      * @return into a (recursively indexed) category
      */
-    private Map<String, Object> processCategory(List<List<String>> content) {
+    private Map<String, Object> processCategory(List<List<String>> content, String name){
 
         // Create an empty map
         Map<String, Object> map = new HashMap<>();
+
+        // Set the category path
+        if (name != null){
+            map.put("path", path + name);
+        }
 
         // Set the category list
         List<List<String>> subCategory = new ArrayList<>();
@@ -229,7 +234,7 @@ public class WikiImporter {
 
                 // End of the previous category
                 // Add subcategory to mapping if previous exists
-                if (category != null) map.put(capitalize(category), processCategory(subCategory));
+                if (category != null) map.put(capitalize(category), processCategory(subCategory, category));
 
                 // Set the category to the new category type
                 subCategory = new ArrayList<>();
@@ -244,7 +249,7 @@ public class WikiImporter {
 
         // Add the last category to the map
         if (category != null){
-            map.put(capitalize(category), processCategory(subCategory));
+            map.put(capitalize(category), processCategory(subCategory, category));
         }
 
         // Return the map
@@ -256,7 +261,7 @@ public class WikiImporter {
      * @param url this url and
      * @return a list of strings (all the lines)
      */
-    private List<String> scrape(URL url) {
+    private List<String> scrape(URL url){
         InputStream stream;
         try {
             stream = url.openStream();
@@ -269,7 +274,7 @@ public class WikiImporter {
         String inputLine;
         List<String> out = new ArrayList<>();
         try {
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null){
                 out.add(inputLine.strip());
             }
             in.close();
