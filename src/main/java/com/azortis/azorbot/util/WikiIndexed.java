@@ -57,8 +57,7 @@ public class WikiIndexed {
                     .withLocale(Locale.getDefault())
                     .withZone(ZoneId.systemDefault())
                     .format(wiki.getUpdatedDate());
-            embed.addField("Last updated on", dateTime + "\n*(Server time)*", false)
-                    .addField("Was updated")
+            embed.addField("Last updated on", dateTime + "\n*(Server time)*", false);
         } else {
             embed.addField("Could not find wiki", name, false);
         }
