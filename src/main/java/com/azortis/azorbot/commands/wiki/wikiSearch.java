@@ -77,6 +77,7 @@ public class wikiSearch extends AzorbotCommand {
 
         // Store search results for arguments in embed
         List<AzorbotEmbed> pages = wiki.search(args, e.getMessage());
+        // TODO: Implement ScrollableEmbed here
 
         // Send embed
         pages.get(0).send(true, 10000);

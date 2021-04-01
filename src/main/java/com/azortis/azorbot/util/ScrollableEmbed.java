@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// TODO: Implement this into search
 @Getter
 public class ScrollableEmbed extends ListenerAdapter {
     private final Message message;

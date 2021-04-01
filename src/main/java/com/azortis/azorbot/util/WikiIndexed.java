@@ -2,7 +2,6 @@ package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
 import lombok.Getter;
-import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.dv8tion.jda.api.entities.Message;
 import org.json.JSONObject;
 
@@ -189,12 +188,6 @@ public class WikiIndexed {
             }
 
             // 2. Add the current item
-            int subs = ((String) ((Map<?, ?>) item).get("path")).split("/").length; // Get substring length
-            String itemPath = ((String) ((Map<?, ?>) item).get("path")) // Build item path
-                    .split("/")[subs-1]
-                    .replace("README", "")
-                    .replace(".md", "")
-                    .toLowerCase(Locale.ROOT);
             string.append(depth)
                     .append("[")
                     .append(key)
@@ -322,15 +315,6 @@ public class WikiIndexed {
     }
 
     /**
-     * Capitalize the first letter of
-     * @param str this string and
-     * @return the capitalized string
-     */
-    private static String capitalize(String str){
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
-    }
-
-    /**
      * Searches for a query stored in
      * @param args these arguments (list of words)
      * @param msg the message object of which the channel is used to send messages to
@@ -377,9 +361,7 @@ public class WikiIndexed {
      * If no good items were found, this map has only key "Options" with element a string array with the closest matches.
      */
     private Map<String, String[]> findMatchingPages(List<String> args){
-        return new HashMap<String, String[]>(){{
-            put("Options", new String[]{args.get(0)});
-        }};
+        return Map.of("Options", new String[]{args.get(0)});
     }
 
     /**
