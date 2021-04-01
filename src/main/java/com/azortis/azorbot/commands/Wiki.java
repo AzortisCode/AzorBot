@@ -1,9 +1,6 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.commands.wiki.wikiCreate;
-import com.azortis.azorbot.commands.wiki.wikiIndex;
-import com.azortis.azorbot.commands.wiki.wikiList;
-import com.azortis.azorbot.commands.wiki.wikiUpdate;
+import com.azortis.azorbot.commands.wiki.*;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 public class Wiki extends AzorbotCommand {
@@ -16,7 +13,8 @@ public class Wiki extends AzorbotCommand {
                         new wikiIndex(),
                         new wikiCreate(),
                         new wikiUpdate(),
-                        new wikiList()
+                        new wikiList(),
+                        new wikiInfo()
                 }
         );
     }
