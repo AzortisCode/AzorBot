@@ -2,10 +2,10 @@ com/azortis/azorbot/util/FileManager.java
  com.azortis.azorbot.util.FileManager
 com/azortis/azorbot/util/WikiImporter.java
  com.azortis.azorbot.util.WikiImporter
-com/azortis/azorbot/commands/Wiki.java
- com.azortis.azorbot.commands.Wiki
 com/azortis/azorbot/Main.java
  com.azortis.azorbot.Main
+com/azortis/azorbot/commands/Wiki.java
+ com.azortis.azorbot.commands.Wiki
 com/azortis/azorbot/util/AzorbotCommand.java
  com.azortis.azorbot.util.AzorbotCommand
 com/azortis/azorbot/commands/wiki/wikiUpdate.java

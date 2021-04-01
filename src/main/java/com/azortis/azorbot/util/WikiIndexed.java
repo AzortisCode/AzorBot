@@ -6,9 +6,12 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class WikiIndexed {
     // Global wiki variables
@@ -55,7 +58,12 @@ public class WikiIndexed {
                     "Loaded wikis are: `" + wikiList.toString().trim() + "`");
         } else {
             embed.setDescription(wiki.getWiki().toString(4));
-            embed.addField("Last updated on", wiki.getUpdatedDate().toString(), false);
+            String dateTime = DateTimeFormatter
+                    .ofPattern("dd-MM-yyyy kk:HH:ss")
+                    .withLocale(Locale.getDefault())
+                    .withZone(ZoneId.systemDefault())
+                    .format(wiki.getUpdatedDate());
+            embed.addField("Last updated on", dateTime + "\n*(Server time)*",false);
         }
     }
 
