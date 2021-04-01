@@ -365,7 +365,7 @@ public class AzorbotCommand extends ListenerAdapter {
         }
 
         // Print info message
-        Main.info("Command passed checks: " + getName());
+        info("Passed checks: " + getName());
 
         // If it doesn't require arguments just pass it with null
         if (!needsArguments){
@@ -376,9 +376,9 @@ public class AzorbotCommand extends ListenerAdapter {
                 sendCategoryHelp(e.getMessage());
             } else {
                 // Print subcommands
-                StringBuilder subs = new StringBuilder("Subs: ");
+                StringBuilder subs = new StringBuilder(getName() + " CMDs: ");
                 for (AzorbotCommand cmd : getSubcommands()) subs.append(cmd.getName()).append((" "));
-                Main.info(subs.toString());
+                info(subs.toString());
                 // Pass to subcommands
                 for (AzorbotCommand sub : getSubcommands()){
                     if (sub.getName().equalsIgnoreCase(args.get(1))){
@@ -399,7 +399,7 @@ public class AzorbotCommand extends ListenerAdapter {
             sendHelp(e.getMessage());
             // Pass to (overwritten) handle
         } else {
-            Main.info("Final command. Running: " + getName());
+            info("Final. Running: " + getName());
             handle(args.subList(1, args.size()), e);
         }
     }
@@ -521,5 +521,13 @@ public class AzorbotCommand extends ListenerAdapter {
             }
         });
         embed.send(message);
+    }
+
+    /**
+     * Command debug logs
+     * @param msg Message to send
+     */
+    private void info(String msg){
+        Main.LOGGER.info("CMD {}", msg);
     }
 }
