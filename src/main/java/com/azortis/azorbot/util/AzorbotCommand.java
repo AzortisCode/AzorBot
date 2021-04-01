@@ -10,7 +10,7 @@ import com.azortis.azorbot.Main;
 
 import java.util.*;
 
-/* TODO: Example Command Class
+/* Example Command Class
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.Main;
@@ -44,7 +44,7 @@ public class CommandName extends AzorbotCommand {
 */
 
 
-/* TODO: Example Category Class
+/* Example Category Class
 
 
 // TODO: Replace "CategoryName" with name of the category

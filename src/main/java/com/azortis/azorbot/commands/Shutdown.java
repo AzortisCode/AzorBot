@@ -7,7 +7,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-// TODO: Replace "CommandName" with name of the command
 public class Shutdown extends AzorbotCommand {
     // Constructor
     public Shutdown(){

@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
+// TODO: Make wiki import include scraped sub-webpages
+
 @Getter
 public class WikiImporter {
     private final String name;

@@ -8,8 +8,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-// TODO: Replace "wikiInfo" with name of the command
-
 public class wikiInfo extends AzorbotCommand {
     public wikiInfo(){
         super(
