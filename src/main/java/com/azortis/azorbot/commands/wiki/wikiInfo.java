@@ -14,9 +14,9 @@ public class wikiInfo extends AzorbotCommand {
                 "Info",
                 new String[]{"inf", "updated"},
                 new String[]{"Admin", "Developer", "Moderator"},
-                "Shows information about the wiki",
+                "Shows information about the wiki, param is for showing raw JSON",
                 true,
-                "wiki info Orbis"
+                "wiki info Orbis <yes>"
         );
     }
 
@@ -29,7 +29,7 @@ public class wikiInfo extends AzorbotCommand {
             embed.send(true, 15000);
             sendHelp(e.getMessage());
         }
-        WikiIndexed.getInfo(args.get(0), embed);
+        WikiIndexed.getInfo(args.get(0), embed, args.size() > 1);
         embed.send(true);
     }
 }
