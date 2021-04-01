@@ -95,16 +95,16 @@ public class FileManager {
             if (createIfNot){
                 try {
 
-                    if (!file.exists()) {
+                    if (!file.exists()){
 
                         Main.info("Creating new file for: " + file.getName());
 
-                        if (file.getParentFile().mkdirs()) {
+                        if (file.getParentFile().mkdirs()){
                             Main.info("Created parent directories");
                         }
 
                         // If new file was properly created
-                        if (file.createNewFile()) {
+                        if (file.createNewFile()){
                             Main.info("Created new file");
 
                             // Return if asked
