@@ -11,14 +11,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
-// TODO: Make wiki import include scraped sub-webpages
-
 @Getter
 public class WikiImporter {
     private final String name;
     private final String path;
     private final String docs;
-    private final Map<String, List<String>> pages = new HashMap<>();
     private final JSONObject wiki;
 
     /**
@@ -145,7 +142,7 @@ public class WikiImporter {
             } else {
 
                 // Store the line
-                map.put(info.get(0), info.get(2));
+                map.put(info.get(0), makePage(info.get(2)));
             }
 
         }
@@ -162,6 +159,27 @@ public class WikiImporter {
 
         // Return the map
         return map;
+    }
+
+    /**
+     * Turns a page into a hash with
+     * @param s Path to page to index to
+     * @return Map with: path (full path), page (array of strings)
+     */
+    private Map<String, Object> makePage(String s) {
+        s = path + s;
+        Map<String, Object> page = new HashMap<>();
+        // Try retrieving the page from github
+        try {
+            List<String> PGs = Objects.requireNonNull(scrape(new URL(s)));
+            PGs.forEach(l -> l = l.replace(":", "#69420#"));
+            page.put("page", PGs);
+        } catch (IOException e) {
+            Main.error("Exception while retrieving page information for page: " + s);
+            page.put("page", new ArrayList<>());
+        }
+        page.put("path", s);
+        return page;
     }
 
     /**
@@ -190,12 +208,12 @@ public class WikiImporter {
             if(line.get(1).contains("README.md")){
 
                 // Set the main page
-                map.put("README", line.get(2));
+                map.put("README", makePage(line.get(2)));
 
             } else if(line.get(1).contains(".md")){
 
                 // Add the line to the map
-                map.put(line.get(0), line.get(2));
+                map.put(line.get(0), makePage(line.get(2)));
 
                 // If the line is supposed to go into a subcategory
             } else if(line.get(1).equals(category)){
@@ -286,14 +304,6 @@ public class WikiImporter {
 
         // Last item is the full path as a string
         result.add(str[1]);
-
-        // Try retrieving the page from github
-        try {
-            pages.put(str[1], scrape(new URL(path + str[1])));
-        } catch (IOException e) {
-            Main.error("Exception while retrieving page information for page: " + path + str[1]);
-            pages.put(str[1], new ArrayList<>());
-        }
 
         // Return the list
         return result;
