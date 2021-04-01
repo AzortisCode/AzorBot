@@ -6,14 +6,14 @@ com/azortis/azorbot/commands/Commands.java
  com.azortis.azorbot.commands.Commands
 com/azortis/azorbot/listeners/Prefix.java
  com.azortis.azorbot.listeners.Prefix
-com/azortis/azorbot/commands/wiki/wikiGitPath.java
- com.azortis.azorbot.commands.wiki.wikiGitPath
+com/azortis/azorbot/util/WikiImporter.java
+ com.azortis.azorbot.util.WikiImporter
 com/azortis/azorbot/util/AzorbotEmbed.java
  com.azortis.azorbot.util.AzorbotEmbed
 com/azortis/azorbot/commands/Ping.java
  com.azortis.azorbot.commands.Ping
-com/azortis/azorbot/util/WikiImporter.java
- com.azortis.azorbot.util.WikiImporter
+com/azortis/azorbot/commands/GitBookLogin.java
+ com.azortis.azorbot.commands.GitBookLogin
 com/azortis/azorbot/commands/Shutdown.java
  com.azortis.azorbot.commands.Shutdown
 com/azortis/azorbot/listeners/A2AWatchdog.java
@@ -24,8 +24,8 @@ com/azortis/azorbot/Tester.java
  com.azortis.azorbot.Tester
 com/azortis/azorbot/util/ExecutionTimer.java
  com.azortis.azorbot.util.ExecutionTimer
-com/azortis/azorbot/commands/GitBookLogin.java
- com.azortis.azorbot.commands.GitBookLogin
+com/azortis/azorbot/commands/wiki/wikiGitPath.java
+ com.azortis.azorbot.commands.wiki.wikiGitPath
 com/azortis/azorbot/commands/Links.java
  com.azortis.azorbot.commands.Links
 com/azortis/azorbot/commands/Wiki.java
@@ -40,6 +40,7 @@ com/azortis/azorbot/commands/wiki/wikiInfo.java
  com.azortis.azorbot.commands.wiki.wikiInfo
 com/azortis/azorbot/util/WikiIndexed.java
  com.azortis.azorbot.util.WikiIndexed
+ com.azortis.azorbot.util.WikiIndexed$1
 com/azortis/azorbot/commands/wiki/wikiDelete.java
  com.azortis.azorbot.commands.wiki.wikiDelete
 com/azortis/azorbot/commands/wiki/wikiCreate.java
