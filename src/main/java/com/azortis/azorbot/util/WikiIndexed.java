@@ -2,6 +2,8 @@ package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
 import lombok.Getter;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import net.dv8tion.jda.api.entities.Message;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -44,10 +46,54 @@ public class WikiIndexed {
      * Gets info for a wiki by name
      * @param name Name to query
      * @param embed Embed to write info to
+     * @param rawJSON Toggle to also add raw json to embed
      */
-    public static void getInfo(String name, AzorbotEmbed embed) {
+    public static void getInfo(String name, AzorbotEmbed embed, boolean rawJSON){
+
+        // Find the wiki
         WikiIndexed wiki = findWiki(name);
-        if (wiki != null) {
+
+        // Make sure wiki is found
+        if (wiki != null){
+
+            // Check if raw JSON should be added
+            if (rawJSON){
+
+                // Print info
+                Main.info("Adding raw JSON to embed");
+
+                // Header
+                embed.setDescription("Raw JSON:");
+
+                // Get json string
+                String sWiki = wiki.getWiki().toString(4);
+
+                // Set size per field (cap for in embed)
+                int sizePerField = 1000;
+
+                // Loop over each part of the string
+                for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++){
+
+                    // Add a field with each
+                    embed.addField(
+                            String.valueOf(i + 1), // With a header
+                            "```json\n" + // And a json block
+                            "\u200b" + sWiki // With the right content
+                                    .substring(
+                                            i * sizePerField,
+                                            Math.min(
+                                                    (i + 1) * sizePerField,
+                                                    sWiki.length() - 1
+                                            )
+                                    ).replace("`", "") +
+                            "\n```",
+                            false
+                    );
+
+                }
+            }
+
+            // Add the datetime info
             String dateTime = DateTimeFormatter
                     .ofPattern("dd-MM-yyyy kk:HH:ss")
                     .withLocale(Locale.getDefault())
@@ -55,6 +101,7 @@ public class WikiIndexed {
                     .format(wiki.getUpdatedDate());
             embed.addField("Last updated on", dateTime + "\n*(Server time)*", false);
         } else {
+            // Could not find
             embed.addField("Could not find wiki", name, false);
         }
     }
@@ -64,42 +111,105 @@ public class WikiIndexed {
      * @param name Name of the wiki to index
      * @param embed Embed to write the index to
      */
-    public static void getIndex(String name, AzorbotEmbed embed) {
+    public static void getIndex(String name, AzorbotEmbed embed){
         WikiIndexed wiki = findWiki(name);
         if (wiki == null){
-            StringBuilder wikiList = new StringBuilder();
-            wikis.forEach(w -> wikiList.append(w.getName()).append(" "));
             embed.setDescription("No wiki found by that name. Please double-check\n" +
-                    "Loaded wikis are: `" + wikiList.toString().trim() + "`");
+                    "Loaded wikis are: `" + getLoadedWikis() + "`");
         } else {
-            embed.setDescription(buildIndex(wiki.getWiki().toMap(), "", wiki.getWiki().getString("docs")));
+            embed.setDescription(
+                    buildIndex(
+                            wiki.getWiki().toMap(),
+                            "",
+                            wiki.getWiki().getString("docs"),
+                            "",
+                            wiki.getName()
+                    )
+            );
         }
     }
 
     /**
      * Builds a nicely formatted string from a json wiki
      * @param wiki the wiki to index
+     * @param depth the current indent
+     * @param docs link to the docs webpage
+     * @param subPath subPath inside the docs
+     * @param name the name of this wiki
      * @return the built string
      */
     @SuppressWarnings("unchecked")
-    private static String buildIndex(Map<String, Object> wiki, String depth, String docs){
+    private static String buildIndex(Map<String, Object> wiki, String depth, String docs, String subPath, String name){
+
+        // Init a string builder
         StringBuilder string = new StringBuilder();
+
+        Main.info("(D) " + depth + " (Sp) " + subPath + " (Ks) " + wiki.keySet().toString());
+
+        // Loop over all keys
         for (String key : wiki.keySet()){
+
+            // Prevent key is wiki name, item's path or wiki docs link
+            if (key.equalsIgnoreCase("name")
+                    || key.equalsIgnoreCase("path")
+                    || key.equalsIgnoreCase("docs")
+                    || key.equalsIgnoreCase("page")
+                    || key.equalsIgnoreCase("README")
+            ) {
+                Main.info(depth + "Skip: " + key);
+                continue;
+            }
+
+            // Get item
             Object item = wiki.get(key);
-            if (key.equalsIgnoreCase("name") || key.equalsIgnoreCase("path") || key.equalsIgnoreCase("docs")) continue;
-            if (item instanceof Map) {
-                string.append(buildIndex((Map<String, Object>) item, "" + "  ", docs));
-            } else if (item instanceof String){
+
+            // Prevent item not map
+            if (!(item instanceof Map)) {
+                Main.info(depth + "Skip: " + key);
+                continue;
+            }
+
+            Main.info(depth + " (K) " + key + " (Ks) " + ((Map<?, ?>) item).keySet().toString());
+            /*
+                Next bit is somewhat confusing
+                1. Check if there is NO path: This is a MAIN category, which has no main page
+                2. Add the current item
+                3. Check if the path contains a README.md extension, indicating it is a SUB category
+                    We must then enter this category and add all its stuff as well
+             */
+
+
+            // 1. Check if there is NO path: This is a MAIN category, which has no main page
+            if (!((Map<?, ?>) item).containsKey("path")){
                 string.append(depth)
-                        .append("[")
-                        .append(capitalize(key))
-                        .append("](")
-                        .append(docs)
-                        .append(((String) item)
-                                .replace("README", "")
-                                .replace(".md", ""))
-                        .append(")")
+                        .append(key)
                         .append("\n");
+                string.append(buildIndex((Map<String, Object>) item, "" + "  ", docs, subPath + key + "/", name));
+                continue;
+            }
+
+            // 2. Add the current item
+            int subs = ((String) ((Map<?, ?>) item).get("path")).split("/").length; // Get substring length
+            String itemPath = ((String) ((Map<?, ?>) item).get("path")) // Build item path
+                    .split("/")[subs-1]
+                    .replace("README", "")
+                    .replace(".md", "")
+                    .toLowerCase(Locale.ROOT);
+            string.append(depth)
+                    .append("[")
+                    .append(key)
+                    .append("](")
+                    .append(docs)
+                    .append(subPath.toLowerCase(Locale.ROOT))
+                    .append(key.equalsIgnoreCase(name) ? "" : key.toLowerCase(Locale.ROOT))
+                    .append(")")
+                    .append("\n");
+
+            // 3. Check if the path contains a README.md extension, indicating it is a SUB category
+            //      We must then enter this category and add all its stuff as well
+            Main.info("Path: " + ((Map<?, ?>) item).get("path"));
+            if ((((Map<?, ?>) item)).containsKey("README")){
+                string.append(buildIndex((Map<String, Object>) item, "" + "  ", docs, subPath + key + "/", name));
             }
         }
         return string.toString();
@@ -135,7 +245,7 @@ public class WikiIndexed {
     /**
      * Loads all existing wikis
      */
-    public static void loadAll() {
+    public static void loadAll(){
         // Check all existing wikis
         for (File wiki : new File(absolutePath.replace("{}.json", "")).listFiles()){
             // If not a json file, continue
@@ -144,8 +254,8 @@ public class WikiIndexed {
             // Load into file manager, get/cleanup string, turn into json
             FileManager wManager = new FileManager(wiki);
             String wString = wManager.read().get(0);
-            Main.info("JSON stuff:\n" + wString);
             JSONObject wJson = new JSONObject(wString);
+            Main.info("JSON stuff:\n" + wJson.toString(4));
 
             // Check if is wiki
             if (!isWikiJSON(wJson)) continue;
@@ -173,7 +283,7 @@ public class WikiIndexed {
      * Gets the loaded wikis
      * @return List of loaded wikis
      */
-    public static String getLoadedWikis() {
+    public static String getLoadedWikis(){
         if (wikis.size() == 0){
             return "*none*";
         }
@@ -202,7 +312,7 @@ public class WikiIndexed {
         String fromImport = this.wiki.toString();
 
         // Check for equality
-        if (fromFile.toString().equalsIgnoreCase(fromImport)) {
+        if (fromFile.toString().equalsIgnoreCase(fromImport)){
             return false;
         } else {
             // Write to file if not equal
@@ -223,18 +333,60 @@ public class WikiIndexed {
     /**
      * Searches for a query stored in
      * @param args these arguments (list of words)
-     * @param embed and stores results in this embed
+     * @param msg the message object of which the channel is used to send messages to
+     * @return list of embeds for each of the pages.
      */
-    public void search(List<String> args, AzorbotEmbed embed) {
-        // TODO: Create search
-        embed.addField(args.get(0), "", false);
+    public List<AzorbotEmbed> search(List<String> args, Message msg){
+
+        // Make empty pages list
+        List<AzorbotEmbed> pages = new ArrayList<>();
+
+        // Get matching pages (key is page name, element is page snippet)
+        Map<String, String[]> matches = findMatchingPages(args);
+
+        if (matches.containsKey("Options")){
+            // Return a single error-like embed if no matching pages were found
+            AzorbotEmbed embed = new AzorbotEmbed("No matching pages found", msg);
+            embed.setDescription("Closest keywords are: `" + matches.get("Options")[0] + "`\n" +
+                    "Please try one of these instead.");
+            pages.add(embed);
+            return pages;
+        }
+
+        // Save some variables
+        int thisPage = 1;
+        int foundPages = matches.size();
+
+        // Loop over all matches and save the embeds
+        for (String key : matches.keySet()){
+            AzorbotEmbed embed = new AzorbotEmbed(key, msg);
+            embed.setTitle(key, matches.get(key)[0]);
+            embed.setDescription("Page `" + thisPage + "/" + foundPages + "` relevant pages");
+            embed.addField("Snippet", matches.get(key)[1], false);
+            pages.add(embed);
+        }
+
+        // Return the pages
+        return pages;
+    }
+
+    /**
+     * Finds matching pages in this wiki
+     * @param args using these arguments
+     * @return a map where the keys are the page names, and the elements are a 2-element string array with the page url and the snippet.
+     * If no good items were found, this map has only key "Options" with element a string array with the closest matches.
+     */
+    private Map<String, String[]> findMatchingPages(List<String> args){
+        return new HashMap<String, String[]>(){{
+            put("Options", new String[]{args.get(0)});
+        }};
     }
 
     /**
      * Deletes this wiki
      * @return true if successful
      */
-    public boolean delete() {
+    public boolean delete(){
         wikis.remove(this);
         return file.delete();
     }
