@@ -125,18 +125,18 @@ public class Main extends ListenerAdapter {
     }
 
     public static void warn(String message){
-        LOGGER.warn(" \uD83E\uDC17 {}", message);
+        LOGGER.warn(" > {}", message);
     }
 
     public static void info(String message){
-        LOGGER.info(" \uD83E\uDC17 {}", message);
+        LOGGER.info(" > {}", message);
     }
 
     public static void error(String message){
-        LOGGER.error("\uD83E\uDC17 {}", message);
+        LOGGER.error("> {}", message);
     }
 
     public static void debug(String message){
-        if (DEBUG) LOGGER.debug("\uD83E\uDC17 {}", message);
+        if (DEBUG) LOGGER.debug("> {}", message);
     }
 }
