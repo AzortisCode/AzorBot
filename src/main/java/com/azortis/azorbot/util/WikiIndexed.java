@@ -143,11 +143,8 @@ public class WikiIndexed {
 
             // Load into file manager, get/cleanup string, turn into json
             FileManager wManager = new FileManager(wiki);
-            String wString = wManager.read().toString()
-                    .replace(",", "\n")
-                    .replace("\n\n", ",\n")
-                    .replace("[","")
-                    .replace("]", "");
+            String wString = wManager.read().get(0);
+            Main.info("JSON stuff:\n" + wString);
             JSONObject wJson = new JSONObject(wString);
 
             // Check if is wiki
@@ -202,7 +199,7 @@ public class WikiIndexed {
 
         // Read from saved file
         List<String> fromFile = this.file.read();
-        String fromImport = this.wiki.toString(4);
+        String fromImport = this.wiki.toString();
 
         // Check for equality
         if (fromFile.toString().equalsIgnoreCase(fromImport)) {
