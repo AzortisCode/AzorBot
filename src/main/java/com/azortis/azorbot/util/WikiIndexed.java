@@ -8,10 +8,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class WikiIndexed {
     // Global wiki variables
@@ -24,6 +21,8 @@ public class WikiIndexed {
     @Getter
     private final String name;
     @Getter
+    private final String docs;
+    @Getter
     private final String gitPath;
     @Getter
     private JSONObject wiki;
@@ -35,13 +34,34 @@ public class WikiIndexed {
      * @param name Name
      * @param gitPath and raw github page path
      */
-    public WikiIndexed(String name, String gitPath){
+    public WikiIndexed(String name, String gitPath, String docs){
         this.name = name;
         this.gitPath = gitPath;
+        this.docs = docs;
         this.file = new FileManager(absolutePath.replace("{}", name));
         this.file.checkExists(true, false);
         this.load();
         wikis.add(this);
+    }
+
+    /**
+     * Gets info for a wiki by name
+     * @param name Name to query
+     * @param embed Embed to write info to
+     */
+    public static void getInfo(String name, AzorbotEmbed embed) {
+        WikiIndexed wiki = findWiki(name);
+        if (wiki != null) {
+            String dateTime = DateTimeFormatter
+                    .ofPattern("dd-MM-yyyy kk:HH:ss")
+                    .withLocale(Locale.getDefault())
+                    .withZone(ZoneId.systemDefault())
+                    .format(wiki.getUpdatedDate());
+            embed.addField("Last updated on", dateTime + "\n*(Server time)*", false)
+                    .addField("Was updated")
+        } else {
+            embed.addField("Could not find wiki", name, false);
+        }
     }
 
     /**
@@ -57,14 +77,37 @@ public class WikiIndexed {
             embed.setDescription("No wiki found by that name. Please double-check\n" +
                     "Loaded wikis are: `" + wikiList.toString().trim() + "`");
         } else {
-            embed.setDescription(wiki.getWiki().toString(4));
-            String dateTime = DateTimeFormatter
-                    .ofPattern("dd-MM-yyyy kk:HH:ss")
-                    .withLocale(Locale.getDefault())
-                    .withZone(ZoneId.systemDefault())
-                    .format(wiki.getUpdatedDate());
-            embed.addField("Last updated on", dateTime + "\n*(Server time)*",false);
+            embed.setDescription(buildIndex(wiki.getWiki().toMap(), "", wiki.getWiki().getString("docs")));
         }
+    }
+
+    /**
+     * Builds a nicely formatted string from a json wiki
+     * @param wiki the wiki to index
+     * @return the built string
+     */
+    @SuppressWarnings("unchecked")
+    private static String buildIndex(Map<String, Object> wiki, String depth, String docs){
+        StringBuilder string = new StringBuilder();
+        for (String key : wiki.keySet()){
+            Object item = wiki.get(key);
+            if (key.equalsIgnoreCase("name") || key.equalsIgnoreCase("path") || key.equalsIgnoreCase("docs")) continue;
+            if (item instanceof Map) {
+                string.append(buildIndex((Map<String, Object>) item, "" + "  ", docs));
+            } else if (item instanceof String){
+                string.append(depth)
+                        .append("[")
+                        .append(capitalize(key))
+                        .append("](")
+                        .append(docs)
+                        .append(((String) item)
+                                .replace("README", "")
+                                .replace(".md", ""))
+                        .append(")")
+                        .append("\n");
+            }
+        }
+        return string.toString();
     }
 
     /**
@@ -116,7 +159,7 @@ public class WikiIndexed {
             if (!isWikiJSON(wJson)) continue;
 
             // Add wiki (automatically added to wikis)
-            new WikiIndexed(wJson.getString("name"), wJson.getString("path"));
+            new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"));
         }
     }
 
@@ -126,10 +169,11 @@ public class WikiIndexed {
      * @return True if it is a wiki, false if not
      */
     private static boolean isWikiJSON(JSONObject wikiJson){
-        if (wikiJson.has("path") && wikiJson.has("name")) return true;
+        if (wikiJson.has("path") && wikiJson.has("name") && wikiJson.has("docs")) return true;
         Main.warn("Checked wiki JSON but was no wiki:\n" +
                 wikiJson.toString(2) + "\n" +
-                "Only keys are: " + wikiJson.keySet().toString());
+                "Only keys are: " + wikiJson.keySet().toString() + "\n" +
+                "Needs at least: Path, Name, Docs");
         return false;
     }
 
@@ -139,7 +183,7 @@ public class WikiIndexed {
      */
     private boolean load(){
         this.updatedDate = LocalDateTime.now();
-        this.wiki = new WikiImporter(this.name, this.gitPath).getWiki();
+        this.wiki = new WikiImporter(this.name, this.gitPath, this.docs).getWiki();
         Main.debug(this.file.read().toString());
         Main.debug(Arrays.toString(wiki.toString(4).split("\n")));
         if (this.file.read().toString().equalsIgnoreCase(Arrays.toString(wiki.toString(4).split("\n")))) {
@@ -148,5 +192,14 @@ public class WikiIndexed {
             this.file.write(Arrays.asList(wiki.toString(4).split("\n")));
             return true;
         }
+    }
+
+    /**
+     * Capitalize the first letter of
+     * @param str this string and
+     * @return the capitalized string
+     */
+    private static String capitalize(String str){
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }
