@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 
+import java.util.Collections;
 import java.util.List;
 
 public class wikiSearch extends AzorbotCommand {
@@ -24,7 +25,7 @@ public class wikiSearch extends AzorbotCommand {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("{} search results".replace("{}", args.get(0)), e.getMessage());
-        if (args.size() == 0) {
+        if (args.size() == 0){
             embed.setDescription("Please specify the wiki and/or query");
             embed.send(true, 15000);
             sendHelp(e.getMessage());
@@ -37,7 +38,7 @@ public class wikiSearch extends AzorbotCommand {
     public static void process(List<String> args, GuildMessageReceivedEvent e, AzorbotEmbed embed){
 
         // Check if any wikis are loaded
-        if (WikiIndexed.getWikis().size() == 0) {
+        if (WikiIndexed.getWikis().size() == 0){
             embed.setDescription("Failed to search for wiki, there are none loaded");
             embed.send(true, 15000);
             return;
@@ -59,7 +60,7 @@ public class wikiSearch extends AzorbotCommand {
         } else {
             wiki = WikiIndexed.findWiki(args.get(0));
 
-            if (wiki == null) {
+            if (wiki == null){
                 embed.setDescription("Failed to search for wiki, specified wiki: " + args.get(0) + " can not be found");
                 embed.send(true, 15000);
                 return;
@@ -70,19 +71,14 @@ public class wikiSearch extends AzorbotCommand {
 
         // Treat as wiki index request if no parameters are specified
         if (args.size() == 0){
-            new wikiIndex().handle(args, e);
-            embed.setTitle("");
-            embed.setDescription("Treating command as index request");
-            embed.send(true);
+            new wikiIndex().handle(Collections.singletonList(wiki.getName()), e);
             return;
         }
 
-        embed.setTitle("Wiki search for " + wiki.getName());
-
         // Store search results for arguments in embed
-        wiki.search(args, embed);
+        List<AzorbotEmbed> pages = wiki.search(args, e.getMessage());
 
         // Send embed
-        embed.send(true, 10000);
+        pages.get(0).send(true, 10000);
     }
 }
