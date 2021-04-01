@@ -37,13 +37,15 @@ public class Wiki extends AzorbotCommand {
      */
     @Override
     public void categoryCommand(@Nonnull List<String> args, GuildMessageReceivedEvent e){
+        AzorbotCommand.info(getName() + " category command");
         AzorbotEmbed embed = new AzorbotEmbed("Wiki search", e.getMessage());
-        if (args.size() == 0) {
+        if (args.size() == 0){
             embed.setDescription("Please specify the wiki and/or query");
             embed.send(true, 15000);
             sendHelp(e.getMessage());
             return;
         }
+        AzorbotCommand.info(getName() + " Final. Running Search");
         wikiSearch.process(args, e, embed);
     }
 }
