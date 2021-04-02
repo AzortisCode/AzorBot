@@ -29,7 +29,10 @@ public class CommandCenter extends ListenerAdapter {
             // Categories
             new A2A(),
             new Wiki(),
-            new PingWatchdog()
+            new PingWatchdog(),
+
+            // Command command
+            new Commands(this)
     );
     private final List<AzorbotListener> listeners = Arrays.asList(
             new A2AWatchdog(),
@@ -40,10 +43,9 @@ public class CommandCenter extends ListenerAdapter {
 
     /**
      * Creates a command center
-     * Registers main command index
      */
     public CommandCenter(){
-        this.commands.add(new Commands(this));
+        Main.info("Building Command Center");
     }
 
     /**
