@@ -101,6 +101,9 @@ public class A2AWatchdog extends ListenerAdapter {
 
         // Make sure the bypass character was not added and score was passed
         if (!e.getMessage().getContentRaw().startsWith("#") && r.getScore() >= threshold){
+            Main.info("Message: (" + e.getMessage().getContentDisplay() + ")");
+            Main.info("flagged as A2A with score: " + r.getScore());
+            Main.info("for item: '" + r.getString() + "'");
             constructAndSendA2A(e.getMessage());
         }
     }
