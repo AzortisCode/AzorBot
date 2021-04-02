@@ -9,7 +9,7 @@ public class A2A extends AzorbotCommand {
                 "A2a",
                 new String[]{"aa"},
                 new String[]{"Admin", "Developer", "Moderator"},
-                "A2A definition category",
+                "A2A definitions command category",
                 new AzorbotCommand[]{
                         new A2AAdd(),
                         new A2AThreshold(),
