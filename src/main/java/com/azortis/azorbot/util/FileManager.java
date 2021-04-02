@@ -6,10 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -27,11 +24,21 @@ public class FileManager {
     }
 
     /**
-     * Creates a  FileManager
+     * Creates a FileManager
      * @param path The path to the file that needs to be managed
      */
     public FileManager(String path){
         this.file = new File(path);
+    }
+
+    /**
+     * Creates a FileManager
+     * @param path the path to the file
+     * @param check toggles whether a check should be made at creation
+     */
+    public FileManager(String path, boolean check) {
+        this.file = new File(path);
+        if (check) checkExists(true, false);
     }
 
     /** Reads from file
@@ -80,7 +87,7 @@ public class FileManager {
     /**
      * Checks if the stored file exists.
      * If it does not and `createIfNot`, it creates a new one.
-     * @param createIfNot If true, creates a new file if not yet existant
+     * @param createIfNot If true, creates a new file if not yet existent
      * @param returnCreationInfo If true, returns the creation info if a new file was created, instead of simple exists
      *                           Note: This is never used if `createIfNot` is false
      *
@@ -99,6 +106,10 @@ public class FileManager {
 
                         Main.info("Creating new file for: " + file.getName());
 
+                        if (file.getParentFile() == null){
+                            Main.error("No parent file found for file: " + file.getName());
+                            return false;
+                        }
                         if (file.getParentFile().mkdirs()){
                             Main.info("Created parent directories");
                         }
@@ -128,8 +139,15 @@ public class FileManager {
         return true;
     }
 
+    /**
+     * Writes the string
+     * @param in String to write
+     */
+    public void write(String in) {
+        write(Collections.singletonList(in));
+    }
 
-    /** Writes the string `in` to the file
+    /** Writes the string to file
      * @param in List of strings to write
      * @return boolean value indicating success or failure
      */
@@ -138,6 +156,7 @@ public class FileManager {
         // Make sure file exists
         if (!checkExists(true, true)){
             Main.error("Failed to write to file. Failed to create file.");
+            return false;
         }
 
         // Create writer
