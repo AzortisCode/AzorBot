@@ -7,15 +7,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.utils.cache.SnowflakeCacheView;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PingWatchdog extends ListenerAdapter {
+public class PingWatchdogListener extends ListenerAdapter {
 
     private static JDA jda;
     private static boolean initialized = false;
@@ -32,8 +30,69 @@ public class PingWatchdog extends ListenerAdapter {
      * Creates a new ping watchdog
      * @param jda uses this jda to query users and roles
      */
-    public PingWatchdog(JDA jda){
-        PingWatchdog.jda = jda;
+    public PingWatchdogListener(JDA jda){
+        PingWatchdogListener.jda = jda;
+    }
+
+    /**
+     * Deletes from staff members
+     * @param member this member
+     * @return if it existed
+     */
+    public static boolean deleteMember(Member member) {
+        if (staffMembers.contains(member)){
+            staffMembers.remove(member);
+            save();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Deletes from staff roles
+     * @param role this role
+     * @return if it existed
+     */
+    public static boolean deleteRole(Role role) {
+        if (staffRoles.contains(role)){
+            staffRoles.remove(role);
+            save();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Sets a nice list of configs into
+     * @param embed this embed
+     */
+    public static void getList(AzorbotEmbed embed) {
+        StringBuilder roles = new StringBuilder();
+        StringBuilder members = new StringBuilder();
+        for (int i = 0; i < staffRoles.size(); i++){
+            roles
+                    .append("(")
+                    .append(i + 1)
+                    .append(") ")
+                    .append(staffRoles.get(i).getAsMention())
+                    .append(" `")
+                    .append(staffRoles.get(i).getId())
+                    .append("`\n");
+        }
+        for (int i = 0; i < staffMembers.size(); i++){
+            members
+                    .append("(")
+                    .append(i + 1)
+                    .append(")")
+                    .append(staffMembers.get(i).getAsMention())
+                    .append(" `")
+                    .append(staffMembers.get(i).getId())
+                    .append("`\n");
+        }
+        embed.addField("Staff roles:", roles.toString(), false);
+        embed.addField("Staff members:", members.toString(), false);
     }
 
     /**
@@ -60,6 +119,7 @@ public class PingWatchdog extends ListenerAdapter {
         pingedMembers.forEach(member -> {
             if (done.get()) return;
             if (staffMembers.contains(member)) {
+                Main.info(e.getAuthor().getName() + " pinged staff member: " + member.getNickname());
                 done.set(true);
             }
         });
@@ -73,6 +133,7 @@ public class PingWatchdog extends ListenerAdapter {
         // Go over roles
         pingedRoles.forEach(role -> {
             if (done.get()) return;
+            Main.info(e.getAuthor().getName() + " pinged role: " + role.getName());
             if (staffRoles.contains(role)) {
                 done.set(true);
             }
@@ -80,7 +141,7 @@ public class PingWatchdog extends ListenerAdapter {
 
         // Check if done
         if (done.get()) {
-            PingWatchdog.pingedStaff(e.getMessage(), e.getMember(), embed);
+            PingWatchdogListener.pingedStaff(e.getMessage(), e.getMember(), embed);
         }
     }
 
@@ -105,6 +166,7 @@ public class PingWatchdog extends ListenerAdapter {
      * Initializes the bot
      */
     private static void initialize(Guild e) {
+        Main.info("Initializing ping watchdog");
         initialized = true;
         if (!load()) return;
         loadStaffRoles();
@@ -190,7 +252,7 @@ public class PingWatchdog extends ListenerAdapter {
      * @param guild The guild to check for users
      */
     private static void loadStaffUsers(Guild guild){
-        staffRoles.forEach(role -> guild.findMembersWithRoles(role).onSuccess(memberList -> staffMembers.addAll(memberList)));
+        staffRoles.forEach(role -> guild.findMembersWithRoles(role).onSuccess(staffMembers::addAll));
     }
 
     /**
@@ -200,4 +262,23 @@ public class PingWatchdog extends ListenerAdapter {
     private static void loadHasPingedStaff(Guild guild) {
         hasPingedStaffIDs.forEach(ID -> hasPingedStaff.add(guild.getMemberById(ID)));
     }
+
+    /**
+     * Adds a role
+     * @param role This role
+     */
+    public static void addRole(Role role) {
+        staffRoles.add(role);
+        save();
+    }
+
+    /**
+     * Adds a member
+     * @param member This member
+     */
+    public static void addMember(Member member) {
+        staffMembers.add(member);
+        save();
+    }
+
 }
