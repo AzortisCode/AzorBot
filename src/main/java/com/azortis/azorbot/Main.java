@@ -3,6 +3,7 @@ package com.azortis.azorbot;
 import com.azortis.azorbot.commands.*;
 import com.azortis.azorbot.listeners.*;
 import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.ExecutionTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -42,29 +43,34 @@ public class Main extends ListenerAdapter {
     public static final String configPath = "config/";
 
     @Getter
-    private static JDA      jda;
+    private static JDA jda;
 
 
     public static void main(String[] args){
 
+        ExecutionTimer timer = new ExecutionTimer();
+
+        info("Logging in");
+
         // Try logging in
         if (!login()) return;
 
-        // Save bot info
-        botID   = jda.getSelfUser().getIdLong();
-        botUser = jda.getUserById(botID);
-        assert botUser != null;
-        botName = botUser.getName();
-
-        // Set presence
-        jda.getPresence().setStatus(OnlineStatus.ONLINE);
-        jda.getPresence().setActivity(Activity.watching("over Azortis: `/help`"));
+        info("Logged in");
 
         // Load wikis
         WikiIndexed.loadAll();
+
+        info("Loaded wikis");
+
+        // Stop timer
+        timer.stop();
+
+        info("Running Setup took: " + timer.durationLong() + "ms");
     }
 
     private static boolean login(){
+
+        info("Loading environment file");
         // Load token from env file
         Dotenv dotenv = Dotenv.configure()
                 .ignoreIfMalformed()
@@ -72,21 +78,37 @@ public class Main extends ListenerAdapter {
                 .load();
 
         // Get token from env
+        info("Loading token");
         String token = dotenv.get("token");
         GitBookUser = dotenv.get("GitBookUser");
         GitBookPass = dotenv.get("GitBookPass");
 
         // Log into Discord & build JDA
+        info("Building JDA");
         try {
-            jda = JDABuilder.createDefault(token)
+            JDA jda = JDABuilder.createDefault(token)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS,GatewayIntent.GUILD_PRESENCES)
                     .disableCache(CacheFlag.VOICE_STATE)
                     .addEventListeners(new CommandCenter())
-                    .build();
+                    .build().awaitReady();
+            info("Retrieving JDA info");
+            botID = jda.getSelfUser().getIdLong();
+            botUser = jda.getUserById(botID);
+            assert botUser != null;
+            botName = botUser.getName();
+
+            // Set presence
+            info("Setting presence details");
+            jda.getPresence().setStatus(OnlineStatus.ONLINE);
+            jda.getPresence().setActivity(Activity.watching("over Azortis: `/help`"));
+
         } catch (LoginException e){
             warn("Failed to load bot. Did you forget to create an environment file?");
             warn("Please create a new `.env` file with as content `token=<token>`");
             warn("Otherwise, please double-check the token in the .env file");
+            return false;
+        } catch (InterruptedException e){
+            warn("Interrupted while logging into JDA!");
             return false;
         }
         return true;
