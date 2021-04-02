@@ -1,5 +1,6 @@
 package com.azortis.azorbot.util;
 
+import com.azortis.azorbot.CommandCenter;
 import com.azortis.azorbot.Main;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 // TODO: Implement this into search
 @Getter
-public class ScrollableEmbed extends ListenerAdapter {
+public class ScrollableEmbed implements AzorbotListener {
     private final MessageChannel channel;
     private final List<AzorbotEmbed> embeds;
     private final LocalDateTime end;
@@ -37,7 +38,7 @@ public class ScrollableEmbed extends ListenerAdapter {
         this.prev = 0;
         this.end = LocalDateTime.now().plusHours(2);
         updateTitles();
-        Main.getJda().addEventListener(this);
+        CommandCenter.addEmojiListener(this);
         send(msg);
     }
 
@@ -160,10 +161,10 @@ public class ScrollableEmbed extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
+    public void incomingEmoji(@Nonnull GuildMessageReactionAddEvent e) {
         Main.info("Added reactions!");
-        if (Objects.requireNonNull(e.getMember()).getIdLong() == Main.getJda().getSelfUser().getIdLong()) return;
-        if (LocalDateTime.now().isAfter(end)) Main.getJda().removeEventListener(this);
+        if (Objects.requireNonNull(e.getMember()).getIdLong() == Main.botID) return;
+        if (LocalDateTime.now().isAfter(end)) CommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
             checkReactions(e.getReactionEmote().getEmoji());
         }

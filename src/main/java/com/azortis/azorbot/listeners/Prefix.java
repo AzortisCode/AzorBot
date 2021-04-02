@@ -13,7 +13,7 @@ public class Prefix implements AzorbotListener {
     @Override
     public void incoming(GuildMessageReceivedEvent e){
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
-        if (e.getMessage().getContentRaw().contains(Main.getJda().getSelfUser().getId())){
+        if (e.getMessage().getMentionedUsers().contains(Main.botUser)){
             String Sender = e.getMessage().getAuthor().getName();
             AzorbotEmbed embed = new AzorbotEmbed("ಥ_ಥ", e.getMessage());
             embed

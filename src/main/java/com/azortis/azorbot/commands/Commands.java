@@ -11,19 +11,15 @@ import java.util.Objects;
 
 public class Commands extends AzorbotCommand {
 
-    private final CommandCenter center;
-
     /**
      * Creates a commands command
-     * @param center Takes a CommandCenter
      */
-    public Commands(CommandCenter center){
+    public Commands(){
         super(
                 "commands",
                 new String[]{"command", "cmd", "help", "?", ""},
                 "Sends the command help page (this one)"
         );
-        this.center = center;
     }
 
     // Handle
@@ -41,7 +37,7 @@ public class Commands extends AzorbotCommand {
         );
 
         // Loop over and add all commands with their respective information
-        for (AzorbotCommand command : center.getCommands()){
+        for (AzorbotCommand command : CommandCenter.getCommands()){
             if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
             if (command.getCommands().size() == 0){

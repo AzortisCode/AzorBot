@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -29,22 +30,20 @@ import java.net.http.WebSocket;
 
 public class Main extends ListenerAdapter {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(WebSocket.Listener.class);
-    public static final String prefix = "!";
-    public static final String botColor = "0x003b6f";
-    public static final String botCompany = "Azortis";
-    public static       User   botUser;
-    public static       String botName;
-    public static       Long   botID;
-    public static       String GitBookUser;
-    public static       String GitBookPass;
+    public static final Logger   LOGGER = LoggerFactory.getLogger(WebSocket.Listener.class);
+    public static final String   configPath = "config/";
+    public static final String   prefix = "!";
+    public static final String   botColor = "0x003b6f";
+    public static final String   botCompany = "Azortis";
+    public static       User     botUser;
+    public static       SelfUser botSelfUser;
+    public static       String   botName;
+    public static       Long     botID;
+    public static       String   GitBookUser;
+    public static       String   GitBookPass;
 
     private static final boolean DEBUG = true;
-    public static final String configPath = "config/";
-
-    @Getter
     private static JDA jda;
-
 
     public static void main(String[] args){
 
@@ -86,7 +85,7 @@ public class Main extends ListenerAdapter {
         // Log into Discord & build JDA
         info("Building JDA");
         try {
-            JDA jda = JDABuilder.createDefault(token)
+            jda = JDABuilder.createDefault(token)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS,GatewayIntent.GUILD_PRESENCES)
                     .disableCache(CacheFlag.VOICE_STATE)
                     .addEventListeners(new CommandCenter())
@@ -94,6 +93,7 @@ public class Main extends ListenerAdapter {
             info("Retrieving JDA info");
             botID = jda.getSelfUser().getIdLong();
             botUser = jda.getUserById(botID);
+            botSelfUser = jda.getSelfUser();
             assert botUser != null;
             botName = botUser.getName();
 

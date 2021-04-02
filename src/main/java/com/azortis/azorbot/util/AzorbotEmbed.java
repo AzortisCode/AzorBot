@@ -206,14 +206,4 @@ public class AzorbotEmbed extends EmbedBuilder {
             });
         }
     }
-
-    /**
-     * Sends an embed and returns the ID of the message
-     * @param channel The channel to send to
-     */
-    public Message sendGetMSG(TextChannel channel) {
-        AtomicReference<Message> newMSG = new AtomicReference<>();
-        channel.sendMessage(this.build()).queue(newMSG::set);
-        return newMSG.get();
-    }
 }
