@@ -88,7 +88,7 @@ public class A2AWatchdog extends ListenerAdapter {
     public static String getNiceDefinitions() {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < definitions.size(); i++){
-            out.append("(").append(i).append(") `").append(definitions.get(i)).append("`").append("\n");
+            out.append("(").append(i + 1).append(") `").append(definitions.get(i)).append("`").append("\n");
         }
         return out.toString();
     }
