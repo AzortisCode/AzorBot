@@ -36,8 +36,18 @@ public class ScrollableEmbed extends ListenerAdapter {
         this.embeds = embeds;
         this.prev = 0;
         this.end = LocalDateTime.now().plusHours(2);
+        updateTitles();
         update();
         Main.getJda().addEventListener(this);
+    }
+
+    /**
+     * Updates the titles of all embeds to include their page number
+     */
+    private void updateTitles() {
+        for (int i = 0; i < embeds.size(); i++){
+            embeds.get(i).setTitle(embeds.get(i).getTitle() + " `" + i + "/" + embeds.size() + "`");
+        }
     }
 
     /**
