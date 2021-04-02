@@ -1,5 +1,6 @@
 package com.azortis.azorbot.util;
 
+import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -10,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Getter
 public class AzorbotEmbed extends EmbedBuilder {
     private final Message message;
+    private final String title;
 
     /**
      * Creates a default AzorbotEmbed object.
@@ -20,6 +23,7 @@ public class AzorbotEmbed extends EmbedBuilder {
      */
     public AzorbotEmbed(String title, Message message){
         this.message = message;
+        this.title = title;
         this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl())
                 .setTitle(!title.equals("") ? title : "\u200E")
                 .setColor(Color.decode(Main.botColor))
@@ -33,6 +37,7 @@ public class AzorbotEmbed extends EmbedBuilder {
      */
     public AzorbotEmbed(String title, Message message, boolean useShort){
         this.message = message;
+        this.title = title;
         this.setTitle(title).setColor(Color.decode(Main.botColor));
         if (!useShort){
             this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl())
