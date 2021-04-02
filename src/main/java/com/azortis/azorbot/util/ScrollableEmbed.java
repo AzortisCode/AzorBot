@@ -4,12 +4,14 @@ import com.azortis.azorbot.Main;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 // TODO: Implement this into search
 @Getter
@@ -37,7 +39,6 @@ public class ScrollableEmbed extends ListenerAdapter {
         updateTitles();
         Main.getJda().addEventListener(this);
         send(msg);
-        update();
     }
 
     /**
@@ -48,6 +49,7 @@ public class ScrollableEmbed extends ListenerAdapter {
         msg.getChannel().sendMessage(embeds.get(current).build()).queue(scrollableMessage ->{
             this.message = scrollableMessage;
             this.ID = scrollableMessage.getIdLong();
+            this.update();
         });
     }
 
@@ -67,7 +69,7 @@ public class ScrollableEmbed extends ListenerAdapter {
     private void update(){
         this.prev = current;
         setResetEmbed();
-        addEmojis();
+        resetEmojis();
     }
 
     /**
@@ -76,17 +78,13 @@ public class ScrollableEmbed extends ListenerAdapter {
     private void setResetEmbed() {
         this.channel.retrieveMessageById(ID).queue(d -> {
             this.channel.editMessageById(ID, embeds.get(current).build()).queue();
-            this.channel.removeReactionById(ID, emojis[0]).queue();
-            this.channel.removeReactionById(ID, emojis[1]).queue();
-            this.channel.removeReactionById(ID, emojis[2]).queue();
-            this.channel.removeReactionById(ID, emojis[3]).queue();
         });
     }
 
     /**
      * Adds all emojis for scrolling
      */
-    private void addEmojis() {
+    private void resetEmojis() {
         if (embeds.size() > 2) {
             this.message.addReaction(emojis[0]).queue();
         }
@@ -123,12 +121,12 @@ public class ScrollableEmbed extends ListenerAdapter {
      * Scrolls back one page
      */
     public void back(){
+        current -= 1;
         if (current <= 0){
             current = 0;
             Main.info("Already as far left as possible");
             return;
         }
-        current -= 1;
         update();
     }
 
@@ -144,12 +142,12 @@ public class ScrollableEmbed extends ListenerAdapter {
      * Scrolls forward one page
      */
     public void forward(){
+        current += 1;
         if (current >= embeds.size() - 1){
             current = embeds.size() - 1;
             Main.info("Already as far right as possible");
             return;
         }
-        current += 1;
         update();
     }
 
@@ -162,7 +160,9 @@ public class ScrollableEmbed extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent e){
+    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
+        Main.info("Added reactions!");
+        if (Objects.requireNonNull(e.getMember()).getIdLong() == Main.getJda().getSelfUser().getIdLong()) return;
         if (LocalDateTime.now().isAfter(end)) Main.getJda().removeEventListener(this);
         if (e.getMessageIdLong() == ID){
             checkReactions(e.getReactionEmote().getEmoji());
