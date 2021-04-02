@@ -16,7 +16,8 @@ public class PingWatchdog extends AzorbotCommand {
                 new AzorbotCommand[]{
                         new PingWatchdogDelete(),
                         new PingWatchdogAdd(),
-                        new PingWatchdogList()
+                        new PingWatchdogList(),
+                        new PingWatchdogExcuse()
                 }
         );
     }

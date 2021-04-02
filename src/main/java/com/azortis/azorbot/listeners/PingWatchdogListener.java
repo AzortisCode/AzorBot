@@ -9,8 +9,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PingWatchdogListener extends ListenerAdapter {
@@ -18,13 +20,14 @@ public class PingWatchdogListener extends ListenerAdapter {
     private static JDA jda;
     private static boolean initialized = false;
 
+    private static List<Long> staffRoleIDs = new ArrayList<>();
+    private static List<Long> hasPingedStaffIDs = new ArrayList<>();
     private static final String path = Main.configPath + "ping-watchdog.txt";
     private static final FileManager file = new FileManager(path);
     private static final List<Role> staffRoles = new ArrayList<>();
-    private static final List<Long> staffRoleIDs = new ArrayList<>();
     private static final List<Member> staffMembers = new ArrayList<>();
     private static final List<Member> hasPingedStaff = new ArrayList<>();
-    private static final List<Long> hasPingedStaffIDs = new ArrayList<>();
+    private static final Map<Long, LocalDateTime> pingedStaffWhen = new HashMap<>();
 
     /**
      * Creates a new ping watchdog
@@ -68,9 +71,11 @@ public class PingWatchdogListener extends ListenerAdapter {
      * Sets a nice list of configs into
      * @param embed this embed
      */
+    @SuppressWarnings("all")
     public static void getList(AzorbotEmbed embed) {
         StringBuilder roles = new StringBuilder();
         StringBuilder members = new StringBuilder();
+        StringBuilder pingedStaff = new StringBuilder();
         for (int i = 0; i < staffRoles.size(); i++){
             roles
                     .append("(")
@@ -85,14 +90,45 @@ public class PingWatchdogListener extends ListenerAdapter {
             members
                     .append("(")
                     .append(i + 1)
-                    .append(")")
+                    .append(") ")
                     .append(staffMembers.get(i).getAsMention())
-                    .append(" `")
-                    .append(staffMembers.get(i).getId())
-                    .append("`\n");
+                    .append("\n");
+        }
+        for (int i = 0; i < hasPingedStaff.size(); i++){
+            pingedStaff
+                    .append("(")
+                    .append(i + 1)
+                    .append(") ")
+                    .append(hasPingedStaff.get(i).getAsMention());
+
+            LocalDateTime time = pingedStaffWhen.get(hasPingedStaff.get(i));
+            if (time != null) {
+                String dateTime = DateTimeFormatter
+                        .ofPattern("dd-MM-yyyy kk:HH:ss")
+                        .withLocale(Locale.getDefault())
+                        .withZone(ZoneId.systemDefault())
+                        .format(time);
+                pingedStaff.append(" @ ")
+                        .append(dateTime);
+            }
+            pingedStaff.append("\n");
         }
         embed.addField("Staff roles:", roles.toString(), false);
         embed.addField("Staff members:", members.toString(), false);
+        embed.addField("Staff mentioned by:", pingedStaff.toString(), false);
+    }
+
+    /**
+     * Excuses a member
+     * @param member the member to excuse
+     * @return true if existed
+     */
+    public static boolean excuseMember(Member member) {
+        if (hasPingedStaff.contains(member)){
+            hasPingedStaff.remove(member);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -102,11 +138,14 @@ public class PingWatchdogListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent e){
 
+        if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
+        if (e.getMessage().getContentRaw().startsWith("#")) return;
+
         // Make atomic done
         AtomicBoolean done = new AtomicBoolean(false);
 
         // Build embed
-        AzorbotEmbed embed = new AzorbotEmbed("Please do not ping staff twice", e.getMessage());
+        AzorbotEmbed embed = new AzorbotEmbed("Please do not ping staff directly", e.getMessage());
 
         // Check if initialized
         if (!initialized) initialize(e.getGuild());
@@ -119,14 +158,14 @@ public class PingWatchdogListener extends ListenerAdapter {
         pingedMembers.forEach(member -> {
             if (done.get()) return;
             if (staffMembers.contains(member)) {
-                Main.info(e.getAuthor().getName() + " pinged staff member: " + member.getNickname());
+                Main.info(e.getAuthor().getName() + " pinged staff member: " + member.getUser().getName());
                 done.set(true);
             }
         });
 
         // Check if done
         if (done.get()) {
-            pingedStaff(e.getMessage(), e.getMember(), embed);
+            pingedStaff(e.getMessage(), e.getMember(), embed, true);
             return;
         }
 
@@ -141,7 +180,7 @@ public class PingWatchdogListener extends ListenerAdapter {
 
         // Check if done
         if (done.get()) {
-            PingWatchdogListener.pingedStaff(e.getMessage(), e.getMember(), embed);
+            pingedStaff(e.getMessage(), e.getMember(), embed, false);
         }
     }
 
@@ -150,14 +189,30 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param message the message whose contents will be copied
      * @param member the member that pinged staff
      * @param embed the embed to output to (will be sent here)
+     * @param isDP true if direct ping to staff
      */
-    private static void pingedStaff(Message message, Member member, AzorbotEmbed embed) {
-        if (hasPingedStaff.contains(member)){
+    private static void pingedStaff(Message message, Member member, AzorbotEmbed embed, boolean isDP) {
+        if (isDP){
+            embed.setDescription("It is not allowed to directly ping staff.\n" +
+                    "Please ping a support role instead\n" +
+                    "Never ping support twice within 12 hours.");
+            embed.addField("Your message:", message.getContentRaw(), false);
+            embed.send(true);
+        } else if (hasPingedStaff.contains(member)){
             embed.setDescription("It is not allowed to ping staff multiple times within 12 hours");
             embed.addField("Your message:", message.getContentRaw(), false);
+            if (pingedStaffWhen.containsKey(member.getIdLong())){
+                String dateTime = DateTimeFormatter
+                        .ofPattern("dd-MM-yyyy kk:HH:ss")
+                        .withLocale(Locale.getDefault())
+                        .withZone(ZoneId.systemDefault())
+                        .format(pingedStaffWhen.get(member.getIdLong()));
+                embed.addField("Pinged on", dateTime, false);
+            }
             embed.send(true);
         } else {
             hasPingedStaff.add(member);
+            pingedStaffWhen.put(member.getIdLong(), LocalDateTime.now());
             save();
         }
     }
@@ -166,7 +221,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * Initializes the bot
      */
     private static void initialize(Guild e) {
-        Main.info("Initializing ping watchdog");
+        Main.info("Initializing ping watchdog (first message received)");
         initialized = true;
         if (!load()) return;
         loadStaffRoles();
@@ -179,24 +234,32 @@ public class PingWatchdogListener extends ListenerAdapter {
      */
     private static void save() {
 
+        // Reset ID lists
+        staffRoleIDs = new ArrayList<>();
+        hasPingedStaffIDs = new ArrayList<>();
+
         // Load IDs
-        staffRoles.forEach(role -> staffRoleIDs.add(role.getIdLong()));
-        hasPingedStaff.forEach(member -> hasPingedStaffIDs.add(member.getIdLong()));
+        staffRoles.forEach(role -> {
+            if (!staffRoleIDs.contains(role.getIdLong())) staffRoleIDs.add(role.getIdLong());
+        });
+        hasPingedStaff.forEach(member -> {
+            if (!hasPingedStaffIDs.contains(member.getIdLong())) hasPingedStaffIDs.add(member.getIdLong());
+        });
 
         // Build string
         StringBuilder out = new StringBuilder();
 
         // Add staff roles
         out.append("staffRoleIDs").append("\n");
-        staffRoleIDs.forEach(id -> out.append(id).append("\n"));
+        if (staffRoleIDs.size() != 0 && staffRoleIDs.get(0) != null) staffRoleIDs.forEach(id -> out.append(id).append("\n"));
 
         // Add has pinged members
         out.append("hasPingedStaffIDs").append("\n");
-        hasPingedStaffIDs.forEach(id -> out.append(id).append("\n"));
+        if (hasPingedStaffIDs.size() != 0 && hasPingedStaffIDs.get(0) != null) hasPingedStaffIDs.forEach(id -> out.append(id).append("OnDate").append(pingedStaffWhen.get(id).toString()).append("\n"));
 
         // Add staff members
         out.append("staffMembers").append("\n");
-        staffMembers.forEach(member -> out.append(member.getNickname()).append("\n"));
+        if (staffMembers.size() != 0 && staffMembers.get(0) != null) staffMembers.forEach(member -> out.append(member.getNickname()).append("\n"));
 
         // Write
         file.write(out.toString());
@@ -214,6 +277,9 @@ public class PingWatchdogListener extends ListenerAdapter {
         int section = 0;
         for (String line : in) {
 
+            if (line.isBlank()) continue;
+            if (line.startsWith("null")) continue;
+
             // Check if new section
             switch (line) {
                 case "staffRoleIDs":
@@ -230,7 +296,12 @@ public class PingWatchdogListener extends ListenerAdapter {
             // Save to section
             switch (section){
                 case 1: staffRoleIDs.add(Long.parseLong(line)); break;
-                case 2: hasPingedStaffIDs.add(Long.parseLong(line)); break;
+                case 2: {
+                    String[] split = line.split("OnDate");
+                    hasPingedStaffIDs.add(Long.parseLong(split[0]));
+                    pingedStaffWhen.put(Long.parseLong(split[0]), LocalDateTime.parse(split[1]));
+                    break;
+                }
                 case 3: Main.info("PingWatchdog staff member: " + line); break;
                 default: Main.error("PingWatchdog sections not starting with staffRoleIDs or out of bounds"); return false;
             }
@@ -252,7 +323,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param guild The guild to check for users
      */
     private static void loadStaffUsers(Guild guild){
-        staffRoles.forEach(role -> guild.findMembersWithRoles(role).onSuccess(staffMembers::addAll));
+        guild.findMembers(member -> staffRoles.stream().anyMatch(member.getRoles()::contains)).onSuccess(staffMembers::addAll);
     }
 
     /**
@@ -266,19 +337,25 @@ public class PingWatchdogListener extends ListenerAdapter {
     /**
      * Adds a role
      * @param role This role
+     * @return true if didn't already exist
      */
-    public static void addRole(Role role) {
+    public static boolean addRole(Role role) {
+        if (staffRoles.contains(role)) return false;
         staffRoles.add(role);
         save();
+        return true;
     }
 
     /**
      * Adds a member
      * @param member This member
+     * @return true if didn't already exist
      */
-    public static void addMember(Member member) {
+    public static boolean addMember(Member member) {
+        if (staffMembers.contains(member)) return false;
         staffMembers.add(member);
         save();
+        return true;
     }
 
 }
