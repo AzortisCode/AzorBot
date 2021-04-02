@@ -22,6 +22,8 @@ com/azortis/azorbot/commands/Shutdown.java
  com.azortis.azorbot.commands.Shutdown
 com/azortis/azorbot/listeners/A2AWatchdog.java
  com.azortis.azorbot.listeners.A2AWatchdog
+com/azortis/azorbot/CommandCenter.java
+ com.azortis.azorbot.CommandCenter
 com/azortis/azorbot/commands/pingwatchdog/PingWatchdogList.java
  com.azortis.azorbot.commands.pingwatchdog.PingWatchdogList
 com/azortis/azorbot/listeners/PingWatchdogListener.java
@@ -30,6 +32,8 @@ com/azortis/azorbot/commands/a2a/A2ADelete.java
  com.azortis.azorbot.commands.a2a.A2ADelete
 com/azortis/azorbot/commands/XYProblem.java
  com.azortis.azorbot.commands.XYProblem
+com/azortis/azorbot/listeners/ChatListener.java
+ com.azortis.azorbot.listeners.ChatListener
 com/azortis/azorbot/commands/a2a/A2AAdd.java
  com.azortis.azorbot.commands.a2a.A2AAdd
 com/azortis/azorbot/commands/wiki/wikiUpdate.java
@@ -60,6 +64,8 @@ com/azortis/azorbot/commands/wiki/wikiIndex.java
  com.azortis.azorbot.commands.wiki.wikiIndex
 com/azortis/azorbot/util/WikiIndexed.java
  com.azortis.azorbot.util.WikiIndexed
+com/azortis/azorbot/util/AzorbotListener.java
+ com.azortis.azorbot.util.AzorbotListener
 com/azortis/azorbot/commands/a2a/A2AThreshold.java
  com.azortis.azorbot.commands.a2a.A2AThreshold
 com/azortis/azorbot/commands/wiki/wikiGitPath.java
