@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +15,7 @@ import java.util.*;
 @Getter
 public class WikiIndexed {
     // Global wiki variables
-    private static final String absolutePath = "wikis/{}.json";
+    private static final String absolutePath = Main.configPath + "wikis/{}.json";
     @Getter
     private static final List<WikiIndexed> wikis = new ArrayList<>();
 
@@ -239,19 +240,39 @@ public class WikiIndexed {
      * Loads all existing wikis
      */
     public static void loadAll(){
+
+        // Check folder exists
+        File wikiFolder = new File(absolutePath.replace("{}.json", ""));
+        if (!wikiFolder.exists()){
+            Main.info("Tried loading wikis but folder does not exist. Creating folder");
+            try {
+                if (!wikiFolder.createNewFile())
+                    Main.error("Failed creating folder");
+            } catch (IOException e){
+                Main.error("Failed creating folder");
+                e.printStackTrace();
+            }
+            return;
+        }
+
         // Check all existing wikis
-        for (File wiki : new File(absolutePath.replace("{}.json", "")).listFiles()){
+        for (File wiki : wikiFolder.listFiles()){
             // If not a json file, continue
             if (!wiki.getName().endsWith(".json")) continue;
 
             // Load into file manager, get/cleanup string, turn into json
             FileManager wManager = new FileManager(wiki);
+            if (!wManager.checkExists(false, false)){
+                return;
+            }
             String wString = wManager.read().get(0);
             JSONObject wJson = new JSONObject(wString);
-            Main.info("JSON stuff:\n" + wJson.toString(4));
 
             // Check if is wiki
             if (!isWikiJSON(wJson)) continue;
+
+            // Send info
+            Main.info("Loaded wiki: " + wJson.getString("name"));
 
             // Add wiki (automatically added to wikis)
             new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"));
@@ -309,7 +330,7 @@ public class WikiIndexed {
             return false;
         } else {
             // Write to file if not equal
-            this.file.write(Collections.singletonList(fromImport));
+            this.file.write(fromImport);
             return true;
         }
     }
