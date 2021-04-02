@@ -1,19 +1,24 @@
 package com.azortis.azorbot.util;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import com.azortis.azorbot.Main;
+import net.dv8tion.jda.api.entities.User;
 
+import javax.annotation.Detainted;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class AzorbotEmbed extends EmbedBuilder {
-    private final Message message;
+    @Setter
+    private Message message;
     private final String title;
 
     /**
@@ -24,10 +29,26 @@ public class AzorbotEmbed extends EmbedBuilder {
     public AzorbotEmbed(String title, Message message){
         this.message = message;
         this.title = title;
-        this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl())
-                .setTitle(!title.equals("") ? title : "\u200E")
-                .setColor(Color.decode(Main.botColor))
-                .setFooter(Main.botCompany);
+        this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl());
+        this.setTitle(!title.equals("") ? title : "\u200E");
+        this.setColor(Color.decode(Main.botColor));
+        this.setFooter(Main.botCompany);
+    }
+
+    /**
+     * Creates a default AzorbotEmbed object.
+     * Warning, this is going to cause issues unless message is set later
+     * @param title The title of the embed
+     * @param author The author user
+     */
+    @Deprecated
+    public AzorbotEmbed(String title, User author){
+        this.message = null;
+        this.title = title;
+        this.setAuthor("Requested by: " + author.getName(), null, author.getAvatarUrl());
+        this.setTitle(!title.equals("") ? title : "\u200E");
+        this.setColor(Color.decode(Main.botColor));
+        this.setFooter(Main.botCompany);
     }
 
     /**
@@ -184,5 +205,15 @@ public class AzorbotEmbed extends EmbedBuilder {
                 }
             });
         }
+    }
+
+    /**
+     * Sends an embed and returns the ID of the message
+     * @param channel The channel to send to
+     */
+    public Message sendGetMSG(TextChannel channel) {
+        AtomicReference<Message> newMSG = new AtomicReference<>();
+        channel.sendMessage(this.build()).queue(newMSG::set);
+        return newMSG.get();
     }
 }

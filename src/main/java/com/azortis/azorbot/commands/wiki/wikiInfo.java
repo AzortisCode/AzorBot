@@ -30,6 +30,5 @@ public class wikiInfo extends AzorbotCommand {
             sendHelp(e.getMessage());
         }
         WikiIndexed.getInfo(args.get(0), embed, args.size() > 1);
-        embed.send(true);
     }
 }

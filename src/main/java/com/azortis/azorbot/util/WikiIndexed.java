@@ -45,7 +45,7 @@ public class WikiIndexed {
     /**
      * Gets info for a wiki by name
      * @param name Name to query
-     * @param embed Embed to write info to
+     * @param embed Embed to write info to (is also sent)
      * @param rawJSON Toggle to also add raw json to embed
      */
     public static void getInfo(String name, AzorbotEmbed embed, boolean rawJSON){
@@ -76,24 +76,41 @@ public class WikiIndexed {
                     // Loop over each part of the string
                     for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++) {
 
+                        // Do not mind deprecation. This is because ScrollableEmbed will set the message.
                         AzorbotEmbed thisEmbed = new AzorbotEmbed(embed.getTitle(), embed.getMessage());
 
                         // Add a field with each
-                        embed.addField(
-                                String.valueOf(i + 1), // With a header
-                                "```json\n" + // And a json block
-                                        "\u200b" + sWiki // With the right content
-                                        .substring(
-                                                i * sizePerField,
-                                                Math.min(
-                                                        (i + 1) * sizePerField,
-                                                        sWiki.length() - 1
-                                                )
-                                        ) +
-                                        "\n```",
-                                false
+                        thisEmbed.setDescription(
+                                "```json\n" + // Json code block
+                                "\u200b" + sWiki // With the right content
+                                .substring(
+                                        i * sizePerField,
+                                        Math.min(
+                                                (i + 1) * sizePerField,
+                                                sWiki.length() - 1
+                                        )
+                                ) + "\n```"
                         );
+
+                        // Add the datetime info
+                        String dateTime = DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy kk:HH:ss")
+                                .withLocale(Locale.getDefault())
+                                .withZone(ZoneId.systemDefault())
+                                .format(wiki.getUpdatedDate());
+                        embed.addField("Last updated on", dateTime + "\n*(Server time)*", false);
+
+                        // Add this to embeds
+                        embeds.add(thisEmbed);
                     }
+
+                    // Create and send a scrollable embed
+                    new ScrollableEmbed(embeds, embed.getMessage());
+
+                    // Delete command but don't send original embed (do send scrollable)
+                    embed.getMessage().delete().queue();
+
+                    return;
                 } else {
                     embed.setDescription("```json\n\u200b" + sWiki + "\n```");
                 }
@@ -110,6 +127,8 @@ public class WikiIndexed {
             // Could not find
             embed.addField("Could not find wiki", name, false);
         }
+
+        embed.send(true);
     }
 
     /**

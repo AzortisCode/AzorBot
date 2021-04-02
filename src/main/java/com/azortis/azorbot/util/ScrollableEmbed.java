@@ -14,11 +14,11 @@ import java.util.List;
 // TODO: Implement this into search
 @Getter
 public class ScrollableEmbed extends ListenerAdapter {
-    private final Message message;
     private final MessageChannel channel;
     private final List<AzorbotEmbed> embeds;
     private final LocalDateTime end;
-    private final long ID;
+    private Message message;
+    private long ID;
     private int prev;
     private int current;
 
@@ -30,15 +30,25 @@ public class ScrollableEmbed extends ListenerAdapter {
      * @param msg Message of which we use the channel
      */
     public ScrollableEmbed(List<AzorbotEmbed> embeds, Message msg){
-        this.message = msg;
-        this.ID = msg.getIdLong();
         this.channel = msg.getChannel();
         this.embeds = embeds;
         this.prev = 0;
         this.end = LocalDateTime.now().plusHours(2);
         updateTitles();
-        update();
         Main.getJda().addEventListener(this);
+        send(msg);
+        update();
+    }
+
+    /**
+     * Sends this scrollable embed in to the channel of
+     * @param msg this message
+     */
+    private void send(Message msg) {
+        msg.getChannel().sendMessage(embeds.get(current).build()).queue(scrollableMessage ->{
+            this.message = scrollableMessage;
+            this.ID = scrollableMessage.getIdLong();
+        });
     }
 
     /**
@@ -47,6 +57,7 @@ public class ScrollableEmbed extends ListenerAdapter {
     private void updateTitles() {
         for (int i = 0; i < embeds.size(); i++){
             embeds.get(i).setTitle(embeds.get(i).getTitle() + " `" + i + "/" + embeds.size() + "`");
+            embeds.get(i).setMessage(message);
         }
     }
 
@@ -63,11 +74,13 @@ public class ScrollableEmbed extends ListenerAdapter {
      * Sets the current embed and resets it reactions
      */
     private void setResetEmbed() {
-        this.channel.editMessageById(ID, embeds.get(current).build()).queue();
-        this.channel.removeReactionById(ID, emojis[0]).queue();
-        this.channel.removeReactionById(ID, emojis[1]).queue();
-        this.channel.removeReactionById(ID, emojis[2]).queue();
-        this.channel.removeReactionById(ID, emojis[3]).queue();
+        this.channel.retrieveMessageById(ID).queue(d -> {
+            this.channel.editMessageById(ID, embeds.get(current).build()).queue();
+            this.channel.removeReactionById(ID, emojis[0]).queue();
+            this.channel.removeReactionById(ID, emojis[1]).queue();
+            this.channel.removeReactionById(ID, emojis[2]).queue();
+            this.channel.removeReactionById(ID, emojis[3]).queue();
+        });
     }
 
     /**
@@ -75,12 +88,12 @@ public class ScrollableEmbed extends ListenerAdapter {
      */
     private void addEmojis() {
         if (embeds.size() > 2) {
-            this.channel.addReactionById(ID, emojis[0]).queue();
+            this.message.addReaction(emojis[0]).queue();
         }
-        this.channel.addReactionById(ID, emojis[1]).queue();
-        this.channel.addReactionById(ID, emojis[2]).queue();
+        this.message.addReaction(emojis[1]).queue();
+        this.message.addReaction(emojis[2]).queue();
         if (embeds.size() > 2) {
-            this.channel.addReactionById(ID, emojis[3]).queue();
+            this.message.addReaction(emojis[3]).queue();
         }
     }
 
