@@ -41,15 +41,56 @@ public class A2AWatchdog extends ListenerAdapter {
             "Hello, may I ask you for some help?",
             "Hello, may I ask you for some information?");
 
-    private static List<String> definitions;
-    private static int threshold;
-    private static final FileManager file = new FileManager("A2A-Definitions.txt");
+    private static List<String> definitions = new ArrayList<>();
+    private static int threshold = 85;
+    private static final FileManager file = new FileManager(Main.configPath + "A2A.txt", true);
 
     /**
      * Creates a new A2A Watchdog
      */
     public A2AWatchdog(){
         getSetDefinitions();
+    }
+
+    /**
+     * Adds a definition
+     * @param definition the definition to add
+     */
+    public static void addDefinition(String definition) {
+        definitions.add(definition);
+    }
+
+    /**
+     * Sets the threshold
+     * @param threshold to threshold
+     */
+    public static void setThreshold(int threshold) {
+        A2AWatchdog.threshold = threshold;
+        save();
+    }
+
+    /**
+     * Removes a definition
+     * @param definition the definition to remove
+     * @return true if removed, false if not found
+     */
+    public static boolean removeDefinition(String definition) {
+        ExtractedResult r = FuzzySearch.extractOne(definition, definitions);
+        if (r.getScore() < 70) return false;
+        definitions.remove(r.getString());
+        return true;
+    }
+
+    /**
+     * Get a nice list of definitions
+     * @return A list of definitions (in a single string)
+     */
+    public static String getNiceDefinitions() {
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < definitions.size(); i++){
+            out.append("(").append(i).append(") `").append(definitions.get(i)).append("`").append("\n");
+        }
+        return out.toString();
     }
 
     @Override
@@ -68,7 +109,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * Constructs and sends an A2A information message
      * @param msg Message's channel which is sent to
      */
-    private void constructAndSendA2A(Message msg){
+    private static void constructAndSendA2A(Message msg){
         AzorbotEmbed embed = new AzorbotEmbed("Please do not ask to ask!", msg);
         embed.setDescription("Please do not ask if you can ask your question, just ask!\n" +
                 "We love to help, but if we don't know your question, we cannot help efficiently.");
@@ -82,7 +123,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * Set the A2A definitions from file if it exists.
      * If it does not, create a new default definitions file
      */
-    private void getSetDefinitions(){
+    private static void getSetDefinitions(){
 
         // Make sure file exists
         if (!file.checkExists(true, false)){
@@ -95,8 +136,21 @@ public class A2AWatchdog extends ListenerAdapter {
         }
 
         // Read the definitions file
-        List<String> in = new ArrayList<>(file.read());
-        threshold = Integer.parseInt(in.remove(0));
-        definitions = in;
+        if (!file.read().isEmpty()) {
+            List<String> in = new ArrayList<>(file.read());
+            threshold = Integer.parseInt(in.remove(0));
+            definitions = in;
+        } else {
+            definitions = defaultDefinitions;
+        }
+    }
+
+    /**
+     * Save the definitions to file
+     */
+    private static void save(){
+        List<String> out = new ArrayList<>(Collections.singleton(String.valueOf(threshold)));
+        out.addAll(definitions);
+        file.write(out);
     }
 }

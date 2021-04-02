@@ -33,6 +33,7 @@ public class Main extends ListenerAdapter {
     public static       String GitBookPass;
 
     private static final boolean DEBUG = true;
+    public static final String configPath = "config/";
 
     @Getter
     private static JDA      jda;
@@ -62,15 +63,19 @@ public class Main extends ListenerAdapter {
         // Listeners
         jda.addEventListener(new A2AWatchdog());
         jda.addEventListener(new Prefix());
+        jda.addEventListener(new PingWatchdog(jda));
 
         // Commands
         jda.addEventListener(new Ping());
         jda.addEventListener(new Shutdown());
         jda.addEventListener(new Links());
         jda.addEventListener(new Tester());
-        jda.addEventListener(new Wiki());
         jda.addEventListener(new XYProblem());
         jda.addEventListener(new GitBookLogin());
+
+        // Categories
+        jda.addEventListener(new A2A());
+        jda.addEventListener(new Wiki());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
