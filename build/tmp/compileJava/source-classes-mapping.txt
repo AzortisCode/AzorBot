@@ -1,72 +1,74 @@
 com/azortis/azorbot/util/FileManager.java
  com.azortis.azorbot.util.FileManager
-com/azortis/azorbot/util/AzorbotCommand.java
- com.azortis.azorbot.util.AzorbotCommand
-com/azortis/azorbot/commands/Commands.java
- com.azortis.azorbot.commands.Commands
-com/azortis/azorbot/Tester.java
- com.azortis.azorbot.Tester
-com/azortis/azorbot/commands/a2a/A2AList.java
- com.azortis.azorbot.commands.a2a.A2AList
 com/azortis/azorbot/util/WikiImporter.java
  com.azortis.azorbot.util.WikiImporter
 com/azortis/azorbot/commands/PingWatchdog.java
  com.azortis.azorbot.commands.PingWatchdog
+com/azortis/azorbot/commands/A2A.java
+ com.azortis.azorbot.commands.A2A
+com/azortis/azorbot/util/ExecutionTimer.java
+ com.azortis.azorbot.util.ExecutionTimer
+com/azortis/azorbot/util/AzorbotCommand.java
+ com.azortis.azorbot.util.AzorbotCommand
+com/azortis/azorbot/commands/Commands.java
+ com.azortis.azorbot.commands.Commands
+com/azortis/azorbot/commands/pingwatchdog/PingWatchdogDelete.java
+ com.azortis.azorbot.commands.pingwatchdog.PingWatchdogDelete
+com/azortis/azorbot/listeners/Prefix.java
+ com.azortis.azorbot.listeners.Prefix
 com/azortis/azorbot/util/AzorbotEmbed.java
  com.azortis.azorbot.util.AzorbotEmbed
 com/azortis/azorbot/commands/Ping.java
  com.azortis.azorbot.commands.Ping
-com/azortis/azorbot/commands/wiki/wikiCreate.java
- com.azortis.azorbot.commands.wiki.wikiCreate
+com/azortis/azorbot/commands/pingwatchdog/PingWatchdogAdd.java
+ com.azortis.azorbot.commands.pingwatchdog.PingWatchdogAdd
 com/azortis/azorbot/commands/Shutdown.java
  com.azortis.azorbot.commands.Shutdown
 com/azortis/azorbot/listeners/A2AWatchdog.java
  com.azortis.azorbot.listeners.A2AWatchdog
-com/azortis/azorbot/commands/a2a/A2AThreshold.java
- com.azortis.azorbot.commands.a2a.A2AThreshold
-com/azortis/azorbot/commands/wiki/wikiGitPath.java
- com.azortis.azorbot.commands.wiki.wikiGitPath
+com/azortis/azorbot/commands/pingwatchdog/PingWatchdogList.java
+ com.azortis.azorbot.commands.pingwatchdog.PingWatchdogList
+com/azortis/azorbot/listeners/PingWatchdogListener.java
+ com.azortis.azorbot.listeners.PingWatchdogListener
 com/azortis/azorbot/commands/a2a/A2ADelete.java
  com.azortis.azorbot.commands.a2a.A2ADelete
 com/azortis/azorbot/commands/XYProblem.java
  com.azortis.azorbot.commands.XYProblem
 com/azortis/azorbot/commands/a2a/A2AAdd.java
  com.azortis.azorbot.commands.a2a.A2AAdd
-com/azortis/azorbot/commands/wiki/wikiUpdate.java
- com.azortis.azorbot.commands.wiki.wikiUpdate
-com/azortis/azorbot/util/ExecutionTimer.java
- com.azortis.azorbot.util.ExecutionTimer
-com/azortis/azorbot/commands/wiki/wikiInfo.java
- com.azortis.azorbot.commands.wiki.wikiInfo
+com/azortis/azorbot/Tester.java
+ com.azortis.azorbot.Tester
+com/azortis/azorbot/commands/pingwatchdog/PingWatchdogExcuse.java
+ com.azortis.azorbot.commands.pingwatchdog.PingWatchdogExcuse
+com/azortis/azorbot/commands/a2a/A2AList.java
+ com.azortis.azorbot.commands.a2a.A2AList
 com/azortis/azorbot/commands/Links.java
  com.azortis.azorbot.commands.Links
-com/azortis/azorbot/commands/A2A.java
- com.azortis.azorbot.commands.A2A
-com/azortis/azorbot/commands/wiki/wikiDelete.java
- com.azortis.azorbot.commands.wiki.wikiDelete
+com/azortis/azorbot/commands/a2a/A2AThreshold.java
+ com.azortis.azorbot.commands.a2a.A2AThreshold
 com/azortis/azorbot/commands/Wiki.java
  com.azortis.azorbot.commands.Wiki
-com/azortis/azorbot/util/ScrollableEmbed.java
- com.azortis.azorbot.util.ScrollableEmbed
-com/azortis/azorbot/commands/wiki/wikiSearch.java
- com.azortis.azorbot.commands.wiki.wikiSearch
+com/azortis/azorbot/commands/wiki/wikiGitPath.java
+ com.azortis.azorbot.commands.wiki.wikiGitPath
 com/azortis/azorbot/commands/GitBookLogin.java
  com.azortis.azorbot.commands.GitBookLogin
+com/azortis/azorbot/commands/wiki/wikiUpdate.java
+ com.azortis.azorbot.commands.wiki.wikiUpdate
 com/azortis/azorbot/commands/wiki/wikiList.java
  com.azortis.azorbot.commands.wiki.wikiList
 com/azortis/azorbot/commands/wiki/wikiIndex.java
  com.azortis.azorbot.commands.wiki.wikiIndex
-com/azortis/azorbot/util/WikiIndexed.java
- com.azortis.azorbot.util.WikiIndexed
-com/azortis/azorbot/commands/pingwatchdog/PingWatchdogDelete.java
- com.azortis.azorbot.commands.pingwatchdog.PingWatchdogDelete
-com/azortis/azorbot/commands/pingwatchdog/PingWatchdogList.java
- com.azortis.azorbot.commands.pingwatchdog.PingWatchdogList
-com/azortis/azorbot/listeners/PingWatchdogListener.java
- com.azortis.azorbot.listeners.PingWatchdogListener
-com/azortis/azorbot/listeners/Prefix.java
- com.azortis.azorbot.listeners.Prefix
-com/azortis/azorbot/commands/pingwatchdog/PingWatchdogAdd.java
- com.azortis.azorbot.commands.pingwatchdog.PingWatchdogAdd
+com/azortis/azorbot/commands/wiki/wikiInfo.java
+ com.azortis.azorbot.commands.wiki.wikiInfo
 com/azortis/azorbot/Main.java
  com.azortis.azorbot.Main
+com/azortis/azorbot/commands/wiki/wikiDelete.java
+ com.azortis.azorbot.commands.wiki.wikiDelete
+com/azortis/azorbot/commands/wiki/wikiSearch.java
+ com.azortis.azorbot.commands.wiki.wikiSearch
+com/azortis/azorbot/commands/wiki/wikiCreate.java
+ com.azortis.azorbot.commands.wiki.wikiCreate
+com/azortis/azorbot/util/WikiIndexed.java
+ com.azortis.azorbot.util.WikiIndexed
+com/azortis/azorbot/util/ScrollableEmbed.java
+ com.azortis.azorbot.util.ScrollableEmbed
