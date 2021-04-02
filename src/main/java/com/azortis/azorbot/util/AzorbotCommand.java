@@ -50,7 +50,7 @@ public class CommandName extends AzorbotCommand {
 // TODO: Replace "CategoryName" with name of the category
 public class CategoryName extends AzorbotCommand {
     // Constructor
-    public Wiki(){
+    public CategoryName(){
         super(
                 "CategoryName",
                 new String[]{"Alias1", "Alias2"},
@@ -468,9 +468,9 @@ public class AzorbotCommand extends ListenerAdapter {
             embed.addField(
                     cmd,
                     "\n`" + Main.prefix +
-                            (getCommands().size() == 2 ?
-                                    getCommands().get(1) :
-                                    " " + getCommands().subList(1, getCommands().size()).toString()
+                            (getCommands().size() == 1 ?
+                                    getCommands().get(0) :
+                                    " " + getCommands().toString()
                                             .replace("[", "").replace("]", "")) +
                             "`\n" + getDescription(),
                     true
@@ -506,10 +506,10 @@ public class AzorbotCommand extends ListenerAdapter {
             } else {
                 String body =
                         "\n`" + Main.prefix +
-                                (command.getCommands().size() == 2 ?
-                                        command.getCommands().get(1) :
-                                        " " + command.getCommands().subList(1, command.getCommands().size()))
-                                        .replace("[", "").replace("]", "") +
+                                (command.getCommands().size() == 1 ?
+                                        command.getCommands().get(0) :
+                                        " " + command.getCommands().toString()
+                                        .replace("[", "").replace("]", "")) +
                                 "`\n" +
                                 command.getDescription() +
                                 (command.getExample() != null ? "\n**Usage**\n`" + Main.prefix + command.getExample() + "`": "");
