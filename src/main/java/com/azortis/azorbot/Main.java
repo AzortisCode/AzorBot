@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +80,7 @@ public class Main extends ListenerAdapter {
         jda.addEventListener(new Wiki());
         jda.addEventListener(new PingWatchdog());
 
-        // Add command index help page listener
+        // Add command index help page listener!
         // Any commands registered after are NOT displayed in the index
         jda.addEventListener(new Commands(jda));
 
@@ -100,7 +102,7 @@ public class Main extends ListenerAdapter {
 
         // Log into Discord & build JDA
         try {
-            jda = JDABuilder.createDefault(token).build();
+            jda = JDABuilder.create(token, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_PRESENCES).disableCache(CacheFlag.VOICE_STATE).build();
         } catch (LoginException e){
             warn("Failed to load bot. Did you forget to create an environment file?");
             warn("Please create a new `.env` file with as content `token=<token>`");
