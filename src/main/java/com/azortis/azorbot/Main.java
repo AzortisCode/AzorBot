@@ -63,7 +63,7 @@ public class Main extends ListenerAdapter {
         // Listeners
         jda.addEventListener(new A2AWatchdog());
         jda.addEventListener(new Prefix());
-        jda.addEventListener(new PingWatchdog(jda));
+        jda.addEventListener(new PingWatchdogListener(jda));
 
         // Commands
         jda.addEventListener(new Ping());
@@ -76,6 +76,7 @@ public class Main extends ListenerAdapter {
         // Categories
         jda.addEventListener(new A2A());
         jda.addEventListener(new Wiki());
+        jda.addEventListener(new PingWatchdog());
 
         // Add command index help page listener
         // Any commands registered after are NOT displayed in the index
@@ -138,10 +139,10 @@ public class Main extends ListenerAdapter {
     }
 
     public static void error(String message){
-        LOGGER.error("> {}", message);
+        LOGGER.error(" > {}", message);
     }
 
     public static void debug(String message){
-        if (DEBUG) LOGGER.debug("> {}", message);
+        if (DEBUG) LOGGER.debug(" > {}", message);
     }
 }
