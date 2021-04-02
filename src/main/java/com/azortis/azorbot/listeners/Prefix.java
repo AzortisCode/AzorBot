@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Prefix extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent e){
+        if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
         if (e.getMessage().getContentRaw().contains(Main.getJda().getSelfUser().getId())){
             String Sender = e.getMessage().getAuthor().getName();
             AzorbotEmbed embed = new AzorbotEmbed("ಥ_ಥ", e.getMessage());
