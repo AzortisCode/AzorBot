@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-// TODO: Replace "PingWatchdogAdd" with name of the category
 public class PingWatchdogDelete extends AzorbotCommand {
     // Constructor
     public PingWatchdogDelete(){

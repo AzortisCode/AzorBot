@@ -127,7 +127,6 @@ public class WikiIndexed {
             // Could not find
             embed.addField("Could not find wiki", name, false);
         }
-
         embed.send(true);
     }
 

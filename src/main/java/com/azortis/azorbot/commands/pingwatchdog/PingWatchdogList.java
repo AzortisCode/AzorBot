@@ -3,12 +3,9 @@ package com.azortis.azorbot.commands.pingwatchdog;
 import com.azortis.azorbot.listeners.PingWatchdogListener;
 import com.azortis.azorbot.util.AzorbotEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
-
-// TODO: Replace "PingWatchdogList" with name of the command
 
 public class PingWatchdogList extends AzorbotCommand {
     public PingWatchdogList(){

@@ -92,6 +92,7 @@ public class CommandCenter extends ListenerAdapter {
      */
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
+        if (e.getUser().isBot()) return;
         emojiListeners.forEach(listener -> listener.incomingEmoji(e));
     }
 

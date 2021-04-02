@@ -6,15 +6,12 @@ import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-// TODO: Implement this into search
 @Getter
 public class ScrollableEmbed implements AzorbotListener {
     private final MessageChannel channel;
@@ -77,9 +74,7 @@ public class ScrollableEmbed implements AzorbotListener {
      * Sets the current embed and resets it reactions
      */
     private void setResetEmbed() {
-        this.channel.retrieveMessageById(ID).queue(d -> {
-            this.channel.editMessageById(ID, embeds.get(current).build()).queue();
-        });
+        this.channel.retrieveMessageById(ID).queue(d -> this.channel.editMessageById(ID, embeds.get(current).build()).queue());
     }
 
     /**
