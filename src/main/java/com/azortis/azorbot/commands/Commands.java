@@ -1,28 +1,29 @@
 package com.azortis.azorbot.commands;
 
+import com.azortis.azorbot.CommandCenter;
 import com.azortis.azorbot.Main;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.util.AzorbotCommand;
 import com.azortis.azorbot.util.AzorbotEmbed;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Commands extends AzorbotCommand {
 
-    // Commands stored
-    private AzorbotCommand[] botCommands = null;
+    private final CommandCenter center;
 
-    // Constructor
-    public Commands(JDA jda){
+    /**
+     * Creates a commands command
+     * @param center Takes a CommandCenter
+     */
+    public Commands(CommandCenter center){
         super(
                 "commands",
                 new String[]{"command", "cmd", "help", "?", ""},
                 "Sends the command help page (this one)"
         );
-        setCommands(processCMDs(jda));
+        this.center = center;
     }
 
     // Handle
@@ -40,7 +41,7 @@ public class Commands extends AzorbotCommand {
         );
 
         // Loop over and add all commands with their respective information
-        for (AzorbotCommand command : botCommands){
+        for (AzorbotCommand command : center.getCommands()){
             if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
             if (command.getCommands().size() == 0){
@@ -77,30 +78,5 @@ public class Commands extends AzorbotCommand {
 
         // Send the embed
         embed.send(true, 1000);
-    }
-
-    /**
-     * Sets commands
-     * @param commands Commands
-     */
-    public void setCommands(List<AzorbotCommand> commands){
-        botCommands = commands.toArray(new AzorbotCommand[0]);
-    }
-
-    /**
-     * Gets all commands found in
-     * @param jda The JDA
-     * @return The list of commands
-     */
-    public List<AzorbotCommand> processCMDs(JDA jda){
-        List<AzorbotCommand> foundCommands = new ArrayList<>();
-        jda.getRegisteredListeners().forEach(c -> {
-
-            if (c instanceof AzorbotCommand && c.getClass().getPackageName().contains(".commands")){
-                foundCommands.add((AzorbotCommand) c);
-            }
-        });
-        foundCommands.add(this);
-        return foundCommands;
     }
 }

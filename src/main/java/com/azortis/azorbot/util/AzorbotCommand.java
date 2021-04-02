@@ -326,17 +326,12 @@ public class AzorbotCommand extends ListenerAdapter {
         e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten!");
     }
 
+
     /**
-     * Handles: Prefix, Bot authors, required permissions, argument preprocessing, command check
-     * @param e The guild message event that needs to be processed
+     * First process. Called by CommandCenter.
+     * @param e received event
      */
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
-
-        // Check prefix
-        if (!e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
-
-        // Prevent bot user
-        if (e.getAuthor().isBot()) return;
+    public void incoming(GuildMessageReceivedEvent e) {
 
         // Prevent non-permitted users
         if (noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) return;

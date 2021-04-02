@@ -5,14 +5,14 @@ import com.azortis.azorbot.Main;
 import java.util.*;
 
 import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.AzorbotListener;
 import com.azortis.azorbot.util.FileManager;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class A2AWatchdog extends ListenerAdapter {
+public class A2AWatchdog implements AzorbotListener {
     private static final int defaultThreshold = 80;
     private static final List<String> defaultDefinitions = Arrays.asList(
             "Can someone please help?",
@@ -93,8 +93,12 @@ public class A2AWatchdog extends ListenerAdapter {
         return out.toString();
     }
 
+    /**
+     * Handles incoming
+     * @param e message event
+     */
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
+    public void incoming(GuildMessageReceivedEvent e){
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
 
         ExtractedResult r = FuzzySearch.extractOne(e.getMessage().getContentDisplay(), definitions);

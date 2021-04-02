@@ -2,6 +2,7 @@ package com.azortis.azorbot;
 
 import com.azortis.azorbot.commands.*;
 import com.azortis.azorbot.listeners.*;
+import com.azortis.azorbot.util.AzorbotCommand;
 import com.azortis.azorbot.util.WikiIndexed;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -11,6 +12,8 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -19,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 import java.net.http.WebSocket;
 
@@ -56,34 +60,6 @@ public class Main extends ListenerAdapter {
         jda.getPresence().setStatus(OnlineStatus.ONLINE);
         jda.getPresence().setActivity(Activity.watching("over Azortis: `/help`"));
 
-
-        /// Listener Registrar
-
-        // Log incoming messages
-        jda.addEventListener(new Main());
-
-        // Listeners
-        jda.addEventListener(new A2AWatchdog());
-        jda.addEventListener(new Prefix());
-        jda.addEventListener(new PingWatchdogListener(jda));
-
-        // Commands
-        jda.addEventListener(new Ping());
-        jda.addEventListener(new Shutdown());
-        jda.addEventListener(new Links());
-        jda.addEventListener(new Tester());
-        jda.addEventListener(new XYProblem());
-        jda.addEventListener(new GitBookLogin());
-
-        // Categories
-        jda.addEventListener(new A2A());
-        jda.addEventListener(new Wiki());
-        jda.addEventListener(new PingWatchdog());
-
-        // Add command index help page listener!
-        // Any commands registered after are NOT displayed in the index
-        jda.addEventListener(new Commands(jda));
-
         // Load wikis
         WikiIndexed.loadAll();
     }
@@ -102,7 +78,11 @@ public class Main extends ListenerAdapter {
 
         // Log into Discord & build JDA
         try {
-            jda = JDABuilder.create(token, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_PRESENCES).disableCache(CacheFlag.VOICE_STATE).build();
+            jda = JDABuilder.createDefault(token)
+                    .enableIntents(GatewayIntent.GUILD_MEMBERS,GatewayIntent.GUILD_PRESENCES)
+                    .disableCache(CacheFlag.VOICE_STATE)
+                    .addEventListeners(new CommandCenter())
+                    .build();
         } catch (LoginException e){
             warn("Failed to load bot. Did you forget to create an environment file?");
             warn("Please create a new `.env` file with as content `token=<token>`");
@@ -110,14 +90,6 @@ public class Main extends ListenerAdapter {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
-        if (!e.getAuthor().isBot()){
-            // Updates configurations
-            Main.LOGGER.info(e.getAuthor().getName() + ": " + e.getMessage().getContentDisplay());
-        }
     }
 
     @Override

@@ -2,12 +2,10 @@ package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.AzorbotListener;
 import com.azortis.azorbot.util.FileManager;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,9 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PingWatchdogListener extends ListenerAdapter {
+public class PingWatchdogListener implements AzorbotListener {
 
-    private static JDA jda;
     private static boolean initialized = false;
 
     private static List<Long> staffRoleIDs = new ArrayList<>();
@@ -28,14 +25,6 @@ public class PingWatchdogListener extends ListenerAdapter {
     private static final List<Member> staffMembers = new ArrayList<>();
     private static final List<Member> hasPingedStaff = new ArrayList<>();
     private static final Map<Long, LocalDateTime> pingedStaffWhen = new HashMap<>();
-
-    /**
-     * Creates a new ping watchdog
-     * @param jda uses this jda to query users and roles
-     */
-    public PingWatchdogListener(JDA jda){
-        PingWatchdogListener.jda = jda;
-    }
 
     /**
      * Deletes from staff members
@@ -132,11 +121,11 @@ public class PingWatchdogListener extends ListenerAdapter {
     }
 
     /**
-     * Runs checks for init, ping role and ping member
-     * @param e Event to check
+     * Handles incoming
+     * @param e message event
      */
     @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent e){
+    public void incoming(GuildMessageReceivedEvent e){
 
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
         if (e.getMessage().getContentRaw().startsWith("#")) return;
@@ -224,7 +213,7 @@ public class PingWatchdogListener extends ListenerAdapter {
         Main.info("Initializing ping watchdog (first message received)");
         initialized = true;
         if (!load()) return;
-        loadStaffRoles();
+        loadStaffRoles(e);
         loadStaffUsers(e);
         loadHasPingedStaff(e);
     }
@@ -311,10 +300,10 @@ public class PingWatchdogListener extends ListenerAdapter {
 
     /**
      * Loads staff roles
+     * @param guild The guild to find roles in
      */
-    private static void loadStaffRoles(){
-        assert jda != null;
-        staffRoleIDs.forEach(role -> staffRoles.add(jda.getRoleById(role)));
+    private static void loadStaffRoles(Guild guild){
+        staffRoleIDs.forEach(role -> staffRoles.add(guild.getRoleById(role)));
     }
 
     /**
