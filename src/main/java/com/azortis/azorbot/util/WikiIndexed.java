@@ -62,34 +62,40 @@ public class WikiIndexed {
                 // Print info
                 Main.info("Adding raw JSON to embed");
 
-                // Header
-                embed.setDescription("Raw JSON:");
-
                 // Get json string
-                String sWiki = wiki.getWiki().toString(4);
+                String sWiki = wiki.getWiki().toString(4).replace("`", "");
 
                 // Set size per field (cap for in embed)
                 int sizePerField = 1000;
 
-                // Loop over each part of the string
-                for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++){
+                // Check if we should make a scrollable embed
+                if (sWiki.length() > sizePerField) {
 
-                    // Add a field with each
-                    embed.addField(
-                            String.valueOf(i + 1), // With a header
-                            "```json\n" + // And a json block
-                            "\u200b" + sWiki // With the right content
-                                    .substring(
-                                            i * sizePerField,
-                                            Math.min(
-                                                    (i + 1) * sizePerField,
-                                                    sWiki.length() - 1
-                                            )
-                                    ).replace("`", "") +
-                            "\n```",
-                            false
-                    );
+                    List<AzorbotEmbed> embeds = new ArrayList<>();
 
+                    // Loop over each part of the string
+                    for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++) {
+
+                        AzorbotEmbed thisEmbed = new AzorbotEmbed(embed.getTitle(), embed.getMessage());
+
+                        // Add a field with each
+                        embed.addField(
+                                String.valueOf(i + 1), // With a header
+                                "```json\n" + // And a json block
+                                        "\u200b" + sWiki // With the right content
+                                        .substring(
+                                                i * sizePerField,
+                                                Math.min(
+                                                        (i + 1) * sizePerField,
+                                                        sWiki.length() - 1
+                                                )
+                                        ) +
+                                        "\n```",
+                                false
+                        );
+                    }
+                } else {
+                    embed.setDescription("```json\n\u200b" + sWiki + "\n```");
                 }
             }
 
