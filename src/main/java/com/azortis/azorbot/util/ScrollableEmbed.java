@@ -6,14 +6,16 @@ import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 @Getter
-public class ScrollableEmbed implements AzorbotListener {
+public class ScrollableEmbed extends ListenerAdapter {
     private final MessageChannel channel;
     private final List<AzorbotEmbed> embeds;
     private final LocalDateTime end;
@@ -57,7 +59,7 @@ public class ScrollableEmbed implements AzorbotListener {
      */
     private void updateTitles() {
         for (int i = 0; i < embeds.size(); i++){
-            embeds.get(i).setTitle(embeds.get(i).getTitle() + " `" + i + "/" + embeds.size() + "`");
+            embeds.get(i).setTitle(embeds.get(i).getTitle() + " `" + (i+1) + "/" + embeds.size() + "`");
             embeds.get(i).setMessage(message);
         }
     }
@@ -143,7 +145,7 @@ public class ScrollableEmbed implements AzorbotListener {
     public void forward(){
         Main.info("Scrolling forward 1 page");
         current += 1;
-        if (current >= embeds.size() - 1){
+        if (current > embeds.size() - 1){
             current = embeds.size() - 1;
             Main.info("Already as far right as possible");
             return;
@@ -161,11 +163,12 @@ public class ScrollableEmbed implements AzorbotListener {
     }
 
     @Override
-    public void incomingEmoji(@Nonnull GuildMessageReactionAddEvent e) {
-        Main.debug("Scrollable got emoji!");
+        public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
         if (LocalDateTime.now().isAfter(end)) CommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
-            checkReactions(e.getReactionEmote().getEmoji());
+            Main.info("Scrollable was reacted on! Emoji: " + e.getReactionEmote().toString().toUpperCase(Locale.ROOT).replace("RE:",""));
+            checkReactions(e.getReactionEmote().toString().toUpperCase(Locale.ROOT).replace("RE:",""));
+            e.getReaction().removeReaction(e.getUser()).queue();
         }
     }
 }
