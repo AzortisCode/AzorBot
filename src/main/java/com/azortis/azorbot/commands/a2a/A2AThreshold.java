@@ -7,8 +7,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-// TODO: Replace "A2AThreshold" with name of the command
-
 public class A2AThreshold extends AzorbotCommand {
     public A2AThreshold(){
         super(
