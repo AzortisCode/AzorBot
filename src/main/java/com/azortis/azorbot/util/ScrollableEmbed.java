@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 @Getter
 public class ScrollableEmbed extends ListenerAdapter {
@@ -21,33 +20,47 @@ public class ScrollableEmbed extends ListenerAdapter {
     private final LocalDateTime end;
     private Message message;
     private long ID;
-    private int prev;
     private int current;
 
     private static final String[] emojis = new String[]{"U+23EA", "U+25C0", "U+25B6", "U+23E9"};
 
     /**
      * Create a new scrollable embed
-     * @param embeds List of embeds to scroll through
-     * @param msg Message of which we use the channel
+     * @param pages List of embeds to scroll through
+     * @param message Message of which we use the channel
      */
-    public ScrollableEmbed(List<AzorbotEmbed> embeds, Message msg){
-        this.channel = msg.getChannel();
-        this.embeds = embeds;
-        this.prev = 0;
+    public ScrollableEmbed(List<AzorbotEmbed> pages, Message message){
+        this.channel = message.getChannel();
+        this.embeds = pages;
         this.end = LocalDateTime.now().plusHours(2);
         updateTitles();
         CommandCenter.addEmojiListener(this);
-        send(msg);
+        send();
+        Main.info("Built new scrollable");
+    }
+
+    /**
+     * Create a new scrollable embed
+     * @param pages List of embeds to scroll through
+     * @param message Message of which we use the channel
+     * @param deleteOriginal If true, deletes original message
+     */
+    public ScrollableEmbed(List<AzorbotEmbed> pages, Message message, boolean deleteOriginal) {
+        this.channel = message.getChannel();
+        this.embeds = pages;
+        this.end = LocalDateTime.now().plusHours(2);
+        updateTitles();
+        CommandCenter.addEmojiListener(this);
+        send();
+        if (deleteOriginal) message.delete().queue();
         Main.info("Built new scrollable");
     }
 
     /**
      * Sends this scrollable embed in to the channel of
-     * @param msg this message
      */
-    private void send(Message msg) {
-        msg.getChannel().sendMessage(embeds.get(current).build()).queue(scrollableMessage ->{
+    private void send() {
+        channel.sendMessage(embeds.get(current).build()).queue(scrollableMessage ->{
             this.message = scrollableMessage;
             this.ID = scrollableMessage.getIdLong();
             this.update();
@@ -68,7 +81,6 @@ public class ScrollableEmbed extends ListenerAdapter {
      * Updates the embed
      */
     private void update(){
-        this.prev = current;
         setResetEmbed();
         resetEmojis();
     }
@@ -100,18 +112,14 @@ public class ScrollableEmbed extends ListenerAdapter {
      */
     private void checkReactions(String emoji){
         for (int i = 0; i < emojis.length; i++){
-            try {
-                if (emojis[i].equalsIgnoreCase(emoji)){
-                    switch (i){
-                        case 0: wayBack(); break;
-                        case 1: back(); break;
-                        case 2: forward(); break;
-                        case 3: wayForward(); break;
-                    }
-                    break;
+            if (emojis[i].equalsIgnoreCase(emoji)){
+                switch (i){
+                    case 0: wayBack(); break;
+                    case 1: back(); break;
+                    case 2: forward(); break;
+                    case 3: wayForward(); break;
                 }
-            } catch (Exception ignored) {
-
+                return;
             }
         }
     }
@@ -162,12 +170,21 @@ public class ScrollableEmbed extends ListenerAdapter {
         update();
     }
 
+    /**
+     * Gets an emoji from Guild emoji event
+     * @param e The event to check
+     * @return The emoji unicode string
+     */
+    private String eventToEmoji(GuildMessageReactionAddEvent e){
+        return e.getReactionEmote().toString().toUpperCase(Locale.ROOT).replace("RE:","");
+    }
+
     @Override
-        public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
+    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
         if (LocalDateTime.now().isAfter(end)) CommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
-            Main.info("Scrollable was reacted on! Emoji: " + e.getReactionEmote().toString().toUpperCase(Locale.ROOT).replace("RE:",""));
-            checkReactions(e.getReactionEmote().toString().toUpperCase(Locale.ROOT).replace("RE:",""));
+            Main.info("Scrollable was reacted on! Emoji: " + eventToEmoji(e));
+            checkReactions(eventToEmoji(e));
             e.getReaction().removeReaction(e.getUser()).queue();
         }
     }

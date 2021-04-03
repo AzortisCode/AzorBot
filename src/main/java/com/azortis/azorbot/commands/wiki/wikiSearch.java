@@ -1,6 +1,7 @@
 package com.azortis.azorbot.commands.wiki;
 
 import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.ScrollableEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.util.AzorbotCommand;
@@ -76,9 +77,8 @@ public class wikiSearch extends AzorbotCommand {
 
         // Store search results for arguments in embed
         List<AzorbotEmbed> pages = wiki.search(args, e.getMessage());
-        // TODO: Implement ScrollableEmbed here
 
-        // Send embed
-        pages.get(0).send(true, 10000);
+        // Send scrollable
+        new ScrollableEmbed(pages, e.getMessage(), true);
     }
 }
