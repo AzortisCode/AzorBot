@@ -1,10 +1,8 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.commands.Wiki;
 import com.azortis.azorbot.util.AzorbotEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;

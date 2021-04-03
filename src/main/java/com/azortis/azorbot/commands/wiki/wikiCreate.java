@@ -5,7 +5,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 import com.azortis.azorbot.util.AzorbotEmbed;
 import com.azortis.azorbot.util.ExecutionTimer;
 import com.azortis.azorbot.util.WikiIndexed;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;

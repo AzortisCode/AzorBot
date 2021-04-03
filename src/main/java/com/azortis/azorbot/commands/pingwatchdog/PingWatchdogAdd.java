@@ -1,12 +1,10 @@
 package com.azortis.azorbot.commands.pingwatchdog;
 
-import com.azortis.azorbot.commands.PingWatchdog;
 import com.azortis.azorbot.listeners.PingWatchdogListener;
 import com.azortis.azorbot.util.AzorbotCommand;
 import com.azortis.azorbot.util.AzorbotEmbed;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;

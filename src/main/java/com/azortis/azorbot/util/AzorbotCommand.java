@@ -1,85 +1,27 @@
 package com.azortis.azorbot.util;
 
+import com.azortis.azorbot.Main;
 import lombok.Getter;
 import lombok.NonNull;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import com.azortis.azorbot.Main;
 
 import java.util.*;
 
-/* Example Command Class
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotCommand;
-
-import java.util.List;
-
-// TODO: Replace "CommandName" with name of the command
-
-public class CommandName extends AzorbotCommand {
-    public CommandName(){
-        super(
-                "CommandName",
-                new String[]{"Alias1", "Alias2", "Alias2"},
-                new String[]{"Role1", "Role2"},
-                "CommandDescription",
-                true,
-                "parent CommandName param1"
-        );
-    }
-
-    // Handle
-    @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e){
-        Main.info("Command ran!");
-    }
-}
-
-
-
-*/
-
-
-/* Example Category Class
-
-
-// TODO: Replace "CategoryName" with name of the category
-public class CategoryName extends AzorbotCommand {
-    // Constructor
-    public CategoryName(){
-        super(
-                "CategoryName",
-                new String[]{"Alias1", "Alias2"},
-                new String[]{}, // Add role name here. Empty: always / 1+: at least one.
-                "CategoryName command category",
-                "CategoryName <subcommand>",
-                new AzorbotCommand[]{
-                        new SubCommand1(),
-                        new SubCommand2(),
-                        new SubCommand3()
-                }
-        );
-    }
-}
-
-
-
-*/
 @Getter
 public class AzorbotCommand extends ListenerAdapter {
 
-    public String name;
-    public List<String> commands;
-    public List<String> roles;
-    public String description;
-    public boolean needsArguments;
-    public String example;
-    public boolean category;
-    public List<AzorbotCommand> subcommands;
+    public final String name;
+    public final List<String> commands;
+    public final List<String> roles;
+    public final String description;
+    public final boolean needsArguments;
+    public final String example;
+    public final boolean category;
+    public final List<AzorbotCommand> subcommands;
 
     /**
      * Command creator

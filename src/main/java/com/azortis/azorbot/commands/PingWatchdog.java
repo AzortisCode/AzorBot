@@ -2,8 +2,6 @@ package com.azortis.azorbot.commands;
 
 import com.azortis.azorbot.commands.pingwatchdog.*;
 import com.azortis.azorbot.util.AzorbotCommand;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 
 public class PingWatchdog extends AzorbotCommand {
     // Constructor

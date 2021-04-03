@@ -3,7 +3,6 @@ package com.azortis.azorbot.commands.a2a;
 import com.azortis.azorbot.listeners.A2AWatchdog;
 import com.azortis.azorbot.util.AzorbotEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
