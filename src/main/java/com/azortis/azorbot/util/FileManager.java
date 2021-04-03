@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -199,5 +201,13 @@ public class FileManager {
      */
     public boolean delete(){
         return file.delete();
+    }
+
+    /**
+     * Get when the managed file was last edited
+     * @return LocalDateTime
+     */
+    public LocalDateTime getLastEdited(){
+        return LocalDateTime.ofEpochSecond(this.file.lastModified(), 0, ZoneOffset.of(TimeZone.getDefault().getID()));
     }
 }
