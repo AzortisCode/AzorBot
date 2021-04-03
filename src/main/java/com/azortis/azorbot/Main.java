@@ -1,11 +1,7 @@
 package com.azortis.azorbot;
 
-import com.azortis.azorbot.commands.*;
-import com.azortis.azorbot.listeners.*;
-import com.azortis.azorbot.util.AzorbotCommand;
 import com.azortis.azorbot.util.ExecutionTimer;
 import com.azortis.azorbot.util.WikiIndexed;
-import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -13,9 +9,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -24,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 import java.net.http.WebSocket;
 
