@@ -8,8 +8,6 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-// TODO: Replace "A2AList" with name of the command
-
 public class A2AList extends AzorbotCommand {
     public A2AList(){
         super(
