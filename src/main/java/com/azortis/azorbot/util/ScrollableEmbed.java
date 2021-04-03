@@ -130,7 +130,7 @@ public class ScrollableEmbed extends ListenerAdapter {
     public void back(){
         Main.info("Scrolling back 1 page");
         current -= 1;
-        if (current <= 0){
+        if (current < 0){
             current = 0;
             Main.info("Already as far left as possible");
             return;
