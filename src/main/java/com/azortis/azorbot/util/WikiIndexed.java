@@ -3,6 +3,7 @@ package com.azortis.azorbot.util;
 import com.azortis.azorbot.Main;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -336,9 +337,6 @@ public class WikiIndexed {
      */
     private boolean load(){
 
-        // Get date
-        this.updatedDate = LocalDateTime.now();
-
         // Load importer
         WikiImporter importer = new WikiImporter(this.name, this.gitPath, this.docs);
 
@@ -355,6 +353,13 @@ public class WikiIndexed {
         } else {
             // Write to file if not equal
             this.file.write(fromImport);
+
+            // Get date
+            this.updatedDate = LocalDateTime.now();
+
+            // Update search wiki definitions
+            updateSearch();
+
             return true;
         }
     }
@@ -390,7 +395,6 @@ public class WikiIndexed {
         for (String key : matches.keySet()){
             AzorbotEmbed embed = new AzorbotEmbed(key, msg);
             embed.setTitle(key, matches.get(key)[0]);
-            embed.setDescription("Page `" + thisPage + "/" + foundPages + "` relevant pages");
             embed.addField("Snippet", matches.get(key)[1], false);
             pages.add(embed);
         }
@@ -403,10 +407,34 @@ public class WikiIndexed {
      * Finds matching pages in this wiki
      * @param args using these arguments
      * @return a map where the keys are the page names, and the elements are a 2-element string array with the page url and the snippet.
-     * If no good items were found, this map has only key "Options" with element a string array with the closest matches.
+     * <p>If no good items were found, this map has only key "Options" with element a string array with the closest matches.</p>
      */
-    private Map<String, String[]> findMatchingPages(List<String> args){
+    private @NotNull Map<String, String[]> findMatchingPages(List<String> args){
         return Map.of("Options", new String[]{args.get(0)});
+    }
+
+    /**
+     * Updates wiki search definitions
+     * <p>Can be quite slow!</p>
+     */
+    private void updateSearch() {
+
+        // Useless entries
+        List<String> banned = Arrays.asList("name", "path", "docs");
+
+        // Queue
+        List<JSONObject> queue = new ArrayList<>();
+
+        // Find affected keys
+        wiki.keySet().stream().filter(key -> !banned.contains(key)).forEach(key -> queue.add((JSONObject) wiki.get(key)));
+
+
+        List<JSONObject> requeue = new ArrayList<>();
+
+        queue.forEach(item -> {
+            if (item.has("README")){
+            }
+        });
     }
 
     /**
