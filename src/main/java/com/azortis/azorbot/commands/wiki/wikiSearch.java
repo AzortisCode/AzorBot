@@ -31,10 +31,18 @@ public class wikiSearch extends AzorbotCommand {
             sendHelp(e.getMessage());
             return;
         }
+
+        // Process
         process(args, e, embed);
     }
 
 
+    /**
+     * Processes this command
+     * @param args Arguments used as query and/or wiki name
+     * @param e Guild event
+     * @param embed Embed to write into
+     */
     public static void process(List<String> args, GuildMessageReceivedEvent e, AzorbotEmbed embed){
 
         // Check if any wikis are loaded
@@ -78,7 +86,12 @@ public class wikiSearch extends AzorbotCommand {
         // Store search results for arguments in embed
         List<AzorbotEmbed> pages = wiki.search(args, e.getMessage());
 
-        // Send scrollable
-        new ScrollableEmbed(pages, e.getMessage(), true);
+        // Check if only one page (either when one found or when none found so returns error)
+        if (pages.size() == 1) {
+            pages.get(0).send(true, 10000);
+        } else {
+            // Send scrollable
+            new ScrollableEmbed(pages, e.getMessage(), true);
+        }
     }
 }
