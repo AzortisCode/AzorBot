@@ -2,10 +2,10 @@ package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotEmbed;
-import com.azortis.azorbot.util.AzorbotListener;
 import com.azortis.azorbot.util.FileManager;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PingWatchdogListener implements AzorbotListener {
+public class PingWatchdogListener extends ListenerAdapter {
 
     private static boolean initialized = false;
 
@@ -125,7 +125,7 @@ public class PingWatchdogListener implements AzorbotListener {
      * @param e message event
      */
     @Override
-    public void incoming(GuildMessageReceivedEvent e){
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
 
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
         if (e.getMessage().getContentRaw().startsWith("#")) return;

@@ -2,16 +2,16 @@ package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.util.AzorbotEmbed;
-import com.azortis.azorbot.util.AzorbotListener;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class Prefix implements AzorbotListener {
+public class Prefix extends ListenerAdapter {
     /**
      * Handles incoming
      * @param e message event
      */
     @Override
-    public void incoming(GuildMessageReceivedEvent e){
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
         if (e.getMessage().getMentionedUsers().contains(Main.botUser)){
             String Sender = e.getMessage().getAuthor().getName();

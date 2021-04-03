@@ -6,10 +6,10 @@ import com.azortis.azorbot.listeners.ChatListener;
 import com.azortis.azorbot.listeners.PingWatchdogListener;
 import com.azortis.azorbot.listeners.Prefix;
 import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotListener;
 import lombok.Getter;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
@@ -35,13 +35,13 @@ public class CommandCenter extends ListenerAdapter {
             // Command command
             new Commands()
     );
-    private static final List<AzorbotListener> listeners = Arrays.asList(
+    private static final List<ListenerAdapter> listeners = Arrays.asList(
             new A2AWatchdog(),
             new PingWatchdogListener(),
             new Prefix(),
             new ChatListener()
     );
-    private static final List<AzorbotListener> emojiListeners = new ArrayList<>();
+    private static final List<ListenerAdapter> emojiListeners = new ArrayList<>();
 
     /**
      * Creates a command center
@@ -54,7 +54,8 @@ public class CommandCenter extends ListenerAdapter {
      * Adds an emoji listener
      * @param listener the listener to add
      */
-    public static void addEmojiListener(AzorbotListener listener) {
+    public static void addEmojiListener(ListenerAdapter listener) {
+        Main.info("Adding emoji listener: " + listener.getClass().toString());
         emojiListeners.add(listener);
     }
 
@@ -62,7 +63,7 @@ public class CommandCenter extends ListenerAdapter {
      * Removes an emoji listener
      * @param listener the listener to remove
      */
-    public static void removeEmojiListener(AzorbotListener listener) {
+    public static void removeEmojiListener(ListenerAdapter listener) {
         emojiListeners.remove(listener);
     }
 
@@ -77,13 +78,13 @@ public class CommandCenter extends ListenerAdapter {
         if (e.getAuthor().isBot()) return;
 
         // Pass to all listeners
-        listeners.forEach(listener -> listener.incoming(e));
+        listeners.forEach(listener -> listener.onGuildMessageReceived(e));
 
         // Check prefix
         if (!e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
 
         // Send to all commands
-        commands.forEach(cmd -> cmd.incoming(e));
+        commands.forEach(cmd -> cmd.onGuildMessageReceived(e));
     }
 
     /**
@@ -92,8 +93,17 @@ public class CommandCenter extends ListenerAdapter {
      */
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
-        if (e.getUser().isBot()) return;
-        Main.debug("Added reactions! Sending to " + emojiListeners.size() + " listeners");
-        emojiListeners.forEach(listener -> listener.incomingEmoji(e));
+        if (Objects.requireNonNull(e.getUser()).isBot()) return;
+        emojiListeners.forEach(listener -> listener.onGuildMessageReactionAdd(e));
+    }
+
+    /**
+     * Handles emoji listeners
+     * @param e Emoji event
+     */
+    @Override
+    public void onGuildMessageReactionRemove(@Nonnull GuildMessageReactionRemoveEvent e){
+        if (Objects.requireNonNull(e.getUser()).isBot()) return;
+        emojiListeners.forEach(listener -> listener.onGuildMessageReactionRemove(e));
     }
 }

@@ -323,7 +323,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param e Guild message even that needs to be processed
      */
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten!");
+        e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten!").queue();
     }
 
 
@@ -331,7 +331,8 @@ public class AzorbotCommand extends ListenerAdapter {
      * First process. Called by CommandCenter.
      * @param e received event
      */
-    public void incoming(GuildMessageReceivedEvent e) {
+    @Override
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
         // Prevent non-permitted users
         if (noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) return;
