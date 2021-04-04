@@ -365,6 +365,26 @@ public class WikiIndexed {
     }
 
     /**
+     * Updates wiki search definitions
+     * <p>Can be quite slow!</p>
+     */
+    private void updateSearch() {
+
+        // Useless entries
+        List<String> banned = Arrays.asList("name", "path", "docs");
+
+        // Pages & requeue
+        Map<String, List<String>> pages = new HashMap<>();
+        Map<String, String> paths = new HashMap<>();
+        List<JSONObject> requeue = new ArrayList<>();
+
+        // Find affected keys
+        wiki.keySet().stream().filter(key -> !banned.contains(key)).forEach(key -> {
+        });
+        Main.info(wiki.keySet().toString());
+    }
+
+    /**
      * Searches for a query stored in
      * @param args these arguments (list of words)
      * @param msg the message object of which the channel is used to send messages to
@@ -382,14 +402,11 @@ public class WikiIndexed {
             // Return a single error-like embed if no matching pages were found
             AzorbotEmbed embed = new AzorbotEmbed("No matching pages found", msg);
             embed.setDescription("Closest keywords are: `" + matches.get("Options")[0] + "`\n" +
-                    "Please try one of these instead.");
+                    "Please try one of these instead.\n");
+            embed.addField("Otherwise, search the wiki", "[" + getName() + "](" + getDocs() + ")", false);
             pages.add(embed);
             return pages;
         }
-
-        // Save some variables
-        int thisPage = 1;
-        int foundPages = matches.size();
 
         // Loop over all matches and save the embeds
         for (String key : matches.keySet()){
@@ -411,26 +428,6 @@ public class WikiIndexed {
      */
     private @NotNull Map<String, String[]> findMatchingPages(List<String> args){
         return Map.of("Options", new String[]{args.get(0)});
-    }
-
-    /**
-     * Updates wiki search definitions
-     * <p>Can be quite slow!</p>
-     */
-    private void updateSearch() {
-
-        // Useless entries
-        List<String> banned = Arrays.asList("name", "path", "docs");
-
-        // Pages & requeue
-        Map<String, List<String>> pages = new HashMap<>();
-        Map<String, String> paths = new HashMap<>();
-        List<JSONObject> requeue = new ArrayList<>();
-
-        // Find affected keys
-        wiki.keySet().stream().filter(key -> !banned.contains(key)).forEach(key -> {
-        });
-        Main.info(wiki.keySet().toString());
     }
 
     /**

@@ -24,8 +24,8 @@ com/azortis/azorbot/commands/Shutdown.java
  com.azortis.azorbot.commands.Shutdown
 com/azortis/azorbot/listeners/A2AWatchdog.java
  com.azortis.azorbot.listeners.A2AWatchdog
-com/azortis/azorbot/commands/Wiki.java
- com.azortis.azorbot.commands.Wiki
+com/azortis/azorbot/util/ScrollableEmbed.java
+ com.azortis.azorbot.util.ScrollableEmbed
 com/azortis/azorbot/commands/pingwatchdog/PingWatchdogList.java
  com.azortis.azorbot.commands.pingwatchdog.PingWatchdogList
 com/azortis/azorbot/listeners/PingWatchdogListener.java
@@ -52,33 +52,33 @@ com/azortis/azorbot/commands/Links.java
  com.azortis.azorbot.commands.Links
 com/azortis/azorbot/commands/A2A.java
  com.azortis.azorbot.commands.A2A
-com/azortis/azorbot/commands/wiki/wikiUpdate.java
- com.azortis.azorbot.commands.wiki.wikiUpdate
+com/azortis/azorbot/util/ExampleCommand.java
+ com.azortis.azorbot.util.ExampleCommand
 com/azortis/azorbot/commands/Commands.java
  com.azortis.azorbot.commands.Commands
 com/azortis/azorbot/util/ExampleCategory.java
  com.azortis.azorbot.util.ExampleCategory
-com/azortis/azorbot/commands/wiki/wikiInfo.java
- com.azortis.azorbot.commands.wiki.wikiInfo
-com/azortis/azorbot/commands/wiki/wikiDelete.java
- com.azortis.azorbot.commands.wiki.wikiDelete
-com/azortis/azorbot/util/ScrollableEmbed.java
- com.azortis.azorbot.util.ScrollableEmbed
-com/azortis/azorbot/Main.java
- com.azortis.azorbot.Main
-com/azortis/azorbot/commands/wiki/wikiCreate.java
- com.azortis.azorbot.commands.wiki.wikiCreate
-com/azortis/azorbot/commands/wiki/wikiSearch.java
- com.azortis.azorbot.commands.wiki.wikiSearch
-com/azortis/azorbot/util/ExampleCommand.java
- com.azortis.azorbot.util.ExampleCommand
+com/azortis/azorbot/commands/TryAndSee.java
+ com.azortis.azorbot.commands.TryAndSee
+com/azortis/azorbot/CommandCenter.java
+ com.azortis.azorbot.CommandCenter
+com/azortis/azorbot/commands/wiki/wikiUpdate.java
+ com.azortis.azorbot.commands.wiki.wikiUpdate
 com/azortis/azorbot/commands/wiki/wikiList.java
  com.azortis.azorbot.commands.wiki.wikiList
 com/azortis/azorbot/commands/wiki/wikiIndex.java
  com.azortis.azorbot.commands.wiki.wikiIndex
+com/azortis/azorbot/commands/wiki/wikiInfo.java
+ com.azortis.azorbot.commands.wiki.wikiInfo
 com/azortis/azorbot/util/WikiIndexed.java
  com.azortis.azorbot.util.WikiIndexed
-com/azortis/azorbot/CommandCenter.java
- com.azortis.azorbot.CommandCenter
-com/azortis/azorbot/commands/TryAndSee.java
- com.azortis.azorbot.commands.TryAndSee
+com/azortis/azorbot/commands/wiki/wikiDelete.java
+ com.azortis.azorbot.commands.wiki.wikiDelete
+com/azortis/azorbot/commands/Wiki.java
+ com.azortis.azorbot.commands.Wiki
+com/azortis/azorbot/commands/wiki/wikiCreate.java
+ com.azortis.azorbot.commands.wiki.wikiCreate
+com/azortis/azorbot/commands/wiki/wikiSearch.java
+ com.azortis.azorbot.commands.wiki.wikiSearch
+com/azortis/azorbot/Main.java
+ com.azortis.azorbot.Main

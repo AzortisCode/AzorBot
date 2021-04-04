@@ -90,6 +90,15 @@ public class wikiSearch extends AzorbotCommand {
         if (pages.size() == 1) {
             pages.get(0).send(true, 10000);
         } else {
+
+            // Make another embed which contains some generic info
+            embed.setDescription("If you did not find what you were looking for,\n" +
+                    "please search for it on the wiki yourself, before contacting Support.");
+            embed.addField("Wiki:", "[" + wiki.getName() + "](" + wiki.getDocs() + ")", false);
+
+            // Add it to the pages
+            pages.add(embed);
+
             // Send scrollable
             new ScrollableEmbed(pages, e.getMessage(), true);
         }

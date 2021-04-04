@@ -99,8 +99,10 @@ public class ScrollableEmbed extends ListenerAdapter {
         if (embeds.size() > 2) {
             this.message.addReaction(emojis[0]).queue();
         }
-        this.message.addReaction(emojis[1]).queue();
-        this.message.addReaction(emojis[2]).queue();
+        if (embeds.size() != 0) {
+            this.message.addReaction(emojis[1]).queue();
+            this.message.addReaction(emojis[2]).queue();
+        }
         if (embeds.size() > 2) {
             this.message.addReaction(emojis[3]).queue();
         }
