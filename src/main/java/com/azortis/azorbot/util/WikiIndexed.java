@@ -422,19 +422,15 @@ public class WikiIndexed {
         // Useless entries
         List<String> banned = Arrays.asList("name", "path", "docs");
 
-        // Queue
-        List<JSONObject> queue = new ArrayList<>();
-
-        // Find affected keys
-        wiki.keySet().stream().filter(key -> !banned.contains(key)).forEach(key -> queue.add((JSONObject) wiki.get(key)));
-
-
+        // Pages & requeue
+        Map<String, List<String>> pages = new HashMap<>();
+        Map<String, String> paths = new HashMap<>();
         List<JSONObject> requeue = new ArrayList<>();
 
-        queue.forEach(item -> {
-            if (item.has("README")){
-            }
+        // Find affected keys
+        wiki.keySet().stream().filter(key -> !banned.contains(key)).forEach(key -> {
         });
+        Main.info(wiki.keySet().toString());
     }
 
     /**
