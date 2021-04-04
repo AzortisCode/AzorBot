@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-class ExampleCommand extends AzorbotCommand {
+public class ExampleCommand extends AzorbotCommand {
     public ExampleCommand() {
         super(
                 "CommandName",

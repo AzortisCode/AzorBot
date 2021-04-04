@@ -26,6 +26,7 @@ public class CommandCenter extends ListenerAdapter {
             new Tester(),
             new XYProblem(),
             new GitBookLogin(),
+            new TryAndSee(),
 
             // Categories
             new A2A(),
