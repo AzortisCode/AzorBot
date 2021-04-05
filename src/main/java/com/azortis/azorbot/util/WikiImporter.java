@@ -18,16 +18,20 @@ public class WikiImporter {
     private final String docs;
     private final JSONObject wiki;
     private final JSONObject flatWiki = new JSONObject();
+    private final int threshold;
 
     /**
      * Imports a wiki
      * @param name with name as name
      * @param path and path as path to raw github repo
+     * @param docs url to docs of this wiki
+     * @param threshold 1-100 scale for wiki queries
      */
-    public WikiImporter (String name, String path, String docs){
+    public WikiImporter (String name, String path, String docs, int threshold){
         this.name = name;
         this.path = path.replace("SUMMARY.md","");
         this.docs = docs;
+        this.threshold = threshold;
         wiki = create();
         if (wiki == null){
             Main.error("Wiki" + name + " has an issue during creation");
@@ -57,6 +61,7 @@ public class WikiImporter {
         wiki.put("path", path);
         wiki.put("name", name);
         wiki.put("docs", docs);
+        wiki.put("threshold", threshold);
         return wiki;
     }
 
