@@ -1,10 +1,7 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.cocoUtil.CocoCommand;
-import com.azortis.azorbot.cocoUtil.CocoEmbed;
-import com.azortis.azorbot.cocoUtil.CocoScrollable;
-import com.azortis.azorbot.cocoUtil.CocoText;
-import com.azortis.azorbot.util.*;
+import com.azortis.azorbot.cocoUtil.*;
+import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Collections;
@@ -96,6 +93,9 @@ public class WikiSearch extends CocoCommand {
             embed.setDescription("If you did not find what you were looking for,\n" +
                     "please search for it on the wiki yourself, before contacting Support.");
             embed.addField("Wiki:", "[" + wiki.getName() + "](" + wiki.getDocs() + ")", false);
+
+            // Add runtime field
+            embed.addField("Time to search", CocoTimer.duration("Search Wiki", 69420), false);
 
             // Add it to the pages
             pages.add(embed);
