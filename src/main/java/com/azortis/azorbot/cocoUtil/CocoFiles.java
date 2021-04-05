@@ -1,7 +1,5 @@
 package com.azortis.azorbot.cocoUtil;
 
-import com.azortis.azorbot.Main;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -99,6 +97,7 @@ public class CocoFiles {
 
         // Check if the file exists
         if (!file.exists()){
+
 
             // Create if should create
             if (createIfNot){
