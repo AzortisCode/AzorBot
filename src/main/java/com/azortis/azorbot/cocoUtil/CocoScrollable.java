@@ -50,7 +50,7 @@ public class CocoScrollable extends ListenerAdapter {
         CocoCommandCenter.addEmojiListener(this);
         send();
         if (deleteOriginal) message.delete().queue();
-        CocoBot.info("Built new scrollable");
+        CocoBot.debug("Built new scrollable");
     }
 
     /**
@@ -66,7 +66,7 @@ public class CocoScrollable extends ListenerAdapter {
         updateTitles();
         CocoCommandCenter.addEmojiListener(this);
         send();
-        CocoBot.info("Built new scrollable");
+        CocoBot.debug("Built new scrollable");
     }
 
     /**
@@ -88,7 +88,7 @@ public class CocoScrollable extends ListenerAdapter {
             CocoCommandCenter.addEmojiListener(this);
             send();
             if (deleteOriginal) message.delete().queue();
-            CocoBot.info("Built new scrollable");
+            CocoBot.debug("Built new scrollable");
         }
     }
 
@@ -329,7 +329,7 @@ public class CocoScrollable extends ListenerAdapter {
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e){
         if (LocalDateTime.now().isAfter(end)) CocoCommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
-            CocoBot.info("Scrollable was reacted on! Emoji: " + eventToEmoji(e));
+            CocoBot.debug("Scrollable was reacted on! Emoji: " + eventToEmoji(e));
             checkReactions(eventToEmoji(e));
             e.getReaction().removeReaction(e.getUser()).queue();
         }
