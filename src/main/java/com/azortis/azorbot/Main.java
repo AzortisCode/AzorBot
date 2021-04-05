@@ -31,6 +31,9 @@ public class Main extends ListenerAdapter {
         loadConfig();
     }
 
+    /**
+     * Load configuration
+     */
     private static void loadConfig(){
         // Load token from env file
         Dotenv dotenv = Dotenv.configure()
