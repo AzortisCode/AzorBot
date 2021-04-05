@@ -1,7 +1,6 @@
 package com.azortis.azorbot.cocoUtil;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.Tester;
 import com.azortis.azorbot.commands.Shutdown;
 import com.azortis.azorbot.commands.*;
 import com.azortis.azorbot.listeners.A2AWatchdog;
@@ -31,7 +30,6 @@ public class CocoCommandCenter extends ListenerAdapter {
             new Ping(),
             new Shutdown(),
             new Links(),
-            new Tester(),
             new XYProblem(),
             new GitBookLogin(),
             new TryAndSee(),
