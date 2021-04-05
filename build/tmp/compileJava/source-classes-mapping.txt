@@ -34,24 +34,16 @@ com/azortis/azorbot/commands/pingwatchdog/PingWatchdogAdd.java
  com.azortis.azorbot.commands.pingwatchdog.PingWatchdogAdd
 com/azortis/azorbot/commands/pingwatchdog/PingWatchdogList.java
  com.azortis.azorbot.commands.pingwatchdog.PingWatchdogList
-com/azortis/azorbot/commands/wiki/WikiUpdate.java
- com.azortis.azorbot.commands.wiki.WikiUpdate
+com/azortis/azorbot/commands/GitBookLogin.java
+ com.azortis.azorbot.commands.GitBookLogin
 com/azortis/azorbot/commands/a2a/A2AAdd.java
  com.azortis.azorbot.commands.a2a.A2AAdd
 com/azortis/azorbot/commands/wiki/WikiInfo.java
  com.azortis.azorbot.commands.wiki.WikiInfo
-com/azortis/azorbot/commands/wiki/WikiDelete.java
- com.azortis.azorbot.commands.wiki.WikiDelete
-com/azortis/azorbot/commands/wiki/WikiSearch.java
- com.azortis.azorbot.commands.wiki.WikiSearch
-com/azortis/azorbot/commands/Wiki.java
- com.azortis.azorbot.commands.Wiki
-com/azortis/azorbot/commands/wiki/WikiList.java
- com.azortis.azorbot.commands.wiki.WikiList
-com/azortis/azorbot/commands/wiki/WikiThreshold.java
- com.azortis.azorbot.commands.wiki.WikiThreshold
 com/azortis/azorbot/cocoUtil/CocoCommand.java
  com.azortis.azorbot.cocoUtil.CocoCommand
+com/azortis/azorbot/commands/wiki/WikiSearch.java
+ com.azortis.azorbot.commands.wiki.WikiSearch
 com/azortis/azorbot/cocoUtil/CocoFiles.java
  com.azortis.azorbot.cocoUtil.CocoFiles
 com/azortis/azorbot/commands/Commands.java
@@ -60,8 +52,12 @@ com/azortis/azorbot/listeners/Prefix.java
  com.azortis.azorbot.listeners.Prefix
 com/azortis/azorbot/util/WikiImporter.java
  com.azortis.azorbot.util.WikiImporter
+com/azortis/azorbot/commands/Wiki.java
+ com.azortis.azorbot.commands.Wiki
 com/azortis/azorbot/cocoUtil/CocoEmbed.java
  com.azortis.azorbot.cocoUtil.CocoEmbed
+com/azortis/azorbot/commands/wiki/WikiThreshold.java
+ com.azortis.azorbot.commands.wiki.WikiThreshold
 com/azortis/azorbot/commands/Shutdown.java
  com.azortis.azorbot.commands.Shutdown
 com/azortis/azorbot/listeners/A2AWatchdog.java
@@ -70,14 +66,18 @@ com/azortis/azorbot/cocoUtil/CocoBot.java
  com.azortis.azorbot.cocoUtil.CocoBot
 com/azortis/azorbot/cocoUtil/CocoScrollable.java
  com.azortis.azorbot.cocoUtil.CocoScrollable
-com/azortis/azorbot/commands/GitBookLogin.java
- com.azortis.azorbot.commands.GitBookLogin
 com/azortis/azorbot/commands/wiki/WikiCreate.java
  com.azortis.azorbot.commands.wiki.WikiCreate
 com/azortis/azorbot/listeners/PingWatchdogListener.java
  com.azortis.azorbot.listeners.PingWatchdogListener
+com/azortis/azorbot/commands/wiki/WikiUpdate.java
+ com.azortis.azorbot.commands.wiki.WikiUpdate
+com/azortis/azorbot/commands/wiki/WikiList.java
+ com.azortis.azorbot.commands.wiki.WikiList
 com/azortis/azorbot/listeners/ChatListener.java
  com.azortis.azorbot.listeners.ChatListener
+com/azortis/azorbot/commands/wiki/WikiDelete.java
+ com.azortis.azorbot.commands.wiki.WikiDelete
 com/azortis/azorbot/util/WikiIndexed.java
  com.azortis.azorbot.util.WikiIndexed
 com/azortis/azorbot/cocoUtil/CocoCommandCenter.java
@@ -86,3 +86,5 @@ com/azortis/azorbot/commands/wiki/WikiIndex.java
  com.azortis.azorbot.commands.wiki.WikiIndex
 com/azortis/azorbot/Main.java
  com.azortis.azorbot.Main
+com/azortis/azorbot/Test.java
+ com.azortis.azorbot.Test

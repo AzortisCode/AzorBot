@@ -17,6 +17,7 @@ import java.util.*;
 
 @Getter
 public class WikiIndexed {
+    private static boolean done = false;
     // Global wiki variables
     private static final String absolutePath = Main.configPath + "wikis/{}.json";
     @Getter
@@ -498,6 +499,24 @@ public class WikiIndexed {
      * <p>If empty, there are no found matches</p>
      */
     private List<List<String>> searchMessage(List<String> message, List<String> query){
+        if (!done){
+            CocoFiles file = new CocoFiles(Main.configPath + "example.txt");
+            file.write(message);
+            CocoFiles file2 = new CocoFiles(Main.configPath + "example2.txt");
+            file2.write(query);
+            done = true;
+        }
+        List<List<String>> results = new ArrayList<>();
+        /*
+         * Query item 1 is found
+         * add a snippet to the results list
+         *
+         * A snippet is basically a collection of lines that together form some useful information
+         *
+         * Full query match = 100% match
+         * 1e 2e query word match = 95% match
+         * is
+         */
         return new ArrayList<>(Collections.singleton(message));
     }
 
