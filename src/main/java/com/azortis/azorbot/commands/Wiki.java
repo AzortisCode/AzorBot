@@ -22,7 +22,8 @@ public class Wiki extends AzorbotCommand {
                         new wikiInfo(),
                         new wikiGitPath(),
                         new wikiSearch(),
-                        new wikiDelete()
+                        new wikiDelete(),
+                        new wikiThreshold()
                 }
         );
     }

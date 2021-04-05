@@ -27,6 +27,7 @@ public class Main extends ListenerAdapter {
     public static final String   prefix = "!";
     public static final String   botColor = "0x003b6f";
     public static final String   botCompany = "Azortis";
+    public static       int      defaultSearchThreshold = 80;
     public static       User     botUser;
     public static       SelfUser botSelfUser;
     public static       String   botName;

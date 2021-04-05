@@ -15,9 +15,9 @@ public class wikiCreate extends AzorbotCommand {
                 "Create",
                 new String[]{"c", "+"},
                 null,
-                "Creates a new wiki",
+                "Creates a new wiki (threshold is 1-100 scale integer, indicating % match to search)",
                 true,
-                "wiki create Name <GitBook URL> <Raw GitHub URL>"
+                "wiki create Name <GitBook URL> <Raw GitHub URL> <Threshold>"
         );
     }
 
@@ -38,7 +38,15 @@ public class wikiCreate extends AzorbotCommand {
             embed.addField("GitPath Help", "You can request GitPath help with `" + Main.prefix + "wiki GitPath`", false);
         } else {
             ExecutionTimer timer = new ExecutionTimer();
-            new WikiIndexed(args.get(0), args.get(2), args.get(1));
+            int threshold = Main.defaultSearchThreshold;
+            if (Integer.parseInt(args.get(3)) > 0 && Integer.parseInt(args.get(3)) < 100) {
+                embed.addField("Entered threshold out of bounds [1, 100]", "Using default: " + args.get(3), false);
+            } else if (args.size() == 4) {
+                threshold = Integer.parseInt(args.get(3));
+            } else {
+                embed.addField("Default threshold for searches", String.valueOf(threshold), false);
+            }
+            new WikiIndexed(args.get(0), args.get(2), args.get(1), threshold);
             timer.stop();
             embed.setDescription("Created new wiki " + args.get(0) + "\n" +
                     timer.duration("Create Wiki"));
