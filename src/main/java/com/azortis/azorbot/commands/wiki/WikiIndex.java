@@ -1,13 +1,14 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
+import com.azortis.azorbot.util.CocoScrollable;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class WikiIndex extends AzorbotCommand {
+public class WikiIndex extends CocoCommand {
     public WikiIndex(){
         super(
                 "Index",
@@ -21,8 +22,12 @@ public class WikiIndex extends AzorbotCommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("{} wiki index".replace("{}", args.get(0)), e.getMessage());
-        WikiIndexed.getIndex(args.get(0), embed);
-        embed.send(true);
+        CocoEmbed embed = new CocoEmbed("{} wiki index".replace("{}", args.get(0)), e.getMessage());
+        CocoScrollable scrollable = new CocoScrollable(
+                WikiIndexed.getIndex(args.get(0)),
+                embed,
+                e.getMessage(),
+                true
+        );
     }
 }

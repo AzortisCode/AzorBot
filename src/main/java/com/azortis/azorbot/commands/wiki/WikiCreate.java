@@ -1,15 +1,15 @@
 package com.azortis.azorbot.commands.wiki;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.ExecutionTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class WikiCreate extends AzorbotCommand {
+public class WikiCreate extends CocoCommand {
     public WikiCreate(){
         super(
                 "Create",
@@ -24,7 +24,7 @@ public class WikiCreate extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("Wiki creation", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Wiki creation", e.getMessage());
         if (args.size() == 1){
             embed.setDescription("You forgot to specify the raw GitPath and Docs page");
             sendHelp(e.getMessage());

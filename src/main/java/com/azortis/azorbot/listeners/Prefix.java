@@ -1,7 +1,7 @@
 package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -15,7 +15,7 @@ public class Prefix extends ListenerAdapter {
         if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
         if (e.getMessage().getMentionedUsers().contains(Main.botUser)){
             String Sender = e.getMessage().getAuthor().getName();
-            AzorbotEmbed embed = new AzorbotEmbed("ಥ_ಥ", e.getMessage());
+            CocoEmbed embed = new CocoEmbed("ಥ_ಥ", e.getMessage());
             embed
                     .setAuthor("Hello "+ Sender)
                     .setDescription("Everytime you @ me, it hurts... Use my prefix please.")

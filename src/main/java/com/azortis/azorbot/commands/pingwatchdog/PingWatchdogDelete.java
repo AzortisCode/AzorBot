@@ -1,15 +1,15 @@
 package com.azortis.azorbot.commands.pingwatchdog;
 
 import com.azortis.azorbot.listeners.PingWatchdogListener;
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class PingWatchdogDelete extends AzorbotCommand {
+public class PingWatchdogDelete extends CocoCommand {
     // Constructor
     public PingWatchdogDelete(){
         super(
@@ -25,7 +25,7 @@ public class PingWatchdogDelete extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("Deleting definition from PingWatchdog", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Deleting definition from PingWatchdog", e.getMessage());
         if (args.size() < 2){
             embed.setDescription("Please specify either `role <@role>` or `user <@user>`.");
             embed.send(true, 30000);

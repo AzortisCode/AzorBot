@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.Collections;
 import java.util.List;
 
-public class WikiSearch extends AzorbotCommand {
+public class WikiSearch extends CocoCommand {
     public WikiSearch(){
         super(
                 "Search",
@@ -21,7 +21,7 @@ public class WikiSearch extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("{} search results".replace("{}", args.get(0)), e.getMessage());
+        CocoEmbed embed = new CocoEmbed("{} search results".replace("{}", args.get(0)), e.getMessage());
         if (args.size() == 0){
             embed.setDescription("Please specify the wiki and/or query");
             embed.send(true, 15000);
@@ -40,7 +40,7 @@ public class WikiSearch extends AzorbotCommand {
      * @param e Guild event
      * @param embed Embed to write into
      */
-    public static void process(List<String> args, GuildMessageReceivedEvent e, AzorbotEmbed embed){
+    public static void process(List<String> args, GuildMessageReceivedEvent e, CocoEmbed embed){
 
         // Check if any wikis are loaded
         if (WikiIndexed.getWikis().size() == 0){
@@ -81,7 +81,7 @@ public class WikiSearch extends AzorbotCommand {
         }
 
         // Store search results for arguments in embed
-        List<AzorbotEmbed> pages = wiki.search(args, e.getMessage());
+        List<CocoEmbed> pages = wiki.search(args, e.getMessage());
 
         // Check if only one page (either when one found or when none found so returns error)
         if (pages.size() == 1){
@@ -97,7 +97,7 @@ public class WikiSearch extends AzorbotCommand {
             pages.add(embed);
 
             // Send scrollable
-            new ScrollableEmbed(pages, e.getMessage(), true);
+            new CocoScrollable(pages, e.getMessage(), true);
         }
     }
 }

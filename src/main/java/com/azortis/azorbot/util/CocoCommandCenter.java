@@ -1,11 +1,13 @@
-package com.azortis.azorbot;
+package com.azortis.azorbot.util;
 
+import com.azortis.azorbot.Main;
+import com.azortis.azorbot.Tester;
+import com.azortis.azorbot.commands.Shutdown;
 import com.azortis.azorbot.commands.*;
 import com.azortis.azorbot.listeners.A2AWatchdog;
 import com.azortis.azorbot.listeners.ChatListener;
 import com.azortis.azorbot.listeners.PingWatchdogListener;
 import com.azortis.azorbot.listeners.Prefix;
-import com.azortis.azorbot.util.AzorbotCommand;
 import lombok.Getter;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -13,12 +15,15 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemove
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 
-public class CommandCenter extends ListenerAdapter {
+public class CocoCommandCenter extends ListenerAdapter {
     @Getter
-    private static final List<AzorbotCommand> commands = Arrays.asList(
+    private static final List<CocoCommand> commands = Arrays.asList(
             // Commands
             new Ping(),
             new Shutdown(),
@@ -47,7 +52,7 @@ public class CommandCenter extends ListenerAdapter {
     /**
      * Creates a command center
      */
-    public CommandCenter(){
+    public CocoCommandCenter(){
         Main.info("Building Command Center");
     }
 

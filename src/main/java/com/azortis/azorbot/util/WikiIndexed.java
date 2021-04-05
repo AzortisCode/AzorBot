@@ -56,7 +56,7 @@ public class WikiIndexed {
      * @param embed Embed to write info to (is also sent)
      * @param rawJSON Toggle to also add raw json to embed
      */
-    public static void getInfo(String name, AzorbotEmbed embed, boolean rawJSON){
+    public static void getInfo(String name, CocoEmbed embed, boolean rawJSON){
 
         // Find the wiki
         WikiIndexed wiki = findWiki(name);
@@ -79,13 +79,13 @@ public class WikiIndexed {
                 // Check if we should make a scrollable embed
                 if (sWiki.length() > sizePerField){
 
-                    List<AzorbotEmbed> embeds = new ArrayList<>();
+                    List<CocoEmbed> embeds = new ArrayList<>();
 
                     // Loop over each part of the string
                     for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++){
 
                         // Do not mind deprecation. This is because ScrollableEmbed will set the message.
-                        AzorbotEmbed thisEmbed = new AzorbotEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
+                        CocoEmbed thisEmbed = new CocoEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
 
                         // Add a field with each
                         thisEmbed.setDescription(
@@ -119,14 +119,14 @@ public class WikiIndexed {
                             .withZone(ZoneId.systemDefault())
                             .format(wiki.getUpdatedDate());
                     // Do not mind deprecation. This is because ScrollableEmbed will set the message.
-                    AzorbotEmbed thisEmbed = new AzorbotEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
+                    CocoEmbed thisEmbed = new CocoEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
                     thisEmbed.setDescription("**Last updated on**." + dateTime + "\n*(Server time)*");
 
                     // Add
                     embeds.add(thisEmbed);
 
                     // Create and send a scrollable embed
-                    new ScrollableEmbed(embeds, embed.getMessage());
+                    new CocoScrollable(embeds, embed.getMessage());
 
                     // Delete command but don't send original embed (do send scrollable)
                     embed.getMessage().delete().queue();
@@ -154,22 +154,20 @@ public class WikiIndexed {
     /**
      * Gets the indexed wiki inside an embed
      * @param name Name of the wiki to index
-     * @param embed Embed to write the index to
+     * @return String containing indices
      */
-    public static void getIndex(String name, AzorbotEmbed embed){
+    public static String getIndex(String name){
         WikiIndexed wiki = findWiki(name);
         if (wiki == null){
-            embed.setDescription("No wiki found by that name. Please double-check\n" +
-                    "Loaded wikis are: `" + getLoadedWikis() + "`");
+            return "No wiki found by that name. Please double-check\n" +
+                    "Loaded wikis are: `" + getLoadedWikis() + "`";
         } else {
-            embed.setDescription(
-                    buildIndex(
-                            wiki.getWiki().toMap(),
-                            "",
-                            wiki.getWiki().getString("docs"),
-                            "",
-                            wiki.getName()
-                    ).substring(0, 2000)
+            return buildIndex(
+                    wiki.getWiki().toMap(),
+                    "",
+                    wiki.getWiki().getString("docs"),
+                    "",
+                    wiki.getName()
             );
         }
     }
@@ -386,17 +384,17 @@ public class WikiIndexed {
      * @param msg the message object of which the channel is used to send messages to
      * @return list of embeds for each of the pages.
      */
-    public List<AzorbotEmbed> search(List<String> args, Message msg){
+    public List<CocoEmbed> search(List<String> args, Message msg){
 
         // Make empty pages list
-        List<AzorbotEmbed> pages = new ArrayList<>();
+        List<CocoEmbed> pages = new ArrayList<>();
 
         // Get matching pages (key is page name, element is page snippet)
         Map<String, List<String>> matches = findMatchingPages(args);
 
         if (matches.containsKey("Options")){
             // Return a single error-like embed if no matching pages were found
-            AzorbotEmbed embed = new AzorbotEmbed("No matching pages found", msg);
+            CocoEmbed embed = new CocoEmbed("No matching pages found", msg);
             embed.setDescription("Closest keywords are: `" +
                     matches.get("Options").toString()
                             .replace("[", "")
@@ -410,7 +408,7 @@ public class WikiIndexed {
 
         // Loop over all matches and save the embeds
         for (String key : matches.keySet()){
-            AzorbotEmbed embed = new AzorbotEmbed(key, msg);
+            CocoEmbed embed = new CocoEmbed(key, msg);
             String pageName = key.split("/")[key.split("/").length - 1];
             Main.info("pagename: " + pageName);
             embed.setTitle(pageName, key);

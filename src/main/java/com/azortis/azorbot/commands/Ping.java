@@ -1,12 +1,12 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class Ping extends AzorbotCommand {
+public class Ping extends CocoCommand {
     // Constructor
     public Ping(){
         super(
@@ -18,6 +18,6 @@ public class Ping extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        new AzorbotEmbed("Pong!", e.getMessage(), true).send();
+        new CocoEmbed("Pong!", e.getMessage(), true).send();
     }
 }

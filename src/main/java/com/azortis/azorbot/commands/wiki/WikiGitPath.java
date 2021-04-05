@@ -1,13 +1,13 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class WikiGitPath extends AzorbotCommand {
+public class WikiGitPath extends CocoCommand {
     public WikiGitPath(){
         super(
                 "GitPath",
@@ -19,7 +19,7 @@ public class WikiGitPath extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("GitPath help", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("GitPath help", e.getMessage());
         embed.setDescription(
                 "You can find the raw GitPath as follows:\n" +
                         "0. Go to GitHub and create a new repository for your documentation\n" +

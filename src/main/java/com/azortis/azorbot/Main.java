@@ -1,5 +1,6 @@
 package com.azortis.azorbot;
 
+import com.azortis.azorbot.util.CocoCommandCenter;
 import com.azortis.azorbot.util.ExecutionTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.JDA;
@@ -81,7 +82,7 @@ public class Main extends ListenerAdapter {
             jda = JDABuilder.createDefault(token)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS,GatewayIntent.GUILD_PRESENCES)
                     .disableCache(CacheFlag.VOICE_STATE)
-                    .addEventListeners(new CommandCenter())
+                    .addEventListeners(new CocoCommandCenter())
                     .build().awaitReady();
             info("Retrieving JDA info");
             botID = jda.getSelfUser().getIdLong();

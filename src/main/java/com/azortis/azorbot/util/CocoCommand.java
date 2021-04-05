@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Getter
-public class AzorbotCommand extends ListenerAdapter {
+public class CocoCommand extends ListenerAdapter {
 
     public final String name;
     public final List<String> commands;
@@ -21,14 +21,14 @@ public class AzorbotCommand extends ListenerAdapter {
     public final boolean needsArguments;
     public final String example;
     public final boolean category;
-    public final List<AzorbotCommand> subcommands;
+    public final List<CocoCommand> subcommands;
 
     /**
      * Command creator
      * @param name Name of the command
      * @param description Description of the command
      */
-    public AzorbotCommand(String name, String description){
+    public CocoCommand(String name, String description){
         // Name
         this.name = name;
 
@@ -50,7 +50,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param commands Array of aliases for the command
      * @param description Description of the command
      */
-    public AzorbotCommand(String name, String[] commands, String description){
+    public CocoCommand(String name, String[] commands, String description){
         // Name
         this.name = name;
 
@@ -79,7 +79,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param roles Array of roles the command requires (only one is enough for permission)
      * @param description Description of the command
      */
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description){
+    public CocoCommand(String name, String[] commands, String[] roles, String description){
         // Name
         this.name = name;
 
@@ -115,7 +115,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param description Description of the command
      * @param needsArguments Toggle for requiring arguments (helps with preventing argument-less calls)
      */
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments){
+    public CocoCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments){
         // Name
         this.name = name;
 
@@ -154,7 +154,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param needsArguments Toggle for requiring arguments (helps with preventing argument-less calls)
      * @param example Example of command usage.
      */
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String example){
+    public CocoCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String example){
         // Name
         this.name = name;
 
@@ -193,7 +193,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param description Description of the category
      * @param subcommands Array of commands that this category contains
      */
-    public AzorbotCommand(String name, String[] commands, String description, AzorbotCommand[] subcommands){
+    public CocoCommand(String name, String[] commands, String description, CocoCommand[] subcommands){
         // Name
         this.name = name;
 
@@ -227,7 +227,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param description Description of the category
      * @param subcommands Array of commands that this category contains
      */
-    public AzorbotCommand(String name, String[] commands, String[] roles, String description, AzorbotCommand[] subcommands){
+    public CocoCommand(String name, String[] commands, String[] roles, String description, CocoCommand[] subcommands){
         // Name
         this.name = name;
 
@@ -315,10 +315,10 @@ public class AzorbotCommand extends ListenerAdapter {
             } else {
                 // Print subcommands
                 StringBuilder subs = new StringBuilder(getName() + " CMDs: ");
-                for (AzorbotCommand cmd : getSubcommands()) subs.append(cmd.getName()).append((" "));
+                for (CocoCommand cmd : getSubcommands()) subs.append(cmd.getName()).append((" "));
                 info(subs.toString());
                 // Pass to subcommands
-                for (AzorbotCommand sub : getSubcommands()){
+                for (CocoCommand sub : getSubcommands()){
                     if (sub.getName().equalsIgnoreCase(args.get(1))){
                         sub.continueToHandle(args.subList(1, args.size()), e);
                         return;
@@ -349,7 +349,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param e Uses this to send the message in the right channel
      */
     public void categoryCommand(@NonNull List<String> args, GuildMessageReceivedEvent e){
-        new AzorbotEmbed(
+        new CocoEmbed(
                 "Could not find subcommand " + args.get(0) + " under " + getName() + ", please double-check",
                 e.getMessage()
         ).send(true, 15000);
@@ -397,7 +397,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param message The message object as delivered with the original event
      */
     public void sendHelp(Message message){
-        AzorbotEmbed embed = new AzorbotEmbed(getName() + " Command Usage", message);
+        CocoEmbed embed = new CocoEmbed(getName() + " Command Usage", message);
 
         String cmd = Main.prefix + getName().substring(0, 1).toUpperCase() + getName().substring(1);
         if (getCommands().size() < 2){
@@ -430,7 +430,7 @@ public class AzorbotCommand extends ListenerAdapter {
     protected void sendCategoryHelp(Message message){
 
         // Make a new embed
-        AzorbotEmbed embed = new AzorbotEmbed(getName() + " Command Usage", message);
+        CocoEmbed embed = new CocoEmbed(getName() + " Command Usage", message);
 
         // Loop over all commands and add fields for all of them
         getSubcommands().forEach(command -> {

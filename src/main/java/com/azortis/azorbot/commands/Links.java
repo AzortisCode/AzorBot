@@ -1,12 +1,12 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class Links extends AzorbotCommand {
+public class Links extends CocoCommand {
 
     public Links(){
         super(
@@ -19,7 +19,7 @@ public class Links extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("Here you go!", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Here you go!", e.getMessage());
         embed.addField(
                 "Orbis",
                 "[Github](https://github.com/AzortisCode/Orbis)\n" +

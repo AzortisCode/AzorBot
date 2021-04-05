@@ -1,6 +1,5 @@
 package com.azortis.azorbot.util;
 
-import com.azortis.azorbot.CommandCenter;
 import com.azortis.azorbot.Main;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
@@ -10,14 +9,15 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 @Getter
-public class ScrollableEmbed extends ListenerAdapter {
+public class CocoScrollable extends ListenerAdapter {
     private final MessageChannel channel;
-    private final List<AzorbotEmbed> embeds;
+    private final List<CocoEmbed> embeds;
     private final LocalDateTime end;
     private Message message;
     private long ID;
@@ -30,12 +30,12 @@ public class ScrollableEmbed extends ListenerAdapter {
      * @param pages List of embeds to scroll through
      * @param message Message of which we use the channel
      */
-    public ScrollableEmbed(List<AzorbotEmbed> pages, Message message){
+    public CocoScrollable(List<CocoEmbed> pages, Message message){
         this.channel = message.getChannel();
         this.embeds = pages;
         this.end = LocalDateTime.now().plusHours(2);
         updateTitles();
-        CommandCenter.addEmojiListener(this);
+        CocoCommandCenter.addEmojiListener(this);
         send();
         Main.info("Built new scrollable");
     }
@@ -46,15 +46,65 @@ public class ScrollableEmbed extends ListenerAdapter {
      * @param message Message of which we use the channel
      * @param deleteOriginal If true, deletes original message
      */
-    public ScrollableEmbed(List<AzorbotEmbed> pages, Message message, boolean deleteOriginal){
+    public CocoScrollable(List<CocoEmbed> pages, Message message, boolean deleteOriginal){
         this.channel = message.getChannel();
         this.embeds = pages;
         this.end = LocalDateTime.now().plusHours(2);
         updateTitles();
-        CommandCenter.addEmojiListener(this);
+        CocoCommandCenter.addEmojiListener(this);
         send();
         if (deleteOriginal) message.delete().queue();
         Main.info("Built new scrollable");
+    }
+
+    /**
+     * Create a new scrollable embed from a string
+     * @param string String to build scrollable out of
+     * @param embed The embed template to use (title etc)
+     * @param message Message of which we use the channel
+     */
+    public CocoScrollable(String string, CocoEmbed embed, Message message) {
+        this.channel = message.getChannel();
+        this.embeds = makeEmbedsFromString(string, embed);
+        this.end = LocalDateTime.now().plusHours(2);
+        updateTitles();
+        CocoCommandCenter.addEmojiListener(this);
+        send();
+        Main.info("Built new scrollable");
+    }
+
+    /**
+     * Create a new scrollable embed from a string
+     * @param string String to build scrollable out of
+     * @param embed The embed template to use (title etc)
+     * @param message Message of which we use the channel
+     * @param deleteOriginal If true, deletes original message
+     */
+    public CocoScrollable(String string, CocoEmbed embed, Message message, boolean deleteOriginal) {
+        this.channel = message.getChannel();
+        this.embeds = makeEmbedsFromString(string, embed);
+        this.end = LocalDateTime.now().plusHours(2);
+        if (embeds.size() == 1){
+            embeds.get(0).send(deleteOriginal);
+            Main.info("New scrollable had small size, creating embed instead");
+        } else {
+            updateTitles();
+            CocoCommandCenter.addEmojiListener(this);
+            send();
+            if (deleteOriginal) message.delete().queue();
+            Main.info("Built new scrollable");
+        }
+    }
+
+    /**
+     * Creates a list of embeds from a string, which you can later port into a new scrollable
+     * @param string A string
+     * @param template the embed template to use
+     * @return A list of CocoEmbeds
+     */
+    public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template) {
+        // TODO:
+        return Collections.singletonList(template);
     }
 
     /**
@@ -191,7 +241,7 @@ public class ScrollableEmbed extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e){
-        if (LocalDateTime.now().isAfter(end)) CommandCenter.removeEmojiListener(this);
+        if (LocalDateTime.now().isAfter(end)) CocoCommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
             Main.info("Scrollable was reacted on! Emoji: " + eventToEmoji(e));
             checkReactions(eventToEmoji(e));

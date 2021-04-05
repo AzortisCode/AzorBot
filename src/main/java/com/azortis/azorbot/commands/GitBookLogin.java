@@ -1,14 +1,14 @@
 package com.azortis.azorbot.commands;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 import java.util.Objects;
 
-public class GitBookLogin extends AzorbotCommand {
+public class GitBookLogin extends CocoCommand {
     public GitBookLogin(){
         super(
                 "GitBook Login",
@@ -20,10 +20,10 @@ public class GitBookLogin extends AzorbotCommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("GitBook login details", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("GitBook login details", e.getMessage());
         embed.setDescription("Username: `" + Main.GitBookUser + "`\n" +
                 "Password: `" + Main.GitBookPass + "`");
         Objects.requireNonNull(e.getMember()).getUser().openPrivateChannel().flatMap(channel -> channel.sendMessage(embed.build())).queue();
-        new AzorbotEmbed("Sending login to DMS :)", e.getMessage()).send(true);
+        new CocoEmbed("Sending login to DMS :)", e.getMessage()).send(true);
     }
 }

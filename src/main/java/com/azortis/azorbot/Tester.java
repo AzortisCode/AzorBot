@@ -1,12 +1,12 @@
 package com.azortis.azorbot;
 
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class Tester extends AzorbotCommand {
+public class Tester extends CocoCommand {
     public Tester(){
         super(
                 "Tester",
@@ -18,6 +18,6 @@ public class Tester extends AzorbotCommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        new AzorbotEmbed("Test", e.getMessage(), true).send();
+        new CocoEmbed("Test", e.getMessage(), true).send();
     }
 }

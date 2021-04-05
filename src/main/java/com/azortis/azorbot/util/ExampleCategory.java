@@ -1,6 +1,6 @@
 package com.azortis.azorbot.util;
 
-public class ExampleCategory extends AzorbotCommand {
+public class ExampleCategory extends CocoCommand {
     // Constructor
     public ExampleCategory(){
         super(
@@ -8,7 +8,7 @@ public class ExampleCategory extends AzorbotCommand {
                 new String[]{"CategoryAlias1", "Alias2"},
                 new String[]{"RequiredRole1", "OrRole2"},
                 "ExampleCategory command category",
-                new AzorbotCommand[]{
+                new CocoCommand[]{
                         new ExampleCommand(),
                         new ExampleCommand()
                 }

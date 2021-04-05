@@ -1,13 +1,13 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class Shutdown extends AzorbotCommand {
+public class Shutdown extends CocoCommand {
     // Constructor
     public Shutdown(){
         super(
@@ -21,7 +21,7 @@ public class Shutdown extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        new AzorbotEmbed("Shutting down", e.getMessage()).send(true);
+        new CocoEmbed("Shutting down", e.getMessage()).send(true);
         Main.shutdown();
     }
 }

@@ -1,7 +1,7 @@
 package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.FileManager;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -61,7 +61,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param embed this embed
      */
     @SuppressWarnings("all")
-    public static void getList(AzorbotEmbed embed){
+    public static void getList(CocoEmbed embed){
         StringBuilder roles = new StringBuilder();
         StringBuilder members = new StringBuilder();
         StringBuilder pingedStaff = new StringBuilder();
@@ -134,7 +134,7 @@ public class PingWatchdogListener extends ListenerAdapter {
         AtomicBoolean done = new AtomicBoolean(false);
 
         // Build embed
-        AzorbotEmbed embed = new AzorbotEmbed("Please do not ping staff directly", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Please do not ping staff directly", e.getMessage());
 
         // Check if initialized
         if (!initialized) initialize(e.getGuild());
@@ -180,7 +180,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param embed the embed to output to (will be sent here)
      * @param isDP true if direct ping to staff
      */
-    private static void pingedStaff(Message message, Member member, AzorbotEmbed embed, boolean isDP){
+    private static void pingedStaff(Message message, Member member, CocoEmbed embed, boolean isDP){
         if (isDP){
             embed.setDescription("It is not allowed to directly ping staff.\n" +
                     "Please ping a support role instead\n" +

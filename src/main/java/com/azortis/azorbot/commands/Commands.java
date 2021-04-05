@@ -1,15 +1,15 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.CommandCenter;
+import com.azortis.azorbot.util.CocoCommandCenter;
 import com.azortis.azorbot.Main;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 
 import java.util.List;
 import java.util.Objects;
 
-public class Commands extends AzorbotCommand {
+public class Commands extends CocoCommand {
 
     /**
      * Creates a commands command
@@ -27,7 +27,7 @@ public class Commands extends AzorbotCommand {
     public void handle(List<String> args, GuildMessageReceivedEvent e){
 
         // Init embed
-        AzorbotEmbed embed = new AzorbotEmbed("༼ つ ◕_◕ ༽つ **" + Main.botName + " Info Page!**", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("༼ つ ◕_◕ ༽つ **" + Main.botName + " Info Page!**", e.getMessage());
 
         // Add explanation
         embed.addField(
@@ -37,7 +37,7 @@ public class Commands extends AzorbotCommand {
         );
 
         // Loop over and add all commands with their respective information
-        for (AzorbotCommand command : CommandCenter.getCommands()){
+        for (CocoCommand command : CocoCommandCenter.getCommands()){
             if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
             String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
             if (command.getCommands().size() == 0){

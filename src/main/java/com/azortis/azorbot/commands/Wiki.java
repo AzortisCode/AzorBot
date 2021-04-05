@@ -1,20 +1,20 @@
 package com.azortis.azorbot.commands;
 
 import com.azortis.azorbot.commands.wiki.*;
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class Wiki extends AzorbotCommand {
+public class Wiki extends CocoCommand {
     public Wiki(){
         super(
                 "Wiki",
                 new String[]{"Wikis", "w"},
                 "All wiki-related commands",
-                new AzorbotCommand[]{
+                new CocoCommand[]{
                         new WikiIndex(),
                         new WikiCreate(),
                         new WikiUpdate(),
@@ -36,15 +36,15 @@ public class Wiki extends AzorbotCommand {
      */
     @Override
     public void categoryCommand(@Nonnull List<String> args, GuildMessageReceivedEvent e){
-        AzorbotCommand.info(getName() + " category command");
-        AzorbotEmbed embed = new AzorbotEmbed("Wiki search", e.getMessage());
+        CocoCommand.info(getName() + " category command");
+        CocoEmbed embed = new CocoEmbed("Wiki search", e.getMessage());
         if (args.size() == 0){
             embed.setDescription("Please specify the wiki and/or query");
             embed.send(true, 15000);
             sendHelp(e.getMessage());
             return;
         }
-        AzorbotCommand.info(getName() + " Final. Running Search");
+        CocoCommand.info(getName() + " Final. Running Search");
         WikiSearch.process(args, e, embed);
     }
 }

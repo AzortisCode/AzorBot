@@ -1,13 +1,13 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class WikiInfo extends AzorbotCommand {
+public class WikiInfo extends CocoCommand {
     public WikiInfo(){
         super(
                 "Info",
@@ -22,7 +22,7 @@ public class WikiInfo extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed(args.get(0) + " info", e.getMessage());
+        CocoEmbed embed = new CocoEmbed(args.get(0) + " info", e.getMessage());
         if (args.get(0).length() < 4){
             embed.setDescription("Entered wiki name is too short (at least 4 characters)");
             embed.send(true, 15000);

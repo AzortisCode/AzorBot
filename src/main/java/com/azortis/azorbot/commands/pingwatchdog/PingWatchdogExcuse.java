@@ -1,13 +1,13 @@
 package com.azortis.azorbot.commands.pingwatchdog;
 
 import com.azortis.azorbot.listeners.PingWatchdogListener;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class PingWatchdogExcuse extends AzorbotCommand {
+public class PingWatchdogExcuse extends CocoCommand {
     public PingWatchdogExcuse(){
         super(
                 "Excuse",
@@ -22,7 +22,7 @@ public class PingWatchdogExcuse extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("Excusing user", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Excusing user", e.getMessage());
         if (e.getMessage().getMentionedMembers().size() == 0){
             embed.setDescription("You did not mention a user. Please double-check");
             embed.send(true, 15000);

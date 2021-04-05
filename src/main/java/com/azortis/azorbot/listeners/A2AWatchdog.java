@@ -4,7 +4,7 @@ import com.azortis.azorbot.Main;
 
 import java.util.*;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.FileManager;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
@@ -117,7 +117,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * @param msg Message's channel which is sent to
      */
     private static void constructAndSendA2A(Message msg){
-        AzorbotEmbed embed = new AzorbotEmbed("Please do not ask to ask!", msg);
+        CocoEmbed embed = new CocoEmbed("Please do not ask to ask!", msg);
         embed.setDescription("Please do not ask if you can ask your question, just ask!\n" +
                 "We love to help, but if we don't know your question, we cannot help efficiently.");
         embed.addField("Ask To Ask", "[Ask To Ask website](https://dontasktoask.com/)", false);

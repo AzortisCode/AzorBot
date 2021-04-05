@@ -1,13 +1,13 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class WikiDelete extends AzorbotCommand {
+public class WikiDelete extends CocoCommand {
     public WikiDelete(){
         super(
                 "Delete",
@@ -22,7 +22,7 @@ public class WikiDelete extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("Delete wiki", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Delete wiki", e.getMessage());
         WikiIndexed wiki = WikiIndexed.findWiki(args.get(0));
         if (wiki == null){
             embed.setDescription("Failed to find wiki, loaded wikis are: `" + WikiIndexed.getLoadedWikis() + "`");

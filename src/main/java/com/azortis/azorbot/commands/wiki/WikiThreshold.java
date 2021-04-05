@@ -1,14 +1,14 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotCommand;
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 import java.util.Objects;
 
-public class WikiThreshold extends AzorbotCommand {
+public class WikiThreshold extends CocoCommand {
     public WikiThreshold(){
         super(
                 "Threshold",
@@ -23,7 +23,7 @@ public class WikiThreshold extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("Set Wiki Threshold", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("Set Wiki Threshold", e.getMessage());
         if (args.size() == 0){
             embed.setDescription("You did not specify a wiki name nor a threshold");
             embed.send(true, 10000);

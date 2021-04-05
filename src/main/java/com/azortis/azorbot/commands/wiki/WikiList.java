@@ -1,13 +1,13 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
+import com.azortis.azorbot.util.CocoEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
+import com.azortis.azorbot.util.CocoCommand;
 
 import java.util.List;
 
-public class WikiList extends AzorbotCommand {
+public class WikiList extends CocoCommand {
     public WikiList(){
         super(
                 "List",
@@ -19,7 +19,7 @@ public class WikiList extends AzorbotCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        AzorbotEmbed embed = new AzorbotEmbed("List of wikis", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("List of wikis", e.getMessage());
         embed.setDescription("Loaded wikis are: `" + WikiIndexed.getLoadedWikis() + "`");
         embed.send(true);
     }

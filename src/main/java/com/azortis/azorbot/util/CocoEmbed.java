@@ -13,16 +13,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Getter
-public class AzorbotEmbed extends EmbedBuilder {
+public class CocoEmbed extends EmbedBuilder {
     @Setter
     private Message message;
 
     /**
-     * Creates a default AzorbotEmbed object.
+     * Creates a default CocoEmbed object.
      * @param title The title of the embed
      * @param message Message used to greet used and make further command easier
      */
-    public AzorbotEmbed(String title, Message message){
+    public CocoEmbed(String title, Message message){
         this.message = message;
         this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl());
         this.setTitle(!title.equals("") ? title : TextUtil.bnk);
@@ -31,11 +31,11 @@ public class AzorbotEmbed extends EmbedBuilder {
     }
 
     /**
-     * Creates a default AzorbotEmbed object.
+     * Creates a default CocoEmbed object.
      * @param title The title of the embed
      * @param useShort Toggles if there should be a mention of the bot company
      */
-    public AzorbotEmbed(String title, Message message, boolean useShort){
+    public CocoEmbed(String title, Message message, boolean useShort){
         this.message = message;
         this.setTitle(title).setColor(Color.decode(Main.botColor));
         if (!useShort){
