@@ -4,8 +4,8 @@ import com.azortis.azorbot.Main;
 
 import java.util.*;
 
-import com.azortis.azorbot.util.CocoEmbed;
-import com.azortis.azorbot.util.FileManager;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoFiles;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import net.dv8tion.jda.api.entities.Message;
@@ -43,7 +43,7 @@ public class A2AWatchdog extends ListenerAdapter {
 
     private static List<String> definitions = new ArrayList<>();
     private static int threshold = 85;
-    private static final FileManager file = new FileManager(Main.configPath + "A2A.txt", true);
+    private static final CocoFiles file = new CocoFiles(Main.configPath + "A2A.txt", true);
 
     /**
      * Creates a new A2A Watchdog

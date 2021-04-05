@@ -1,8 +1,8 @@
 package com.azortis.azorbot.commands.pingwatchdog;
 
 import com.azortis.azorbot.listeners.PingWatchdogListener;
-import com.azortis.azorbot.util.CocoCommand;
-import com.azortis.azorbot.util.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

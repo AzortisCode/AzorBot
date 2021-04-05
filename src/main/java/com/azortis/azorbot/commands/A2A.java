@@ -1,7 +1,7 @@
 package com.azortis.azorbot.commands;
 
 import com.azortis.azorbot.commands.a2a.*;
-import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
 
 public class A2A extends CocoCommand {
     public A2A(){

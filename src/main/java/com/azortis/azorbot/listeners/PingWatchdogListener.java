@@ -1,8 +1,8 @@
 package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.CocoEmbed;
-import com.azortis.azorbot.util.FileManager;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoFiles;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -20,7 +20,7 @@ public class PingWatchdogListener extends ListenerAdapter {
     private static List<Long> staffRoleIDs = new ArrayList<>();
     private static List<Long> hasPingedStaffIDs = new ArrayList<>();
     private static final String path = Main.configPath + "ping-watchdog.txt";
-    private static final FileManager file = new FileManager(path);
+    private static final CocoFiles file = new CocoFiles(path);
     private static final List<Role> staffRoles = new ArrayList<>();
     private static final List<Member> staffMembers = new ArrayList<>();
     private static final List<Member> hasPingedStaff = new ArrayList<>();

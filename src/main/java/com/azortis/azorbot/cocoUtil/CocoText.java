@@ -1,6 +1,6 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
-public class TextUtil {
+public class CocoText {
     /**
      * Half a blank tab. Not removed by string strips
      */

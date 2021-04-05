@@ -1,9 +1,9 @@
 package com.azortis.azorbot.commands.wiki;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.CocoCommand;
-import com.azortis.azorbot.util.CocoEmbed;
-import com.azortis.azorbot.util.ExecutionTimer;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -37,7 +37,7 @@ public class WikiCreate extends CocoCommand {
             embed.setDescription("Your GitPath does not contain the required main path:\n`" + args.get(1) + "`");
             embed.addField("GitPath Help", "You can request GitPath help with `" + Main.prefix + "wiki GitPath`", false);
         } else {
-            ExecutionTimer timer = new ExecutionTimer();
+            CocoTimer timer = new CocoTimer();
             int threshold = Main.defaultSearchThreshold;
             if (Integer.parseInt(args.get(3)) > 0 && Integer.parseInt(args.get(3)) < 100){
                 embed.addField("Entered threshold out of bounds [1, 100]", "Using default: " + args.get(3), false);

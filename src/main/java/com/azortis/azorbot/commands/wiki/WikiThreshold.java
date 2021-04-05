@@ -1,7 +1,7 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.CocoCommand;
-import com.azortis.azorbot.util.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 

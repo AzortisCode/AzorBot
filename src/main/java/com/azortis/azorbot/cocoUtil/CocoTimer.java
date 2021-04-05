@@ -1,13 +1,13 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
-public class ExecutionTimer {
+public class CocoTimer {
     private long start;
     private long end;
 
     /**
      * Creates a new execution timer that immediately starts running
      */
-    public ExecutionTimer(){
+    public CocoTimer(){
         reset();
         start = System.currentTimeMillis();
     }

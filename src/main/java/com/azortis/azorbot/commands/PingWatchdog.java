@@ -1,7 +1,7 @@
 package com.azortis.azorbot.commands;
 
 import com.azortis.azorbot.commands.pingwatchdog.*;
-import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
 
 public class PingWatchdog extends CocoCommand {
     // Constructor

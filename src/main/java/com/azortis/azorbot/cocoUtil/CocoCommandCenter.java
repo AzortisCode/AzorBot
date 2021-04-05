@@ -1,4 +1,4 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.Tester;
@@ -20,7 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-
+/* Command center
+ * You add all your commands and listeners here, and not to the JDA
+ * This is to prevent having many listeners on the JDA, making it very inefficient
+ */
 public class CocoCommandCenter extends ListenerAdapter {
     @Getter
     private static final List<CocoCommand> commands = Arrays.asList(
@@ -61,7 +64,7 @@ public class CocoCommandCenter extends ListenerAdapter {
      * @param listener the listener to add
      */
     public static void addEmojiListener(ListenerAdapter listener){
-        Main.info("Adding emoji listener: " + listener.getClass().toString());
+        Main.info("Adding emoji listener: " + listener.getClass().toString().split("\\.")[listener.getClass().toString().split("\\.").length-1]);
         emojiListeners.add(listener);
     }
 

@@ -1,4 +1,4 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
 import com.azortis.azorbot.Main;
 import lombok.Getter;
@@ -12,6 +12,11 @@ import java.util.*;
 
 
 @Getter
+/* Command framework.
+ * Note that this also functions as a category
+ * Functions by overriding the handle.
+ * Other functions may be overwritten as well (e.g. sendHelp)
+ */
 public class CocoCommand extends ListenerAdapter {
 
     public final String name;
@@ -146,7 +151,7 @@ public class CocoCommand extends ListenerAdapter {
     }
 
     /**
-     * Command creator (with example)
+     * Command creator
      * @param name Name of the command
      * @param commands Array of aliases for the command
      * @param roles Array of roles the command requires (only one is enough for permission)
@@ -267,7 +272,6 @@ public class CocoCommand extends ListenerAdapter {
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         e.getMessage().reply("The command you ran is improperly written. The handle() must be overwritten!").queue();
     }
-
 
     /**
      * First process. Called by CommandCenter.
@@ -427,7 +431,7 @@ public class CocoCommand extends ListenerAdapter {
      * Sends a category help message for this category in the channel of the specified message
      * @param message The message object as delivered with the original event
      */
-    protected void sendCategoryHelp(Message message){
+    public void sendCategoryHelp(Message message){
 
         // Make a new embed
         CocoEmbed embed = new CocoEmbed(getName() + " Command Usage", message);
@@ -465,7 +469,7 @@ public class CocoCommand extends ListenerAdapter {
      * Command debug logs
      * @param msg Message to send
      */
-    public static void info(String msg){
+    public void info(String msg){
         Main.LOGGER.info("CMD {}", msg);
     }
 }

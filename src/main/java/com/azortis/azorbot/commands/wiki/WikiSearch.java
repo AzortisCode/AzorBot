@@ -1,5 +1,9 @@
 package com.azortis.azorbot.commands.wiki;
 
+import com.azortis.azorbot.cocoUtil.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoScrollable;
+import com.azortis.azorbot.cocoUtil.CocoText;
 import com.azortis.azorbot.util.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -66,7 +70,7 @@ public class WikiSearch extends CocoCommand {
             wiki = WikiIndexed.findWiki(args.get(0));
 
             if (wiki == null){
-                embed.setDescription("Failed to search for wiki, specified wiki: `" + TextUtil.capitalize(args.get(0)) + "` can not be found");
+                embed.setDescription("Failed to search for wiki, specified wiki: `" + CocoText.capitalize(args.get(0)) + "` can not be found");
                 embed.send(true, 15000);
                 return;
             } else {

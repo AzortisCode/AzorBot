@@ -1,7 +1,7 @@
 package com.azortis.azorbot;
 
-import com.azortis.azorbot.util.CocoCommandCenter;
-import com.azortis.azorbot.util.ExecutionTimer;
+import com.azortis.azorbot.cocoUtil.CocoCommandCenter;
+import com.azortis.azorbot.cocoUtil.CocoTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -41,7 +41,7 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args){
 
-        ExecutionTimer timer = new ExecutionTimer();
+        CocoTimer timer = new CocoTimer();
 
         info("Logging in");
 

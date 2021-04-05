@@ -1,6 +1,7 @@
 package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
+import com.azortis.azorbot.cocoUtil.CocoText;
 import lombok.Getter;
 import org.json.JSONObject;
 
@@ -243,7 +244,7 @@ public class WikiImporter {
 
                 // End of the previous category
                 // Add subcategory to mapping if previous exists
-                if (category != null) map.put(TextUtil.capitalize(category), processCategory(subCategory, category));
+                if (category != null) map.put(CocoText.capitalize(category), processCategory(subCategory, category));
 
                 // Set the category to the new category type
                 subCategory = new ArrayList<>();
@@ -258,7 +259,7 @@ public class WikiImporter {
 
         // Add the last category to the map
         if (category != null){
-            map.put(TextUtil.capitalize(category), processCategory(subCategory, category));
+            map.put(CocoText.capitalize(category), processCategory(subCategory, category));
         }
 
         // Return the map

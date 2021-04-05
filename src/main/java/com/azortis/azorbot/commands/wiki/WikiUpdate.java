@@ -1,10 +1,10 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.CocoEmbed;
-import com.azortis.azorbot.util.ExecutionTimer;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class WikiUpdate extends CocoCommand {
     // Handle
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
-        ExecutionTimer timer = new ExecutionTimer();
+        CocoTimer timer = new CocoTimer();
         CocoEmbed embed = new CocoEmbed("Wiki update message", e.getMessage());
         String status = WikiIndexed.update(args.get(0));
         timer.stop();

@@ -1,7 +1,7 @@
 package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.util.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

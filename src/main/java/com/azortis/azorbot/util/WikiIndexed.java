@@ -1,6 +1,10 @@
 package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
+import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import com.azortis.azorbot.cocoUtil.CocoScrollable;
+import com.azortis.azorbot.cocoUtil.CocoFiles;
+import com.azortis.azorbot.cocoUtil.CocoText;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Message;
@@ -22,7 +26,7 @@ public class WikiIndexed {
     private static final List<WikiIndexed> wikis = new ArrayList<>();
 
     // This wiki's variables
-    private final FileManager file;
+    private final CocoFiles file;
     private final String name;
     private final String docs;
     private final String gitPath;
@@ -43,7 +47,7 @@ public class WikiIndexed {
         this.name = name;
         this.gitPath = gitPath;
         this.docs = docs;
-        this.file = new FileManager(absolutePath.replace("{}", name));
+        this.file = new CocoFiles(absolutePath.replace("{}", name));
         this.file.checkExists(true, false);
         this.threshold = threshold;
         this.load();
@@ -84,13 +88,13 @@ public class WikiIndexed {
                     // Loop over each part of the string
                     for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++){
 
-                        // Do not mind deprecation. This is because ScrollableEmbed will set the message.
+                        // Rebuild embed
                         CocoEmbed thisEmbed = new CocoEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
 
                         // Add a field with each
                         thisEmbed.setDescription(
                                 "```json\n" + // Json code block
-                                TextUtil.bnk + sWiki // With the right content
+                                CocoText.bnk + sWiki // With the right content
                                 .substring(
                                         i * sizePerField,
                                         Math.min(
@@ -133,7 +137,7 @@ public class WikiIndexed {
 
                     return;
                 } else {
-                    embed.setDescription("```json\n" + TextUtil.bnk + sWiki + "\n```");
+                    embed.setDescription("```json\n" + CocoText.bnk + sWiki + "\n```");
                 }
             }
 
@@ -215,16 +219,16 @@ public class WikiIndexed {
                 3. Check if the path contains a README.md extension, indicating it is a SUB category
                     We must then enter this category and add all its stuff as well
              */
+            Main.info(((Map<?, ?>) item).keySet().toString());
 
             // 1. Check if there is NO path: This is a MAIN category, which has no main page
             if (!((Map<?, ?>) item).containsKey("path")){
                 string.append(depth)
                         .append(key)
                         .append("\n");
-                string.append(buildIndex((Map<String, Object>) item, "" + TextUtil.tab + TextUtil.tab, docs, subPath + key + "/", name));
+                string.append(buildIndex((Map<String, Object>) item, depth + CocoText.tab + CocoText.tab + CocoText.bnk, docs, subPath + key + "/", name));
                 continue;
             }
-            Main.info("key" + key);
             // 2. Add the current item
             string.append(depth)
                     .append("[")
@@ -238,9 +242,8 @@ public class WikiIndexed {
 
             // 3. Check if the path contains a README.md extension, indicating it is a SUB category
             //      We must then enter this category and add all its stuff as well
-            Main.info("Path: " + ((Map<?, ?>) item).get("path"));
             if ((((Map<?, ?>) item)).containsKey("README")){
-                string.append(buildIndex((Map<String, Object>) item, "" + TextUtil.tab + TextUtil.tab, docs, subPath + key + "/", name));
+                string.append(buildIndex((Map<String, Object>) item, depth + CocoText.tab + CocoText.tab + CocoText.bnk, docs, subPath + key + "/", name));
             }
         }
         return string.toString();
@@ -298,7 +301,7 @@ public class WikiIndexed {
             if (!wiki.getName().endsWith(".json")) continue;
 
             // Load into file manager, get/cleanup string, turn into json
-            FileManager wManager = new FileManager(wiki);
+            CocoFiles wManager = new CocoFiles(wiki);
             if (!wManager.checkExists(false, false)){
                 return;
             }
@@ -343,7 +346,7 @@ public class WikiIndexed {
             return "*none*";
         }
         StringBuilder wikiString = new StringBuilder();
-        wikis.forEach(wiki -> wikiString.append(" - `").append(TextUtil.capitalize(wiki.getName())).append("`\n"));
+        wikis.forEach(wiki -> wikiString.append(" - `").append(CocoText.capitalize(wiki.getName())).append("`\n"));
         return wikiString.toString().strip();
     }
 

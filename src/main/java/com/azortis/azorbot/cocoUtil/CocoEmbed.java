@@ -1,4 +1,4 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
 import com.azortis.azorbot.Main;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class CocoEmbed extends EmbedBuilder {
     public CocoEmbed(String title, Message message){
         this.message = message;
         this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl());
-        this.setTitle(!title.equals("") ? title : TextUtil.bnk);
+        this.setTitle(!title.equals("") ? title : CocoText.bnk);
         this.setColor(Color.decode(Main.botColor));
         this.setFooter(Main.botCompany);
     }
@@ -43,7 +43,6 @@ public class CocoEmbed extends EmbedBuilder {
                     .setFooter(Main.botCompany);
         }
     }
-
 
     /**
      * Send the embed
@@ -115,7 +114,7 @@ public class CocoEmbed extends EmbedBuilder {
     /**
      * Send the embed
      * @param message in this channel
-     * @param deleteMSG And delete the specified message
+     * @param deleteMSG And delete the original message
      */
     public void send(Message message, boolean deleteMSG){
         this.send(message, deleteMSG, 0);
@@ -124,7 +123,7 @@ public class CocoEmbed extends EmbedBuilder {
     /**
      * Send the embed 
      * @param message in this channel
-     * @param deleteMSG And delete the specified message
+     * @param deleteMSG And delete the original message
      * @param reactions and add these reactions to the message
      */
     public void send(Message message, boolean deleteMSG, List<String> reactions){
@@ -134,7 +133,7 @@ public class CocoEmbed extends EmbedBuilder {
     /**
      * Send the embed
      * @param message in this channel
-     * @param deleteMSG And delete the specified message
+     * @param deleteMSG And delete the original message
      * @param deleteAfterMS After X ms
      */
     public void send(Message message, boolean deleteMSG, int deleteAfterMS){
@@ -144,7 +143,7 @@ public class CocoEmbed extends EmbedBuilder {
     /**
      * Send the embed 
      * @param message in this channel
-     * @param deleteMSG And delete the specified message
+     * @param deleteMSG And delete the original message
      * @param deleteAfterMS After X ms
      * @param reactions and add these reactions to the message
      */

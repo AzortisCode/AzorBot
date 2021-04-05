@@ -1,4 +1,4 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
 import com.azortis.azorbot.Main;
 import lombok.Getter;
@@ -9,10 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 public class CocoScrollable extends ListenerAdapter {
@@ -103,8 +100,98 @@ public class CocoScrollable extends ListenerAdapter {
      * @return A list of CocoEmbeds
      */
     public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template) {
-        // TODO:
-        return Collections.singletonList(template);
+        return makeEmbedsFromString(string, template, "");
+    }
+
+    /**
+     * Creates a list of embeds from a string, which you can later port into a new scrollable
+     * @param string A string
+     * @param template the embed template to use
+     * @param codeType the type of code-block. If empty (""), no code block.
+     * @return A list of CocoEmbeds
+     */
+    public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template, String codeType) {
+
+        // Set size per field (cap for in embed)
+        int sizePerField = 1000;
+
+        // Check if we should make a scrollable embed
+        if (string.length() > sizePerField) {
+
+            // Embeds list
+            List<CocoEmbed> embeds = new ArrayList<>();
+
+            // Newline position used for finding where to start
+            int newLinePos = 0;
+
+            // Iteration
+            int iteration = 0;
+
+            // Loop over each part of the string
+            do {
+
+                // Do not mind deprecation. This is because ScrollableEmbed will set the message.
+                CocoEmbed thisEmbed = new CocoEmbed(Objects.requireNonNull(template.build().getTitle()), template.getMessage());
+
+                // Make string builder
+                StringBuilder str = new StringBuilder();
+
+                // Build string
+                if (!codeType.equals("")) str.append("```").append(codeType).append(CocoText.bnk);
+
+                // Find closest newline
+                int closeNew = findNewline(newLinePos + sizePerField, string);
+
+                // Todo: Search for closest newline instead of appending direct stuff
+                str.append(
+                        string.substring(
+                                newLinePos,
+                                Math.min(
+                                closeNew,
+                                string.length() - 1
+                                )
+                        )
+                );
+                if (!codeType.equals("")) str.append("```");
+
+                // Save newline position
+                if (!(newLinePos == closeNew)) {
+                    newLinePos = closeNew;
+                } else {
+                    break;
+                }
+
+                // Add a field with each
+                thisEmbed.setDescription(str.toString());
+
+                // Add embed
+                embeds.add(thisEmbed);
+
+                // Up iteration
+                iteration++;
+
+            } while (newLinePos < string.length() && iteration < 100);
+
+            return embeds;
+        } else {
+            // Make a default CocoEmbed, not scrollable
+            template.addField("Section", string, false);
+            return Collections.singletonList(template);
+        }
+    }
+
+    /**
+     * Finds the closest previous newline to
+     * @param index index
+     * @param string in this string
+     * @return position
+     */
+    private static int findNewline(int index, String string) {
+        if (index > string.length()) index = string.length();
+        string = string.substring(0, index);
+        if (!string.contains("\n")) return index;
+        String[] lines = string.split("\n");
+        return index - lines[lines.length-1].length();
     }
 
     /**
@@ -125,7 +212,7 @@ public class CocoScrollable extends ListenerAdapter {
         for (int i = 0; i < embeds.size(); i++){
             embeds.get(i).setTitle(
                     "`" + (i+1) + "/" + embeds.size() + "` " +
-                            TextUtil.capitalize(
+                            CocoText.capitalize(
                                     Objects.requireNonNull(
                                             embeds.get(i).build().getTitle()
                                     )

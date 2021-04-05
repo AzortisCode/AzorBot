@@ -1,11 +1,11 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class ExampleCommand extends CocoCommand {
-    public ExampleCommand(){
+public class AnExampleCommand extends CocoCommand {
+    public AnExampleCommand(){
         super(
                 "CommandName",
                 new String[]{"CommandAlias1", "Alias2", "Alias3"},

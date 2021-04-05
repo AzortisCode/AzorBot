@@ -1,16 +1,16 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
-public class ExampleCategory extends CocoCommand {
+public class AnExampleCategory extends CocoCommand {
     // Constructor
-    public ExampleCategory(){
+    public AnExampleCategory(){
         super(
                 "ExampleCategory",
                 new String[]{"CategoryAlias1", "Alias2"},
                 new String[]{"RequiredRole1", "OrRole2"},
                 "ExampleCategory command category",
                 new CocoCommand[]{
-                        new ExampleCommand(),
-                        new ExampleCommand()
+                        new AnExampleCommand(),
+                        new AnExampleCommand()
                 }
         );
     }

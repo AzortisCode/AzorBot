@@ -1,4 +1,4 @@
-package com.azortis.azorbot.util;
+package com.azortis.azorbot.cocoUtil;
 
 import com.azortis.azorbot.Main;
 
@@ -14,14 +14,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Manages files for read, write and creation
  */
-public class FileManager {
+public class CocoFiles {
     private final File file;
 
     /**
      * Creates a FileManager
      * @param file The file that needs to be managed
      */
-    public FileManager(File file){
+    public CocoFiles(File file){
         this.file = file;
     }
 
@@ -29,7 +29,7 @@ public class FileManager {
      * Creates a FileManager
      * @param path The path to the file that needs to be managed
      */
-    public FileManager(String path){
+    public CocoFiles(String path){
         this.file = new File(path);
     }
 
@@ -38,7 +38,7 @@ public class FileManager {
      * @param path the path to the file
      * @param check toggles whether a check should be made at creation
      */
-    public FileManager(String path, boolean check){
+    public CocoFiles(String path, boolean check){
         this.file = new File(path);
         if (check) checkExists(true, false);
     }
