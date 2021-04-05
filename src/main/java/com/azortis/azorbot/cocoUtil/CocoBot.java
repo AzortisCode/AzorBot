@@ -41,8 +41,6 @@ public class CocoBot {
     @Getter
     @Setter
     private static Collection<CacheFlag> cFlags = null;
-    private static String botColor = "0x003b6f";
-    private static String botCompany = "Azortis";
 
     @Getter
     private static JDA jda = null;
@@ -54,9 +52,13 @@ public class CocoBot {
     private static User botUser;
     @Getter
     private static long botID;
+    @Getter
+    private static String botColor;
+    @Getter
+    private static String botCompany;
 
-    private static final CocoCommandCenter COMMAND_CENTER = new CocoCommandCenter();
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocket.Listener.class);
+    private static final CocoCommandCenter COMMAND_CENTER = new CocoCommandCenter();
 
     /**
      * Login sequence
@@ -109,6 +111,8 @@ public class CocoBot {
         // Get token from env
         token = dotenv.get("token");
         prefix = dotenv.get("prefix");
+        botColor = dotenv.get("botColor");
+        botCompany = dotenv.get("botCompany");
     }
 
     /**
