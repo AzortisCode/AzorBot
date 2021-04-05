@@ -448,7 +448,7 @@ public class WikiIndexed {
             List<String> item = cleanupPage(flatWiki.get(key));
 
             // Query the page
-            List<List<String>> snippets = searchMessage(item, args, this.threshold);
+            List<List<String>> snippets = searchMessage(item, args);
 
             // Return if empty
             if (snippets.size() == 0) return;
@@ -478,13 +478,14 @@ public class WikiIndexed {
                     .replace("{% hint style=\\\"warning\\\" %}", "Hint (Warning):")
                     .replace("{% hint style=\\\"success\\\" %}", "Hint (Success):");
             if (!newLine.equals(line)){
-                if (line.startsWith("%{")) page.remove(line);
-                else if (line.startsWith("####")) line = "__" + line.replace("####", "") + "__";
-                else if (line.startsWith("###")) line = "**" + line.replace("####", "") + "**";
-                else if (line.startsWith("##")) line = "__**" + line.replace("####", "") + "**__";
-                else if (line.startsWith("$$")) line = "Equation";
+                if (newLine.startsWith("####")) newLine = "__" + newLine.replace("####", "") + "__";
+                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("####", "") + "**";
+                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("####", "") + "**__";
+                else if (newLine.startsWith("$$")) newLine = "Equation";
             }
-            newPage.add(newLine);
+            if (!newLine.startsWith("%{")) {
+                newPage.add(newLine);
+            }
         });
         return newPage;
     }
@@ -493,11 +494,10 @@ public class WikiIndexed {
      * Searches for a query in a message
      * @param message the message to search
      * @param query this query
-     * @param threshold 1-100 scale for certainty threshold
      * @return List of List of strings representing snippets for this page.
      * <p>If empty, there are no found matches</p>
      */
-    private List<List<String>> searchMessage(List<String> message, List<String> query, int threshold){
+    private List<List<String>> searchMessage(List<String> message, List<String> query){
         return new ArrayList<>(Collections.singleton(message));
     }
 
