@@ -55,7 +55,7 @@ public class CommandCenter extends ListenerAdapter {
      * Adds an emoji listener
      * @param listener the listener to add
      */
-    public static void addEmojiListener(ListenerAdapter listener) {
+    public static void addEmojiListener(ListenerAdapter listener){
         Main.info("Adding emoji listener: " + listener.getClass().toString());
         emojiListeners.add(listener);
     }
@@ -64,7 +64,7 @@ public class CommandCenter extends ListenerAdapter {
      * Removes an emoji listener
      * @param listener the listener to remove
      */
-    public static void removeEmojiListener(ListenerAdapter listener) {
+    public static void removeEmojiListener(ListenerAdapter listener){
         emojiListeners.remove(listener);
     }
 
@@ -93,7 +93,7 @@ public class CommandCenter extends ListenerAdapter {
      * @param e Emoji event
      */
     @Override
-    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
+    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e){
         if (Objects.requireNonNull(e.getUser()).isBot()) return;
         emojiListeners.forEach(listener -> listener.onGuildMessageReactionAdd(e));
     }

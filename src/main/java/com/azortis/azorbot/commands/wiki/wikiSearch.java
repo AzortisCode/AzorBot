@@ -87,7 +87,7 @@ public class wikiSearch extends AzorbotCommand {
         List<AzorbotEmbed> pages = wiki.search(args, e.getMessage());
 
         // Check if only one page (either when one found or when none found so returns error)
-        if (pages.size() == 1) {
+        if (pages.size() == 1){
             pages.get(0).send(true, 10000);
         } else {
 

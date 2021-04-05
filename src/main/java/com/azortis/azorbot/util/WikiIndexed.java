@@ -27,7 +27,7 @@ public class WikiIndexed {
     private final String docs;
     private final String gitPath;
     private JSONObject wiki;
-    private JSONObject flatWiki;
+    private Map<String, List<String>> flatWiki;
     private LocalDateTime updatedDate;
     @Setter
     private int threshold;
@@ -77,12 +77,12 @@ public class WikiIndexed {
                 int sizePerField = 1000;
 
                 // Check if we should make a scrollable embed
-                if (sWiki.length() > sizePerField) {
+                if (sWiki.length() > sizePerField){
 
                     List<AzorbotEmbed> embeds = new ArrayList<>();
 
                     // Loop over each part of the string
-                    for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++) {
+                    for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++){
 
                         // Do not mind deprecation. This is because ScrollableEmbed will set the message.
                         AzorbotEmbed thisEmbed = new AzorbotEmbed(embed.getTitle(), embed.getMessage());
@@ -200,7 +200,7 @@ public class WikiIndexed {
                     || key.equalsIgnoreCase("docs")
                     || key.equalsIgnoreCase("page")
                     || key.equalsIgnoreCase("README")
-            ) {
+            ){
                 Main.info(depth + "Skip: " + key);
                 continue;
             }
@@ -209,7 +209,7 @@ public class WikiIndexed {
             Object item = wiki.get(key);
 
             // Prevent item not map
-            if (!(item instanceof Map)) {
+            if (!(item instanceof Map)){
                 Main.info(depth + "Skip: " + key);
                 continue;
             }
@@ -417,7 +417,16 @@ public class WikiIndexed {
         // Loop over all matches and save the embeds
         for (String key : matches.keySet()){
             AzorbotEmbed embed = new AzorbotEmbed(key, msg);
-            embed.setTitle(key, matches.get(key).get(0));
+            String pageName = key.split("/")[key.split("/").length - 1];
+            Main.info("pagename: " + pageName);
+            embed.setTitle(pageName, key);
+            embed.setDescription(("Page: `" +
+                    Arrays.toString(key.replace(docs, "")
+                            .split("/"))
+                            .replace("[", "")
+                            .replace("]","")
+                            .replace(",", " ->")
+            + "`").replace("``", "`Main page`"));
             embed.addField("Snippet", matches.get(key).get(1), false);
             pages.add(embed);
         }
@@ -432,7 +441,6 @@ public class WikiIndexed {
      * @return a map where the keys are the page names, and the elements a list of strings representing a page.
      * <p>If no good items were found, this map has only key "Options" with element a string array with the closest matches.</p>
      */
-    @SuppressWarnings("unchecked")
     private Map<String, List<String>> findMatchingPages(@NotNull List<String> args){
 
         // Return hash
@@ -442,7 +450,7 @@ public class WikiIndexed {
         this.flatWiki.keySet().forEach(key -> {
 
             // Retrieve the item as a list
-            List<String> item = cleanupPage((List<String>) flatWiki.get(key));
+            List<String> item = cleanupPage(flatWiki.get(key));
 
             // Query the page
             List<List<String>> snippets = searchMessage(item, args, this.threshold);
@@ -451,7 +459,8 @@ public class WikiIndexed {
             if (snippets.size() == 0) return;
 
             // Return all them snippets
-            snippets.forEach(snip -> results.put(key, snip));
+            String url = docs + key.replace(".md", "").replace("README", "");
+            snippets.forEach(snip -> results.put(url, snip));
         });
 
         // Return
@@ -465,7 +474,7 @@ public class WikiIndexed {
      * @param page this page
      * @return the cleaned up page
      */
-    private List<String> cleanupPage(List<String> page) {
+    private List<String> cleanupPage(List<String> page){
         List<String> newPage = new ArrayList<>();
         page.forEach(line -> {
             String newLine = line.replace("{% tab title=\\", "Tab:")
@@ -473,7 +482,7 @@ public class WikiIndexed {
                     .replace("{% hint style=\\\"info\\\" %}", "Hint (Info):")
                     .replace("{% hint style=\\\"warning\\\" %}", "Hint (Warning):")
                     .replace("{% hint style=\\\"success\\\" %}", "Hint (Success):");
-            if (!newLine.equals(line)) {
+            if (!newLine.equals(line)){
                 if (line.startsWith("%{")) page.remove(line);
                 else if (line.startsWith("####")) line = "__" + line.replace("####", "") + "__";
                 else if (line.startsWith("###")) line = "**" + line.replace("####", "") + "**";

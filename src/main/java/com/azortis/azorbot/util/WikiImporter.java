@@ -17,7 +17,7 @@ public class WikiImporter {
     private final String path;
     private final String docs;
     private final JSONObject wiki;
-    private final JSONObject flatWiki = new JSONObject();
+    private final Map<String, List<String>> flatWiki = new HashMap<>();
     private final int threshold;
 
     /**
@@ -173,7 +173,7 @@ public class WikiImporter {
      * @param s Path to page to index to
      * @return Map with: path (full path), page (array of strings)
      */
-    private Map<String, Object> makePage(String s) {
+    private Map<String, Object> makePage(String s){
         Map<String, Object> page = new HashMap<>();
         // Try retrieving the page from github
         List<String> PGs = null;
@@ -181,7 +181,7 @@ public class WikiImporter {
             PGs = Objects.requireNonNull(scrape(new URL(path + s)));
             PGs.forEach(l -> l = l.replace(":", "#69420#"));
             page.put("page", PGs);
-        } catch (IOException e) {
+        } catch (IOException e){
             Main.error("Exception while retrieving page information for page: " + path + s);
             page.put("page", new ArrayList<>());
         }
@@ -336,7 +336,7 @@ public class WikiImporter {
      * Get the flat wiki generated during creation.
      * @return A JSON with URLs as keys and an arraylist of strings per key for a page
      */
-    public JSONObject getFlatWiki() {
+    public Map<String, List<String>> getFlatWiki(){
         return this.flatWiki;
     }
 }

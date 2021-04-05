@@ -45,7 +45,7 @@ public class ScrollableEmbed extends ListenerAdapter {
      * @param message Message of which we use the channel
      * @param deleteOriginal If true, deletes original message
      */
-    public ScrollableEmbed(List<AzorbotEmbed> pages, Message message, boolean deleteOriginal) {
+    public ScrollableEmbed(List<AzorbotEmbed> pages, Message message, boolean deleteOriginal){
         this.channel = message.getChannel();
         this.embeds = pages;
         this.end = LocalDateTime.now().plusHours(2);
@@ -59,7 +59,7 @@ public class ScrollableEmbed extends ListenerAdapter {
     /**
      * Sends this scrollable embed in to the channel of
      */
-    private void send() {
+    private void send(){
         channel.sendMessage(embeds.get(current).build()).queue(scrollableMessage ->{
             this.message = scrollableMessage;
             this.ID = scrollableMessage.getIdLong();
@@ -70,9 +70,9 @@ public class ScrollableEmbed extends ListenerAdapter {
     /**
      * Updates the titles of all embeds to include their page number
      */
-    private void updateTitles() {
+    private void updateTitles(){
         for (int i = 0; i < embeds.size(); i++){
-            embeds.get(i).setTitle(embeds.get(i).getTitle() + " `" + (i+1) + "/" + embeds.size() + "`");
+            embeds.get(i).setTitle("`" + (i+1) + "/" + embeds.size() + "` " + embeds.get(i).build().getTitle(), embeds.get(i).build().getUrl());
             embeds.get(i).setMessage(message);
         }
     }
@@ -88,22 +88,22 @@ public class ScrollableEmbed extends ListenerAdapter {
     /**
      * Sets the current embed and resets it reactions
      */
-    private void setResetEmbed() {
+    private void setResetEmbed(){
         this.channel.retrieveMessageById(ID).queue(d -> this.channel.editMessageById(ID, embeds.get(current).build()).queue());
     }
 
     /**
      * Adds all emojis for scrolling
      */
-    private void resetEmojis() {
-        if (embeds.size() > 2) {
+    private void resetEmojis(){
+        if (embeds.size() > 2){
             this.message.addReaction(emojis[0]).queue();
         }
-        if (embeds.size() != 0) {
+        if (embeds.size() != 0){
             this.message.addReaction(emojis[1]).queue();
             this.message.addReaction(emojis[2]).queue();
         }
-        if (embeds.size() > 2) {
+        if (embeds.size() > 2){
             this.message.addReaction(emojis[3]).queue();
         }
     }
@@ -182,7 +182,7 @@ public class ScrollableEmbed extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e) {
+    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e){
         if (LocalDateTime.now().isAfter(end)) CommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
             Main.info("Scrollable was reacted on! Emoji: " + eventToEmoji(e));

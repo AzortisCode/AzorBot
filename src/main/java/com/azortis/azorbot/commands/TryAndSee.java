@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.List;
 
 public class TryAndSee extends AzorbotCommand {
-    public TryAndSee() {
+    public TryAndSee(){
         super(
                 "TryAndSee",
                 new String[]{"tas", "tns", "ts"},
@@ -18,7 +18,7 @@ public class TryAndSee extends AzorbotCommand {
 
     // Handle
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e) {
+    public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("Try it and see!", e.getMessage());
         embed.send();
         e.getChannel().sendMessage("https://tryitands.ee/tias.mp4").queue();

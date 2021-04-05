@@ -23,10 +23,10 @@ public class PingWatchdogExcuse extends AzorbotCommand {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("Excusing user", e.getMessage());
-        if (e.getMessage().getMentionedMembers().size() == 0) {
+        if (e.getMessage().getMentionedMembers().size() == 0){
             embed.setDescription("You did not mention a user. Please double-check");
             embed.send(true, 15000);
-        } else if (PingWatchdogListener.excuseMember(e.getMessage().getMentionedMembers().get(0))) {
+        } else if (PingWatchdogListener.excuseMember(e.getMessage().getMentionedMembers().get(0))){
             embed.setDescription("Excused user: " + e.getMessage().getMentionedMembers().get(0).getUser().getName());
             embed.send(true);
         } else {

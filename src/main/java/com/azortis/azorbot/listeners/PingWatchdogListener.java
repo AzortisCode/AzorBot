@@ -31,7 +31,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param member this member
      * @return if it existed
      */
-    public static boolean deleteMember(Member member) {
+    public static boolean deleteMember(Member member){
         if (staffMembers.contains(member)){
             staffMembers.remove(member);
             save();
@@ -46,7 +46,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param role this role
      * @return if it existed
      */
-    public static boolean deleteRole(Role role) {
+    public static boolean deleteRole(Role role){
         if (staffRoles.contains(role)){
             staffRoles.remove(role);
             save();
@@ -61,7 +61,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param embed this embed
      */
     @SuppressWarnings("all")
-    public static void getList(AzorbotEmbed embed) {
+    public static void getList(AzorbotEmbed embed){
         StringBuilder roles = new StringBuilder();
         StringBuilder members = new StringBuilder();
         StringBuilder pingedStaff = new StringBuilder();
@@ -91,7 +91,7 @@ public class PingWatchdogListener extends ListenerAdapter {
                     .append(hasPingedStaff.get(i).getAsMention());
 
             LocalDateTime time = pingedStaffWhen.get(hasPingedStaff.get(i));
-            if (time != null) {
+            if (time != null){
                 String dateTime = DateTimeFormatter
                         .ofPattern("dd-MM-yyyy kk:HH:ss")
                         .withLocale(Locale.getDefault())
@@ -112,7 +112,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param member the member to excuse
      * @return true if existed
      */
-    public static boolean excuseMember(Member member) {
+    public static boolean excuseMember(Member member){
         if (hasPingedStaff.contains(member)){
             hasPingedStaff.remove(member);
             return true;
@@ -146,14 +146,14 @@ public class PingWatchdogListener extends ListenerAdapter {
         // Go over members
         pingedMembers.forEach(member -> {
             if (done.get()) return;
-            if (staffMembers.contains(member)) {
+            if (staffMembers.contains(member)){
                 Main.info(e.getAuthor().getName() + " pinged staff member: " + member.getUser().getName());
                 done.set(true);
             }
         });
 
         // Check if done
-        if (done.get()) {
+        if (done.get()){
             pingedStaff(e.getMessage(), e.getMember(), embed, true);
             return;
         }
@@ -162,13 +162,13 @@ public class PingWatchdogListener extends ListenerAdapter {
         pingedRoles.forEach(role -> {
             if (done.get()) return;
             Main.info(e.getAuthor().getName() + " pinged role: " + role.getName());
-            if (staffRoles.contains(role)) {
+            if (staffRoles.contains(role)){
                 done.set(true);
             }
         });
 
         // Check if done
-        if (done.get()) {
+        if (done.get()){
             pingedStaff(e.getMessage(), e.getMember(), embed, false);
         }
     }
@@ -180,7 +180,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param embed the embed to output to (will be sent here)
      * @param isDP true if direct ping to staff
      */
-    private static void pingedStaff(Message message, Member member, AzorbotEmbed embed, boolean isDP) {
+    private static void pingedStaff(Message message, Member member, AzorbotEmbed embed, boolean isDP){
         if (isDP){
             embed.setDescription("It is not allowed to directly ping staff.\n" +
                     "Please ping a support role instead\n" +
@@ -209,7 +209,7 @@ public class PingWatchdogListener extends ListenerAdapter {
     /**
      * Initializes the bot
      */
-    private static void initialize(Guild e) {
+    private static void initialize(Guild e){
         Main.info("Initializing ping watchdog (first message received)");
         initialized = true;
         if (!load()) return;
@@ -221,7 +221,7 @@ public class PingWatchdogListener extends ListenerAdapter {
     /**
      * Saves all content to file
      */
-    private static void save() {
+    private static void save(){
 
         // Reset ID lists
         staffRoleIDs = new ArrayList<>();
@@ -257,20 +257,20 @@ public class PingWatchdogListener extends ListenerAdapter {
     /**
      * Loads all content from file
      */
-    private static boolean load() {
+    private static boolean load(){
         List<String> in = file.read();
         if (in == null || in.size() < 3){
             Main.error("No content found in file for PingWatchdog");
             return false;
         }
         int section = 0;
-        for (String line : in) {
+        for (String line : in){
 
             if (line.isBlank()) continue;
             if (line.startsWith("null")) continue;
 
             // Check if new section
-            switch (line) {
+            switch (line){
                 case "staffRoleIDs":
                     section = 1;
                     continue;
@@ -319,7 +319,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * Loads pinged staff
      * @param guild The guild to check for users
      */
-    private static void loadHasPingedStaff(Guild guild) {
+    private static void loadHasPingedStaff(Guild guild){
         hasPingedStaffIDs.forEach(ID -> hasPingedStaff.add(guild.getMemberById(ID)));
     }
 
@@ -328,7 +328,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param role This role
      * @return true if didn't already exist
      */
-    public static boolean addRole(Role role) {
+    public static boolean addRole(Role role){
         if (staffRoles.contains(role)) return false;
         staffRoles.add(role);
         save();
@@ -340,7 +340,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * @param member This member
      * @return true if didn't already exist
      */
-    public static boolean addMember(Member member) {
+    public static boolean addMember(Member member){
         if (staffMembers.contains(member)) return false;
         staffMembers.add(member);
         save();

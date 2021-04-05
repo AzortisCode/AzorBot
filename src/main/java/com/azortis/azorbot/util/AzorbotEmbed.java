@@ -16,16 +16,14 @@ import java.util.concurrent.TimeUnit;
 public class AzorbotEmbed extends EmbedBuilder {
     @Setter
     private Message message;
-    private final String title;
 
     /**
      * Creates a default AzorbotEmbed object.
      * @param title The title of the embed
      * @param message Message used to greet used and make further command easier
      */
-    public AzorbotEmbed(String title, Message message) {
+    public AzorbotEmbed(String title, Message message){
         this.message = message;
-        this.title = title;
         this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl());
         this.setTitle(!title.equals("") ? title : "\u200E");
         this.setColor(Color.decode(Main.botColor));
@@ -39,7 +37,6 @@ public class AzorbotEmbed extends EmbedBuilder {
      */
     public AzorbotEmbed(String title, Message message, boolean useShort){
         this.message = message;
-        this.title = title;
         this.setTitle(title).setColor(Color.decode(Main.botColor));
         if (!useShort){
             this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl())

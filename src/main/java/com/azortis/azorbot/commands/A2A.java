@@ -4,7 +4,7 @@ import com.azortis.azorbot.commands.a2a.*;
 import com.azortis.azorbot.util.AzorbotCommand;
 
 public class A2A extends AzorbotCommand {
-    public A2A() {
+    public A2A(){
         super(
                 "A2a",
                 new String[]{"aa"},

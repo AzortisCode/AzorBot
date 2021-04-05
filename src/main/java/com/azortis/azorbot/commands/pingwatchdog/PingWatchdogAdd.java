@@ -37,7 +37,7 @@ public class PingWatchdogAdd extends AzorbotCommand {
                 return;
             }
             Role role = roles.get(0);
-            if (PingWatchdogListener.addRole(role)) {
+            if (PingWatchdogListener.addRole(role)){
                 embed.setDescription("Added new role to staff list: " + role.getName());
             } else {
                 embed.setDescription("Tried adding " + role.getName() + " to staff list but it is already in.");
@@ -51,7 +51,7 @@ public class PingWatchdogAdd extends AzorbotCommand {
                 return;
             }
             Member member = members.get(0);
-            if (PingWatchdogListener.addMember(member)) {
+            if (PingWatchdogListener.addMember(member)){
                 embed.setDescription("Added new member to staff list: " + member.getUser().getName());
             } else {
                 embed.setDescription("Tried adding " + member.getUser().getName() + " to staff list but they are already in");

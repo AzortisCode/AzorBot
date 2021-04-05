@@ -274,7 +274,7 @@ public class AzorbotCommand extends ListenerAdapter {
      * @param e received event
      */
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e){
 
         // Prevent non-permitted users
         if (noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) return;

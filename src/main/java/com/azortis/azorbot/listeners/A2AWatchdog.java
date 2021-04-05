@@ -56,7 +56,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * Adds a definition
      * @param definition the definition to add
      */
-    public static void addDefinition(String definition) {
+    public static void addDefinition(String definition){
         definitions.add(definition);
     }
 
@@ -64,7 +64,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * Sets the threshold
      * @param threshold to threshold
      */
-    public static void setThreshold(int threshold) {
+    public static void setThreshold(int threshold){
         A2AWatchdog.threshold = threshold;
         save();
     }
@@ -74,7 +74,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * @param definition the definition to remove
      * @return true if removed, false if not found
      */
-    public static boolean removeDefinition(String definition) {
+    public static boolean removeDefinition(String definition){
         ExtractedResult r = FuzzySearch.extractOne(definition, definitions);
         if (r.getScore() < 70) return false;
         definitions.remove(r.getString());
@@ -85,7 +85,7 @@ public class A2AWatchdog extends ListenerAdapter {
      * Get a nice list of definitions
      * @return A list of definitions (in a single string)
      */
-    public static String getNiceDefinitions() {
+    public static String getNiceDefinitions(){
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < definitions.size(); i++){
             out.append("(").append(i + 1).append(") `").append(definitions.get(i)).append("`").append("\n");
@@ -143,7 +143,7 @@ public class A2AWatchdog extends ListenerAdapter {
         }
 
         // Read the definitions file
-        if (!file.read().isEmpty()) {
+        if (!file.read().isEmpty()){
             List<String> in = new ArrayList<>(file.read());
             threshold = Integer.parseInt(in.remove(0));
             definitions = in;

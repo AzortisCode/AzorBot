@@ -39,9 +39,9 @@ public class wikiCreate extends AzorbotCommand {
         } else {
             ExecutionTimer timer = new ExecutionTimer();
             int threshold = Main.defaultSearchThreshold;
-            if (Integer.parseInt(args.get(3)) > 0 && Integer.parseInt(args.get(3)) < 100) {
+            if (Integer.parseInt(args.get(3)) > 0 && Integer.parseInt(args.get(3)) < 100){
                 embed.addField("Entered threshold out of bounds [1, 100]", "Using default: " + args.get(3), false);
-            } else if (args.size() == 4) {
+            } else if (args.size() == 4){
                 threshold = Integer.parseInt(args.get(3));
             } else {
                 embed.addField("Default threshold for searches", String.valueOf(threshold), false);

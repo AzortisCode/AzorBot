@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class wikiThreshold extends AzorbotCommand {
-    public wikiThreshold() {
+    public wikiThreshold(){
         super(
                 "Threshold",
                 new String[]{"th", "bounds", "Alias3"},
@@ -22,7 +22,7 @@ public class wikiThreshold extends AzorbotCommand {
 
     // Handle
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent e) {
+    public void handle(List<String> args, GuildMessageReceivedEvent e){
         AzorbotEmbed embed = new AzorbotEmbed("Set Wiki Threshold", e.getMessage());
         if (args.size() == 0){
             embed.setDescription("You did not specify a wiki name nor a threshold");

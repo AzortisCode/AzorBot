@@ -38,7 +38,7 @@ public class FileManager {
      * @param path the path to the file
      * @param check toggles whether a check should be made at creation
      */
-    public FileManager(String path, boolean check) {
+    public FileManager(String path, boolean check){
         this.file = new File(path);
         if (check) checkExists(true, false);
     }
@@ -145,7 +145,7 @@ public class FileManager {
      * Writes the string
      * @param in String to write
      */
-    public void write(String in) {
+    public void write(String in){
         write(Collections.singletonList(in));
     }
 
