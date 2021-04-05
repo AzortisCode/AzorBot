@@ -8,8 +8,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.List;
 import java.util.Objects;
 
-public class wikiThreshold extends AzorbotCommand {
-    public wikiThreshold(){
+public class WikiThreshold extends AzorbotCommand {
+    public WikiThreshold(){
         super(
                 "Threshold",
                 new String[]{"th", "bounds", "Alias3"},

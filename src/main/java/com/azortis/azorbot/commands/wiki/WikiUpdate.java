@@ -8,8 +8,8 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class wikiUpdate extends AzorbotCommand {
-    public wikiUpdate(){
+public class WikiUpdate extends AzorbotCommand {
+    public WikiUpdate(){
         super(
                 "Update",
                 new String[]{"upd", "up", "u", "reload"},
@@ -42,7 +42,7 @@ public class wikiUpdate extends AzorbotCommand {
                     "Did you perhaps want to create a new one?\n" +
                     "Here is the command help for creating a new wiki:");
             embed.send(true, 15000);
-            new wikiCreate().sendHelp(e.getMessage());
+            new WikiCreate().sendHelp(e.getMessage());
         } else {
             embed.setDescription("Unknown return from wiki creation: " + status + "\n" +
                     timer.duration("update"));

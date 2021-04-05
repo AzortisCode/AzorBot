@@ -1,16 +1,13 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.util.AzorbotEmbed;
-import com.azortis.azorbot.util.ScrollableEmbed;
-import com.azortis.azorbot.util.WikiIndexed;
+import com.azortis.azorbot.util.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.Collections;
 import java.util.List;
 
-public class wikiSearch extends AzorbotCommand {
-    public wikiSearch(){
+public class WikiSearch extends AzorbotCommand {
+    public WikiSearch(){
         super(
                 "Search",
                 new String[]{"src", "s", "find"},
@@ -47,7 +44,7 @@ public class wikiSearch extends AzorbotCommand {
 
         // Check if any wikis are loaded
         if (WikiIndexed.getWikis().size() == 0){
-            embed.setDescription("Failed to search for wiki, there are none loaded");
+            embed.setDescription("Wiki search failed, there are none loaded");
             embed.send(true, 15000);
             return;
         }
@@ -69,7 +66,7 @@ public class wikiSearch extends AzorbotCommand {
             wiki = WikiIndexed.findWiki(args.get(0));
 
             if (wiki == null){
-                embed.setDescription("Failed to search for wiki, specified wiki: " + args.get(0) + " can not be found");
+                embed.setDescription("Failed to search for wiki, specified wiki: `" + TextUtil.capitalize(args.get(0)) + "` can not be found");
                 embed.send(true, 15000);
                 return;
             } else {
@@ -79,7 +76,7 @@ public class wikiSearch extends AzorbotCommand {
 
         // Treat as wiki index request if no parameters are specified
         if (args.size() == 0){
-            new wikiIndex().handle(Collections.singletonList(wiki.getName()), e);
+            new WikiIndex().handle(Collections.singletonList(wiki.getName()), e);
             return;
         }
 

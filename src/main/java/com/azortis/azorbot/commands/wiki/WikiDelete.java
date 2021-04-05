@@ -7,8 +7,8 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class wikiDelete extends AzorbotCommand {
-    public wikiDelete(){
+public class WikiDelete extends AzorbotCommand {
+    public WikiDelete(){
         super(
                 "Delete",
                 new String[]{"del", "x", "remove"},

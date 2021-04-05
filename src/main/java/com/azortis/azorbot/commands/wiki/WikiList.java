@@ -7,8 +7,8 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class wikiList extends AzorbotCommand {
-    public wikiList(){
+public class WikiList extends AzorbotCommand {
+    public WikiList(){
         super(
                 "List",
                 new String[]{"all", "l", "get"},

@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class wikiIndex extends AzorbotCommand {
-    public wikiIndex(){
+public class WikiIndex extends AzorbotCommand {
+    public WikiIndex(){
         super(
                 "Index",
                 new String[]{"ind", "i", "list"},

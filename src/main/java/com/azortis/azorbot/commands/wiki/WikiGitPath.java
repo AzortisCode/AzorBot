@@ -7,8 +7,8 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class wikiGitPath extends AzorbotCommand {
-    public wikiGitPath(){
+public class WikiGitPath extends AzorbotCommand {
+    public WikiGitPath(){
         super(
                 "GitPath",
                 new String[]{"GP"},

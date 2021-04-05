@@ -7,8 +7,8 @@ import com.azortis.azorbot.util.AzorbotCommand;
 
 import java.util.List;
 
-public class wikiInfo extends AzorbotCommand {
-    public wikiInfo(){
+public class WikiInfo extends AzorbotCommand {
+    public WikiInfo(){
         super(
                 "Info",
                 new String[]{"inf", "updated"},

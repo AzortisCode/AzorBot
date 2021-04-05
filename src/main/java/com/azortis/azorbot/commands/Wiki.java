@@ -15,15 +15,15 @@ public class Wiki extends AzorbotCommand {
                 new String[]{"Wikis", "w"},
                 "All wiki-related commands",
                 new AzorbotCommand[]{
-                        new wikiIndex(),
-                        new wikiCreate(),
-                        new wikiUpdate(),
-                        new wikiList(),
-                        new wikiInfo(),
-                        new wikiGitPath(),
-                        new wikiSearch(),
-                        new wikiDelete(),
-                        new wikiThreshold()
+                        new WikiIndex(),
+                        new WikiCreate(),
+                        new WikiUpdate(),
+                        new WikiList(),
+                        new WikiInfo(),
+                        new WikiGitPath(),
+                        new WikiSearch(),
+                        new WikiDelete(),
+                        new WikiThreshold()
                 }
         );
     }
@@ -45,6 +45,6 @@ public class Wiki extends AzorbotCommand {
             return;
         }
         AzorbotCommand.info(getName() + " Final. Running Search");
-        wikiSearch.process(args, e, embed);
+        WikiSearch.process(args, e, embed);
     }
 }

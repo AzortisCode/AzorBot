@@ -9,8 +9,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class wikiCreate extends AzorbotCommand {
-    public wikiCreate(){
+public class WikiCreate extends AzorbotCommand {
+    public WikiCreate(){
         super(
                 "Create",
                 new String[]{"c", "+"},
