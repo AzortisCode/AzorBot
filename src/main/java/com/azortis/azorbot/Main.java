@@ -13,7 +13,7 @@ public class Main extends ListenerAdapter {
     public static int      defaultSearchThreshold = 80;
     public static String   GitBookUser;
     public static String   GitBookPass;
-    public static String   configPath;
+    public static String   configPath = "config/";
 
 
     public static void main(String[] args){
