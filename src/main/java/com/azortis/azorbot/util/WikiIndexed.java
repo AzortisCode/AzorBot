@@ -2,6 +2,7 @@ package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -26,19 +27,25 @@ public class WikiIndexed {
     private final String docs;
     private final String gitPath;
     private JSONObject wiki;
+    private JSONObject flatWiki;
     private LocalDateTime updatedDate;
+    @Setter
+    private int threshold;
 
     /**
      * Creates a new blank wiki with
      * @param name Name
      * @param gitPath and raw github page path
+     * @param docs url to the docs page of this wiki
+     * @param threshold integer 1-100 scale threshold for searches
      */
-    public WikiIndexed(String name, String gitPath, String docs){
+    public WikiIndexed(String name, String gitPath, String docs, int threshold){
         this.name = name;
         this.gitPath = gitPath;
         this.docs = docs;
         this.file = new FileManager(absolutePath.replace("{}", name));
         this.file.checkExists(true, false);
+        this.threshold = threshold;
         this.load();
         wikis.add(this);
     }
@@ -104,6 +111,19 @@ public class WikiIndexed {
                         // Add this to embeds
                         embeds.add(thisEmbed);
                     }
+
+                    // Add the datetime info
+                    String dateTime = DateTimeFormatter
+                            .ofPattern("dd-MM-yyyy kk:HH:ss")
+                            .withLocale(Locale.getDefault())
+                            .withZone(ZoneId.systemDefault())
+                            .format(wiki.getUpdatedDate());
+                    // Do not mind deprecation. This is because ScrollableEmbed will set the message.
+                    AzorbotEmbed thisEmbed = new AzorbotEmbed(embed.getTitle(), embed.getMessage());
+                    thisEmbed.setDescription("**Last updated on**\n" + dateTime + "\n*(Server time)*");
+
+                    // Add
+                    embeds.add(thisEmbed);
 
                     // Create and send a scrollable embed
                     new ScrollableEmbed(embeds, embed.getMessage());
@@ -300,7 +320,7 @@ public class WikiIndexed {
             Main.info("Loaded wiki: " + wJson.getString("name"));
 
             // Add wiki (automatically added to wikis)
-            new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"));
+            new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"), wJson.getInt("threshold"));
         }
     }
 
@@ -310,7 +330,11 @@ public class WikiIndexed {
      * @return True if it is a wiki, false if not
      */
     private static boolean isWikiJSON(JSONObject wikiJson){
-        if (wikiJson.has("path") && wikiJson.has("name") && wikiJson.has("docs")) return true;
+        if (wikiJson.has("path")
+                && wikiJson.has("name")
+                && wikiJson.has("docs")
+                && wikiJson.has("threshold")
+        ) return true;
         Main.warn("Checked wiki JSON but was no wiki:\n" +
                 wikiJson.toString(2) + "\n" +
                 "Only keys are: " + wikiJson.keySet().toString() + "\n" +
@@ -338,10 +362,11 @@ public class WikiIndexed {
     private boolean load(){
 
         // Load importer
-        WikiImporter importer = new WikiImporter(this.name, this.gitPath, this.docs);
+        WikiImporter importer = new WikiImporter(this.name, this.gitPath, this.docs, this.threshold);
 
         // Get wiki from importer
         this.wiki = importer.getWiki();
+        this.flatWiki = importer.getFlatWiki();
 
         // Read from saved file
         List<String> fromFile = this.file.read();
@@ -357,31 +382,8 @@ public class WikiIndexed {
             // Get date
             this.updatedDate = LocalDateTime.now();
 
-            // Update search wiki definitions
-            updateSearch();
-
             return true;
         }
-    }
-
-    /**
-     * Updates wiki search definitions
-     * <p>Can be quite slow!</p>
-     */
-    private void updateSearch() {
-
-        // Useless entries
-        List<String> banned = Arrays.asList("name", "path", "docs");
-
-        // Pages & requeue
-        Map<String, List<String>> pages = new HashMap<>();
-        Map<String, String> paths = new HashMap<>();
-        List<JSONObject> requeue = new ArrayList<>();
-
-        // Find affected keys
-        wiki.keySet().stream().filter(key -> !banned.contains(key)).forEach(key -> {
-        });
-        Main.info(wiki.keySet().toString());
     }
 
     /**
@@ -396,12 +398,16 @@ public class WikiIndexed {
         List<AzorbotEmbed> pages = new ArrayList<>();
 
         // Get matching pages (key is page name, element is page snippet)
-        Map<String, String[]> matches = findMatchingPages(args);
+        Map<String, List<String>> matches = findMatchingPages(args);
 
         if (matches.containsKey("Options")){
             // Return a single error-like embed if no matching pages were found
             AzorbotEmbed embed = new AzorbotEmbed("No matching pages found", msg);
-            embed.setDescription("Closest keywords are: `" + matches.get("Options")[0] + "`\n" +
+            embed.setDescription("Closest keywords are: `" +
+                    matches.get("Options").toString()
+                            .replace("[", "")
+                            .replace("]", "")
+                    + "`\n" +
                     "Please try one of these instead.\n");
             embed.addField("Otherwise, search the wiki", "[" + getName() + "](" + getDocs() + ")", false);
             pages.add(embed);
@@ -411,8 +417,8 @@ public class WikiIndexed {
         // Loop over all matches and save the embeds
         for (String key : matches.keySet()){
             AzorbotEmbed embed = new AzorbotEmbed(key, msg);
-            embed.setTitle(key, matches.get(key)[0]);
-            embed.addField("Snippet", matches.get(key)[1], false);
+            embed.setTitle(key, matches.get(key).get(0));
+            embed.addField("Snippet", matches.get(key).get(1), false);
             pages.add(embed);
         }
 
@@ -423,11 +429,72 @@ public class WikiIndexed {
     /**
      * Finds matching pages in this wiki
      * @param args using these arguments
-     * @return a map where the keys are the page names, and the elements are a 2-element string array with the page url and the snippet.
+     * @return a map where the keys are the page names, and the elements a list of strings representing a page.
      * <p>If no good items were found, this map has only key "Options" with element a string array with the closest matches.</p>
      */
-    private @NotNull Map<String, String[]> findMatchingPages(List<String> args){
-        return Map.of("Options", new String[]{args.get(0)});
+    @SuppressWarnings("unchecked")
+    private Map<String, List<String>> findMatchingPages(@NotNull List<String> args){
+
+        // Return hash
+        Map<String, List<String>> results = new HashMap<>();
+
+        // Go over all pages in the wiki
+        this.flatWiki.keySet().forEach(key -> {
+
+            // Retrieve the item as a list
+            List<String> item = cleanupPage((List<String>) flatWiki.get(key));
+
+            // Query the page
+            List<List<String>> snippets = searchMessage(item, args, this.threshold);
+
+            // Return if empty
+            if (snippets.size() == 0) return;
+
+            // Return all them snippets
+            snippets.forEach(snip -> results.put(key, snip));
+        });
+
+        // Return
+        return results.size() != 0 ?
+                results :
+                Map.of("Options", new ArrayList<>(Collections.singleton(args.get(0))));
+    }
+
+    /**
+     * Cleans up
+     * @param page this page
+     * @return the cleaned up page
+     */
+    private List<String> cleanupPage(List<String> page) {
+        List<String> newPage = new ArrayList<>();
+        page.forEach(line -> {
+            String newLine = line.replace("{% tab title=\\", "Tab:")
+                    .replace("{% hint style=\\\"danger\\\" %}", "Hint (Danger):")
+                    .replace("{% hint style=\\\"info\\\" %}", "Hint (Info):")
+                    .replace("{% hint style=\\\"warning\\\" %}", "Hint (Warning):")
+                    .replace("{% hint style=\\\"success\\\" %}", "Hint (Success):");
+            if (!newLine.equals(line)) {
+                if (line.startsWith("%{")) page.remove(line);
+                else if (line.startsWith("####")) line = "__" + line.replace("####", "") + "__";
+                else if (line.startsWith("###")) line = "**" + line.replace("####", "") + "**";
+                else if (line.startsWith("##")) line = "__**" + line.replace("####", "") + "**__";
+                else if (line.startsWith("$$")) line = "Equation";
+            }
+            newPage.add(newLine);
+        });
+        return newPage;
+    }
+
+    /**
+     * Searches for a query in a message
+     * @param message the message to search
+     * @param query this query
+     * @param threshold 1-100 scale for certainty threshold
+     * @return List of List of strings representing snippets for this page.
+     * <p>If empty, there are no found matches</p>
+     */
+    private List<List<String>> searchMessage(List<String> message, List<String> query, int threshold){
+        return new ArrayList<>(Collections.singleton(message));
     }
 
     /**
