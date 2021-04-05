@@ -389,7 +389,7 @@ public class WikiIndexed {
         // Make empty pages list
         List<CocoEmbed> pages = new ArrayList<>();
 
-        CocoTimer timer = new CocoTimer();
+        CocoTimer timer = new CocoTimer(69420);
 
         // Get matching pages (key is page name, element is page snippet)
         Map<String, List<String>> matches = findMatchingPages(args);
@@ -414,7 +414,6 @@ public class WikiIndexed {
         for (String key : matches.keySet()){
             CocoEmbed embed = new CocoEmbed(key, msg);
             String pageName = key.split("/")[key.split("/").length - 1];
-            CocoBot.info("pagename: " + pageName);
             embed.setTitle(pageName, key);
             embed.setDescription(("Page: `" +
                     Arrays.toString(key.replace(docs, "")
@@ -426,11 +425,6 @@ public class WikiIndexed {
             embed.addField("Snippet", matches.get(key).get(1), false);
             pages.add(embed);
         }
-
-        // Add page with time
-        CocoEmbed embed = new CocoEmbed("Runtime", msg);
-        embed.setDescription(timer.duration("Searching Wiki"));
-        pages.add(embed);
 
         // Return the pages
         return pages;
