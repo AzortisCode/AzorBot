@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class AzorbotEmbed extends EmbedBuilder {
@@ -50,68 +51,76 @@ public class AzorbotEmbed extends EmbedBuilder {
 
     /**
      * Send the embed
+     * @return Sent message
      */
-    public void send(){
-        this.send(this.message, null, false, 0, null);
+    public Message send(){
+        return this.send(this.message, null, false, 0, null);
     }
 
     /**
      * Send the embed in the channel of the original message, if passed with the initial command, and
      * @param deleteMSG If true, delete original message
+     * @return Sent message
      */
-    public void send(boolean deleteMSG){
-        this.send(this.message, deleteMSG);
+    public Message send(boolean deleteMSG){
+        return this.send(this.message, deleteMSG);
     }
 
     /**
      * Send the embed
      * @param deleteMSG and, if true, delete original message
      * @param deleteAfterMS after X ms 
+     * @return Sent message
      */
-    public void send(boolean deleteMSG, int deleteAfterMS){
-        this.send(this.message, deleteMSG, deleteAfterMS);
+    public Message send(boolean deleteMSG, int deleteAfterMS){
+        return this.send(this.message, deleteMSG, deleteAfterMS);
     }
 
     /**
      * Send the embed
      * @param reactions and add these reactions to the message
+     * @return Sent message
      */
-    public void send(List<String> reactions){
-        this.send(this.message, null, false, 0, reactions);
+    public Message send(List<String> reactions){
+        return this.send(this.message, null, false, 0, reactions);
     }
 
     /**
      * Send the embed
      * @param channel in this channel
+     * @return Sent message
      */
-    public void send(TextChannel channel){
-        this.send(null, channel, false, 0, null);
+    public Message send(TextChannel channel){
+        return this.send(null, channel, false, 0, null);
     }
 
     /**
      * Send the embed 
      * @param channel in this channel
      * @param reactions and add these reactions to the message
+     * @return Sent message
      */
-    public void send(TextChannel channel, List<String> reactions){
-        this.send(null, channel, false, 0, reactions);
+    public Message send(TextChannel channel, List<String> reactions){
+        return this.send(null, channel, false, 0, reactions);
     }
 
     /**
      * Send the embed
      * @param message in this channel
+     * @return Sent message
      */
-    public void send(Message message){
-        this.send(message, false);
+    public Message send(Message message){
+        return this.send(message, false);
     }
 
     /**
      * Send the embed 
      * @param message in this channel
      * @param reactions and add these reactions to the message
+     * @return Sent message
      */
-    public void send(Message message, List<String> reactions){
-        this.send(message, false, reactions);
+    public Message send(Message message, List<String> reactions){
+        return this.send(message, false, reactions);
     }
 
 
@@ -119,9 +128,10 @@ public class AzorbotEmbed extends EmbedBuilder {
      * Send the embed
      * @param message in this channel
      * @param deleteMSG And delete the specified message
+     * @return Sent message
      */
-    public void send(Message message, boolean deleteMSG){
-        this.send(message, deleteMSG, 0);
+    public Message send(Message message, boolean deleteMSG){
+        return this.send(message, deleteMSG, 0);
     }
 
     /**
@@ -129,9 +139,10 @@ public class AzorbotEmbed extends EmbedBuilder {
      * @param message in this channel
      * @param deleteMSG And delete the specified message
      * @param reactions and add these reactions to the message
+     * @return Sent message
      */
-    public void send(Message message, boolean deleteMSG, List<String> reactions){
-        this.send(message, deleteMSG, 0, reactions);
+    public Message send(Message message, boolean deleteMSG, List<String> reactions){
+        return this.send(message, deleteMSG, 0, reactions);
     }
 
     /**
@@ -139,9 +150,10 @@ public class AzorbotEmbed extends EmbedBuilder {
      * @param message in this channel
      * @param deleteMSG And delete the specified message
      * @param deleteAfterMS After X ms
+     * @return Sent message
      */
-    public void send(Message message, boolean deleteMSG, int deleteAfterMS){
-        this.send(message, null, deleteMSG, deleteAfterMS, null);
+    public Message send(Message message, boolean deleteMSG, int deleteAfterMS){
+        return this.send(message, null, deleteMSG, deleteAfterMS, null);
     }
 
     /**
@@ -150,9 +162,10 @@ public class AzorbotEmbed extends EmbedBuilder {
      * @param deleteMSG And delete the specified message
      * @param deleteAfterMS After X ms
      * @param reactions and add these reactions to the message
+     * @return Sent message
      */
-    public void send(Message message, boolean deleteMSG, int deleteAfterMS, List<String> reactions){
-        this.send(message, null, deleteMSG, deleteAfterMS, reactions);
+    public Message send(Message message, boolean deleteMSG, int deleteAfterMS, List<String> reactions){
+        return this.send(message, null, deleteMSG, deleteAfterMS, reactions);
     }
 
     /**
@@ -162,28 +175,36 @@ public class AzorbotEmbed extends EmbedBuilder {
      * @param deleteMSG And delete the message
      * @param deleteAfterMS After X ms
      * @param reactions and add these reactions to the message
+     * @return Sent message
      */
-    public void send(Message message, TextChannel channel, boolean deleteMSG, int deleteAfterMS, List<String> reactions){
+    public Message send(Message message, TextChannel channel, boolean deleteMSG, int deleteAfterMS, List<String> reactions){
         if (reactions == null) reactions = new ArrayList<>();
         if (message == null && channel == null){
             Main.error("No channel and message specified.");
+            return null;
         } else if (message != null){
             List<String> finalReactions = reactions;
+            AtomicReference<Message> returnMSG = new AtomicReference<>();
             message.getChannel().sendMessage(this.build()).queue(msg ->{
                 for (String emoji : finalReactions){
                     msg.addReaction(emoji).queue();
+                    returnMSG.set(msg);
                 }
             });
             if (deleteMSG){
                 message.delete().queueAfter(deleteAfterMS, TimeUnit.MILLISECONDS);
             }
+            return returnMSG.get();
         } else {
             List<String> finalReactions = reactions;
+            AtomicReference<Message> returnMSG = new AtomicReference<>();
             channel.sendMessage(this.build()).queue(msg ->{
                 for (String emoji : finalReactions){
                     msg.addReaction(emoji).queue();
+                    returnMSG.set(msg);
                 }
             });
+            return returnMSG.get();
         }
     }
 }
