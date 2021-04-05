@@ -21,14 +21,14 @@ import java.util.Objects;
 
 
 public class CocoBot {
-    private static String token = null;
+    private static String token = null; // DotEnv token=
 
     @Getter
     @Setter
-    private static String prefix = "!";
+    private static String prefix = "!"; // DotEnv prefix=
     @Getter
     @Setter
-    private static boolean DEBUG = true;
+    private static boolean debug = false; // DotEnv debug=true/false
     @Getter
     @Setter
     private static Activity activity = null;
@@ -53,9 +53,9 @@ public class CocoBot {
     @Getter
     private static long botID;
     @Getter
-    private static String botColor;
+    private static String botColor = "0x003b6f";
     @Getter
-    private static String botCompany;
+    private static String botCompany = "DotEnv: CompanyName=";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocket.Listener.class);
     private static final CocoCommandCenter COMMAND_CENTER = new CocoCommandCenter();
@@ -113,6 +113,10 @@ public class CocoBot {
         prefix = dotenv.get("prefix");
         botColor = dotenv.get("botColor");
         botCompany = dotenv.get("botCompany");
+        String deb = dotenv.get("debug");
+        if (deb != null && deb.equals("true")){
+            debug = true;
+        }
     }
 
     /**
@@ -207,7 +211,7 @@ public class CocoBot {
      * @param message The debug message to send
      */
     public static void debug(String message){
-        if (DEBUG) LOGGER.debug(" > {}", message);
+        if (debug) LOGGER.info(" > {}", message);
     }
 
     /**
