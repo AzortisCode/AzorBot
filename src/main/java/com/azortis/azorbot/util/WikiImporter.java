@@ -243,7 +243,7 @@ public class WikiImporter {
 
                 // End of the previous category
                 // Add subcategory to mapping if previous exists
-                if (category != null) map.put(capitalize(category), processCategory(subCategory, category));
+                if (category != null) map.put(TextUtil.capitalize(category), processCategory(subCategory, category));
 
                 // Set the category to the new category type
                 subCategory = new ArrayList<>();
@@ -258,7 +258,7 @@ public class WikiImporter {
 
         // Add the last category to the map
         if (category != null){
-            map.put(capitalize(category), processCategory(subCategory, category));
+            map.put(TextUtil.capitalize(category), processCategory(subCategory, category));
         }
 
         // Return the map
@@ -323,14 +323,6 @@ public class WikiImporter {
         return result;
     }
 
-    /**
-     * Capitalize the first letter of
-     * @param str this string and
-     * @return the capitalized string
-     */
-    private String capitalize(String str){
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
-    }
 
     /**
      * Get the flat wiki generated during creation.
