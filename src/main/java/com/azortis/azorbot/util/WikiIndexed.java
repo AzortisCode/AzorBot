@@ -85,12 +85,12 @@ public class WikiIndexed {
                     for (int i = 0; i < Math.ceil(sWiki.length()/(float) sizePerField); i++){
 
                         // Do not mind deprecation. This is because ScrollableEmbed will set the message.
-                        AzorbotEmbed thisEmbed = new AzorbotEmbed(embed.getTitle(), embed.getMessage());
+                        AzorbotEmbed thisEmbed = new AzorbotEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
 
                         // Add a field with each
                         thisEmbed.setDescription(
                                 "```json\n" + // Json code block
-                                "\u200b" + sWiki // With the right content
+                                TextUtil.bnk + sWiki // With the right content
                                 .substring(
                                         i * sizePerField,
                                         Math.min(
@@ -119,8 +119,8 @@ public class WikiIndexed {
                             .withZone(ZoneId.systemDefault())
                             .format(wiki.getUpdatedDate());
                     // Do not mind deprecation. This is because ScrollableEmbed will set the message.
-                    AzorbotEmbed thisEmbed = new AzorbotEmbed(embed.getTitle(), embed.getMessage());
-                    thisEmbed.setDescription("**Last updated on**\n" + dateTime + "\n*(Server time)*");
+                    AzorbotEmbed thisEmbed = new AzorbotEmbed(Objects.requireNonNull(embed.build().getTitle()), embed.getMessage());
+                    thisEmbed.setDescription("**Last updated on**." + dateTime + "\n*(Server time)*");
 
                     // Add
                     embeds.add(thisEmbed);
@@ -133,7 +133,7 @@ public class WikiIndexed {
 
                     return;
                 } else {
-                    embed.setDescription("```json\n\u200b" + sWiki + "\n```");
+                    embed.setDescription("```json\n" + TextUtil.bnk + sWiki + "\n```");
                 }
             }
 
@@ -169,7 +169,7 @@ public class WikiIndexed {
                             wiki.getWiki().getString("docs"),
                             "",
                             wiki.getName()
-                    )
+                    ).substring(0, 2000)
             );
         }
     }
@@ -189,8 +189,6 @@ public class WikiIndexed {
         // Init a string builder
         StringBuilder string = new StringBuilder();
 
-        Main.info("(D) " + depth + " (Sp) " + subPath + " (Ks) " + wiki.keySet().toString());
-
         // Loop over all keys
         for (String key : wiki.keySet()){
 
@@ -201,7 +199,6 @@ public class WikiIndexed {
                     || key.equalsIgnoreCase("page")
                     || key.equalsIgnoreCase("README")
             ){
-                Main.info(depth + "Skip: " + key);
                 continue;
             }
 
@@ -210,11 +207,9 @@ public class WikiIndexed {
 
             // Prevent item not map
             if (!(item instanceof Map)){
-                Main.info(depth + "Skip: " + key);
                 continue;
             }
 
-            Main.info(depth + " (K) " + key + " (Ks) " + ((Map<?, ?>) item).keySet().toString());
             /*
                 Next bit is somewhat confusing
                 1. Check if there is NO path: This is a MAIN category, which has no main page
@@ -223,16 +218,15 @@ public class WikiIndexed {
                     We must then enter this category and add all its stuff as well
              */
 
-
             // 1. Check if there is NO path: This is a MAIN category, which has no main page
             if (!((Map<?, ?>) item).containsKey("path")){
                 string.append(depth)
                         .append(key)
                         .append("\n");
-                string.append(buildIndex((Map<String, Object>) item, "" + "  ", docs, subPath + key + "/", name));
+                string.append(buildIndex((Map<String, Object>) item, "" + TextUtil.tab + TextUtil.tab, docs, subPath + key + "/", name));
                 continue;
             }
-
+            Main.info("key" + key);
             // 2. Add the current item
             string.append(depth)
                     .append("[")
@@ -240,7 +234,7 @@ public class WikiIndexed {
                     .append("](")
                     .append(docs)
                     .append(subPath.toLowerCase(Locale.ROOT))
-                    .append(key.equalsIgnoreCase(name) ? "" : key.toLowerCase(Locale.ROOT))
+                    .append(key.equalsIgnoreCase(name) ? "" : key.toLowerCase(Locale.ROOT).replace(" ", "-"))
                     .append(")")
                     .append("\n");
 
@@ -248,7 +242,7 @@ public class WikiIndexed {
             //      We must then enter this category and add all its stuff as well
             Main.info("Path: " + ((Map<?, ?>) item).get("path"));
             if ((((Map<?, ?>) item)).containsKey("README")){
-                string.append(buildIndex((Map<String, Object>) item, "" + "  ", docs, subPath + key + "/", name));
+                string.append(buildIndex((Map<String, Object>) item, "" + TextUtil.tab + TextUtil.tab, docs, subPath + key + "/", name));
             }
         }
         return string.toString();
@@ -351,7 +345,7 @@ public class WikiIndexed {
             return "*none*";
         }
         StringBuilder wikiString = new StringBuilder();
-        wikis.forEach(wiki -> wikiString.append(wiki.getName()).append(" "));
+        wikis.forEach(wiki -> wikiString.append(" - `").append(TextUtil.capitalize(wiki.getName())).append("`\n"));
         return wikiString.toString().strip();
     }
 

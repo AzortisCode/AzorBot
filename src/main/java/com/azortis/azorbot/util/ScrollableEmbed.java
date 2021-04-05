@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Getter
 public class ScrollableEmbed extends ListenerAdapter {
@@ -72,7 +73,14 @@ public class ScrollableEmbed extends ListenerAdapter {
      */
     private void updateTitles(){
         for (int i = 0; i < embeds.size(); i++){
-            embeds.get(i).setTitle("`" + (i+1) + "/" + embeds.size() + "` " + embeds.get(i).build().getTitle(), embeds.get(i).build().getUrl());
+            embeds.get(i).setTitle(
+                    "`" + (i+1) + "/" + embeds.size() + "` " +
+                            TextUtil.capitalize(
+                                    Objects.requireNonNull(
+                                            embeds.get(i).build().getTitle()
+                                    )
+                            ),
+                    embeds.get(i).build().getUrl());
             embeds.get(i).setMessage(message);
         }
     }

@@ -25,7 +25,7 @@ public class AzorbotEmbed extends EmbedBuilder {
     public AzorbotEmbed(String title, Message message){
         this.message = message;
         this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl());
-        this.setTitle(!title.equals("") ? title : "\u200E");
+        this.setTitle(!title.equals("") ? title : TextUtil.bnk);
         this.setColor(Color.decode(Main.botColor));
         this.setFooter(Main.botCompany);
     }
