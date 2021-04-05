@@ -38,7 +38,7 @@ public class WikiImporter {
             Main.error("Wiki" + name + " has an issue during creation");
             return;
         }
-        Main.info("Created wiki page for " + name);
+        info("Created wiki page for " + name);
     }
 
     /**
