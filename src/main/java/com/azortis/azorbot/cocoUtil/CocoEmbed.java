@@ -1,6 +1,5 @@
 package com.azortis.azorbot.cocoUtil;
 
-import com.azortis.azorbot.Main;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,8 +25,8 @@ public class CocoEmbed extends EmbedBuilder {
         this.message = message;
         this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl());
         this.setTitle(!title.equals("") ? title : CocoText.bnk);
-        this.setColor(Color.decode(Main.botColor));
-        this.setFooter(Main.botCompany);
+        this.setColor(Color.decode(CocoBot.getBotColor()));
+        this.setFooter(CocoBot.getBotCompany());
     }
 
     /**
@@ -37,10 +36,10 @@ public class CocoEmbed extends EmbedBuilder {
      */
     public CocoEmbed(String title, Message message, boolean useShort){
         this.message = message;
-        this.setTitle(title).setColor(Color.decode(Main.botColor));
+        this.setTitle(title).setColor(Color.decode(CocoBot.getBotColor()));
         if (!useShort){
             this.setAuthor("Requested by: " + message.getAuthor().getName(), null, message.getAuthor().getAvatarUrl())
-                    .setFooter(Main.botCompany);
+                    .setFooter(CocoBot.getBotCompany());
         }
     }
 
