@@ -53,16 +53,14 @@ public class CocoCommandCenter extends ListenerAdapter {
     /**
      * Creates a command center
      */
-    public CocoCommandCenter(){
-        Main.info("Building Command Center");
-    }
+    public CocoCommandCenter(){}
 
     /**
      * Adds an emoji listener
      * @param listener the listener to add
      */
     public static void addEmojiListener(ListenerAdapter listener){
-        Main.info("Adding emoji listener: " + listener.getClass().toString().split("\\.")[listener.getClass().toString().split("\\.").length-1]);
+        CocoBot.info("Adding emoji listener: " + listener.getClass().toString().split("\\.")[listener.getClass().toString().split("\\.").length-1]);
         emojiListeners.add(listener);
     }
 
@@ -88,7 +86,7 @@ public class CocoCommandCenter extends ListenerAdapter {
         listeners.forEach(listener -> listener.onGuildMessageReceived(e));
 
         // Check prefix
-        if (!e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
+        if (!e.getMessage().getContentRaw().startsWith(CocoBot.getPrefix())) return;
 
         // Send to all commands
         commands.forEach(cmd -> cmd.onGuildMessageReceived(e));

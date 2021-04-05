@@ -49,7 +49,7 @@ public class CocoFiles {
     public List<String> read(){
 
         if (!checkExists(true, true)){
-            Main.error("Failed reading from file. Failed to create file.");
+            CocoBot.error("Failed reading from file. Failed to create file.");
             return null;
         }
 
@@ -58,7 +58,7 @@ public class CocoFiles {
         try {
             reader = new Scanner(file);
         } catch (FileNotFoundException e){
-            Main.error("Failed creating fileScanner");
+            CocoBot.error("Failed creating fileScanner");
             e.printStackTrace();
             return null;
         }
@@ -70,11 +70,11 @@ public class CocoFiles {
                 file.add(reader.nextLine());
             }
         } catch (NoSuchElementException e){
-            Main.error("Not found next line to write");
+            CocoBot.error("Not found next line to write");
             e.printStackTrace();
             return null;
         } catch (IllegalStateException e){
-            Main.error("");
+            CocoBot.error("");
             e.printStackTrace();
             return null;
         }
@@ -106,26 +106,26 @@ public class CocoFiles {
 
                     if (!file.exists()){
 
-                        Main.info("Creating new file for: " + file.getName());
+                        CocoBot.info("Creating new file for: " + file.getName());
 
                         if (file.getParentFile() == null){
-                            Main.error("No parent file found for file: " + file.getName());
+                            CocoBot.error("No parent file found for file: " + file.getName());
                             return false;
                         }
                         if (file.getParentFile().mkdirs()){
-                            Main.info("Created parent directories");
+                            CocoBot.info("Created parent directories");
                         }
 
                         // If new file was properly created
                         if (file.createNewFile()){
-                            Main.info("Created new file");
+                            CocoBot.info("Created new file");
 
                             // Return if asked
                             return returnCreationInfo;
                         }
                     }
                 } catch (IOException e){
-                    Main.error("Exception while creating new file or folders");
+                    CocoBot.error("Exception while creating new file or folders");
                     e.printStackTrace();
                     // Return that file failed to create
                     return false;
@@ -157,7 +157,7 @@ public class CocoFiles {
 
         // Make sure file exists
         if (!checkExists(true, true)){
-            Main.error("Failed to write to file. Failed to create file.");
+            CocoBot.error("Failed to write to file. Failed to create file.");
             return false;
         }
 
@@ -166,7 +166,7 @@ public class CocoFiles {
         try {
             writer = new FileWriter(file);
         } catch (IOException e){
-            Main.error("Failed creating fileWriter");
+            CocoBot.error("Failed creating fileWriter");
             e.printStackTrace();
             return false;
         }
@@ -177,7 +177,7 @@ public class CocoFiles {
             try {
                 writer.write(line + "\n");
             } catch (IOException e){
-                Main.error("Failed writing a line to file");
+                CocoBot.error("Failed writing a line to file");
                 e.printStackTrace();
                 success.set(false);
             }
@@ -187,7 +187,7 @@ public class CocoFiles {
         try {
             writer.close();
         } catch (IOException e){
-            Main.error("Failed closing writer");
+            CocoBot.error("Failed closing writer");
             e.printStackTrace();
             return false;
         }

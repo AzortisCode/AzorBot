@@ -1,6 +1,6 @@
 package com.azortis.azorbot.commands.wiki;
 
-import com.azortis.azorbot.Main;
+import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoCommand;
 import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import com.azortis.azorbot.cocoUtil.CocoScrollable;
@@ -27,7 +27,7 @@ public class WikiIndex extends CocoCommand {
         CocoEmbed embed = new CocoEmbed("{} wiki index".replace("{}", args.get(0)), e.getMessage());
         int randNum = new Random().nextInt();
         embed.addField("Faulty link?", "Ask an Admin to read the console log at `" + randNum + "`", false);
-        Main.info(randNum + "Faulty link? Fix the slug of a page by clicking the tree dots. Spaces are -'s. Caps don't matter");
+        CocoBot.info(randNum + "Faulty link? Fix the slug of a page by clicking the tree dots. Spaces are -'s. Caps don't matter");
         new CocoScrollable(
                 WikiIndexed.getIndex(args.get(0)),
                 embed,

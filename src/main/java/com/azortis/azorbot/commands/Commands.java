@@ -1,10 +1,10 @@
 package com.azortis.azorbot.commands;
 
-import com.azortis.azorbot.cocoUtil.CocoCommandCenter;
-import com.azortis.azorbot.Main;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoCommand;
+import com.azortis.azorbot.cocoUtil.CocoCommandCenter;
 import com.azortis.azorbot.cocoUtil.CocoEmbed;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +27,7 @@ public class Commands extends CocoCommand {
     public void handle(List<String> args, GuildMessageReceivedEvent e){
 
         // Init embed
-        CocoEmbed embed = new CocoEmbed("༼ つ ◕_◕ ༽つ **" + Main.botName + " Info Page!**", e.getMessage());
+        CocoEmbed embed = new CocoEmbed("༼ つ ◕_◕ ༽つ **" + CocoBot.getBotName() + " Info Page!**", e.getMessage());
 
         // Add explanation
         embed.addField(
@@ -39,14 +39,14 @@ public class Commands extends CocoCommand {
         // Loop over and add all commands with their respective information
         for (CocoCommand command : CocoCommandCenter.getCommands()){
             if (command.noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) continue;
-            String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
+            String cmd = CocoBot.getPrefix() + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
             if (command.getCommands().size() == 0){
                 embed.addField(cmd, "`*no aliases*`\n" + command.getDescription(), true);
             } else {
                 StringBuilder body = new StringBuilder();
                 body
                         .append("\n`")
-                        .append(Main.prefix)
+                        .append(CocoBot.getPrefix())
                         .append(
                                 command.getCommands().size() == 1 ?
                                         command.getCommands().get(0) :

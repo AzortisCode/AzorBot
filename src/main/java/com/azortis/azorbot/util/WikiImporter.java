@@ -1,6 +1,6 @@
 package com.azortis.azorbot.util;
 
-import com.azortis.azorbot.Main;
+import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoText;
 import lombok.Getter;
 import org.json.JSONObject;
@@ -35,10 +35,10 @@ public class WikiImporter {
         this.threshold = threshold;
         wiki = create();
         if (wiki == null){
-            Main.error("Wiki" + name + " has an issue during creation");
+            CocoBot.error("Wiki" + name + " has an issue during creation");
             return;
         }
-        info("Created wiki page for " + name);
+        CocoBot.info("Created wiki page for " + name);
     }
 
     /**
@@ -50,14 +50,14 @@ public class WikiImporter {
         try {
             url = new URL(path + "SUMMARY.md");
         } catch (IOException e){
-            Main.error("Failed retrieving page for (" + name + "): " + path + "SUMMARY.md");
-            Main.error("Failed to import wiki. Exiting wiki importer");
+            CocoBot.error("Failed retrieving page for (" + name + "): " + path + "SUMMARY.md");
+            CocoBot.error("Failed to import wiki. Exiting wiki importer");
             return null;
         }
         List<String> siteContent;
         siteContent = scrape(url);
         assert siteContent != null;
-        Main.debug(siteContent.toString());
+        CocoBot.debug(siteContent.toString());
         JSONObject wiki = new JSONObject(TableOfContents(siteContent));
         wiki.put("path", path);
         wiki.put("name", name);
@@ -130,7 +130,7 @@ public class WikiImporter {
             if (!line.startsWith("* [")){
 
                 // Print the line
-                Main.debug(line);
+                CocoBot.debug(line);
                 continue;
             }
 
@@ -183,7 +183,7 @@ public class WikiImporter {
             PGs.forEach(l -> l = l.replace(":", "#69420#"));
             page.put("page", PGs);
         } catch (IOException e){
-            Main.error("Exception while retrieving page information for page: " + path + s);
+            CocoBot.error("Exception while retrieving page information for page: " + path + s);
             page.put("page", new ArrayList<>());
         }
         page.put("path", path + s);
@@ -217,7 +217,7 @@ public class WikiImporter {
         for (List<String> line : content){
 
             // Print the line
-            Main.debug(line.toString());
+            CocoBot.debug(line.toString());
 
             // If the line is not a part of a subcategory
             if(line.get(1).contains("README.md")){
@@ -276,7 +276,7 @@ public class WikiImporter {
         try {
             stream = url.openStream();
         } catch (IOException e){
-            Main.error("Failed to open stream for URL: " + url.toString());
+            CocoBot.error("Failed to open stream for URL: " + url.toString());
             return null;
         }
         BufferedReader in = new BufferedReader(
@@ -289,7 +289,7 @@ public class WikiImporter {
             }
             in.close();
         } catch (IOException e){
-            Main.error("Failed to read next line or close stream for URL: " + url.toString());
+            CocoBot.error("Failed to read next line or close stream for URL: " + url.toString());
             return null;
         }
         return out;

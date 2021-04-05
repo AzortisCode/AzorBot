@@ -1,9 +1,13 @@
 package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
+import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import com.azortis.azorbot.cocoUtil.CocoFiles;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -127,7 +131,7 @@ public class PingWatchdogListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e){
 
-        if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
+        if (e.getMessage().getContentRaw().startsWith(CocoBot.getPrefix())) return;
         if (e.getMessage().getContentRaw().startsWith("#")) return;
 
         // Make atomic done
@@ -147,7 +151,7 @@ public class PingWatchdogListener extends ListenerAdapter {
         pingedMembers.forEach(member -> {
             if (done.get()) return;
             if (staffMembers.contains(member)){
-                Main.info(e.getAuthor().getName() + " pinged staff member: " + member.getUser().getName());
+                CocoBot.info(e.getAuthor().getName() + " pinged staff member: " + member.getUser().getName());
                 done.set(true);
             }
         });
@@ -161,7 +165,7 @@ public class PingWatchdogListener extends ListenerAdapter {
         // Go over roles
         pingedRoles.forEach(role -> {
             if (done.get()) return;
-            Main.info(e.getAuthor().getName() + " pinged role: " + role.getName());
+            CocoBot.info(e.getAuthor().getName() + " pinged role: " + role.getName());
             if (staffRoles.contains(role)){
                 done.set(true);
             }
@@ -210,7 +214,7 @@ public class PingWatchdogListener extends ListenerAdapter {
      * Initializes the bot
      */
     private static void initialize(Guild e){
-        Main.info("Initializing ping watchdog (first message received)");
+        CocoBot.info("Initializing ping watchdog (first message received)");
         initialized = true;
         if (!load()) return;
         loadStaffRoles(e);
@@ -260,7 +264,7 @@ public class PingWatchdogListener extends ListenerAdapter {
     private static boolean load(){
         List<String> in = file.read();
         if (in == null || in.size() < 3){
-            Main.error("No content found in file for PingWatchdog");
+            CocoBot.error("No content found in file for PingWatchdog");
             return false;
         }
         int section = 0;
@@ -291,8 +295,8 @@ public class PingWatchdogListener extends ListenerAdapter {
                     pingedStaffWhen.put(Long.parseLong(split[0]), LocalDateTime.parse(split[1]));
                     break;
                 }
-                case 3: Main.info("PingWatchdog staff member: " + line); break;
-                default: Main.error("PingWatchdog sections not starting with staffRoleIDs or out of bounds"); return false;
+                case 3: CocoBot.info("PingWatchdog staff member: " + line); break;
+                default: CocoBot.error("PingWatchdog sections not starting with staffRoleIDs or out of bounds"); return false;
             }
         }
         return true;

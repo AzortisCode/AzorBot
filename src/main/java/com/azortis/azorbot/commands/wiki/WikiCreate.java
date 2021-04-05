@@ -1,6 +1,7 @@
 package com.azortis.azorbot.commands.wiki;
 
 import com.azortis.azorbot.Main;
+import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoCommand;
 import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import com.azortis.azorbot.cocoUtil.CocoTimer;
@@ -35,7 +36,7 @@ public class WikiCreate extends CocoCommand {
             embed.setDescription("The specified wiki name is too short (min 4 characters)");
         } else if (!args.get(2).contains("https://raw.githubusercontent.com/")){
             embed.setDescription("Your GitPath does not contain the required main path:\n`" + args.get(1) + "`");
-            embed.addField("GitPath Help", "You can request GitPath help with `" + Main.prefix + "wiki GitPath`", false);
+            embed.addField("GitPath Help", "You can request GitPath help with `" + CocoBot.getPrefix() + "wiki GitPath`", false);
         } else {
             CocoTimer timer = new CocoTimer();
             int threshold = Main.defaultSearchThreshold;

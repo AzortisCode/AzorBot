@@ -1,10 +1,7 @@
 package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
-import com.azortis.azorbot.cocoUtil.CocoEmbed;
-import com.azortis.azorbot.cocoUtil.CocoScrollable;
-import com.azortis.azorbot.cocoUtil.CocoFiles;
-import com.azortis.azorbot.cocoUtil.CocoText;
+import com.azortis.azorbot.cocoUtil.*;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Message;
@@ -72,7 +69,7 @@ public class WikiIndexed {
             if (rawJSON){
 
                 // Print info
-                Main.info("Adding raw JSON to embed");
+                CocoBot.info("Adding raw JSON to embed");
 
                 // Get json string
                 String sWiki = wiki.getWiki().toString(4).replace("`", "");
@@ -219,7 +216,7 @@ public class WikiIndexed {
                 3. Check if the path contains a README.md extension, indicating it is a SUB category
                     We must then enter this category and add all its stuff as well
              */
-            Main.info(((Map<?, ?>) item).keySet().toString());
+            CocoBot.info(((Map<?, ?>) item).keySet().toString());
 
             // 1. Check if there is NO path: This is a MAIN category, which has no main page
             if (!((Map<?, ?>) item).containsKey("path")){
@@ -284,12 +281,12 @@ public class WikiIndexed {
         // Check folder exists
         File wikiFolder = new File(absolutePath.replace("{}.json", ""));
         if (!wikiFolder.exists()){
-            Main.info("Tried loading wikis but folder does not exist. Creating folder");
+            CocoBot.info("Tried loading wikis but folder does not exist. Creating folder");
             try {
                 if (!wikiFolder.createNewFile())
-                    Main.error("Failed creating folder");
+                    CocoBot.error("Failed creating folder");
             } catch (IOException e){
-                Main.error("Failed creating folder");
+                CocoBot.error("Failed creating folder");
                 e.printStackTrace();
             }
             return;
@@ -312,7 +309,7 @@ public class WikiIndexed {
             if (!isWikiJSON(wJson)) continue;
 
             // Send info
-            Main.info("Loaded wiki: " + wJson.getString("name"));
+            CocoBot.info("Loaded wiki: " + wJson.getString("name"));
 
             // Add wiki (automatically added to wikis)
             new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"), wJson.getInt("threshold"));
@@ -330,7 +327,7 @@ public class WikiIndexed {
                 && wikiJson.has("docs")
                 && wikiJson.has("threshold")
         ) return true;
-        Main.warn("Checked wiki JSON but was no wiki:\n" +
+        CocoBot.warn("Checked wiki JSON but was no wiki:\n" +
                 wikiJson.toString(2) + "\n" +
                 "Only keys are: " + wikiJson.keySet().toString() + "\n" +
                 "Needs at least: Path, Name, Docs");
@@ -413,7 +410,7 @@ public class WikiIndexed {
         for (String key : matches.keySet()){
             CocoEmbed embed = new CocoEmbed(key, msg);
             String pageName = key.split("/")[key.split("/").length - 1];
-            Main.info("pagename: " + pageName);
+            CocoBot.info("pagename: " + pageName);
             embed.setTitle(pageName, key);
             embed.setDescription(("Page: `" +
                     Arrays.toString(key.replace(docs, "")

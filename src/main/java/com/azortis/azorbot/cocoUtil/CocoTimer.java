@@ -35,7 +35,8 @@ public class CocoTimer {
     }
 
     /**
-     * Build duration string
+     * Build duration string with command name
+     * <p>Running `command` took `###`ms</p>
      * @return String with duration in format
      */
     public String duration(){
@@ -44,7 +45,7 @@ public class CocoTimer {
 
     /**
      * Build duration string with command name
-     * Running `command` took `###`ms
+     * <p>Running `command` took `###`ms</p>
      * @param command Name of the command used in format
      * @return String with duration in format
      */

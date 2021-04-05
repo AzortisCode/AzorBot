@@ -1,9 +1,9 @@
 package com.azortis.azorbot.commands;
 
+import com.azortis.azorbot.cocoUtil.CocoBot;
+import com.azortis.azorbot.cocoUtil.CocoCommand;
 import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import com.azortis.azorbot.Main;
-import com.azortis.azorbot.cocoUtil.CocoCommand;
 
 import java.util.List;
 
@@ -22,6 +22,6 @@ public class Shutdown extends CocoCommand {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         new CocoEmbed("Shutting down", e.getMessage()).send(true);
-        Main.shutdown();
+        CocoBot.shutdown();
     }
 }

@@ -1,9 +1,7 @@
 package com.azortis.azorbot.listeners;
 
 import com.azortis.azorbot.Main;
-
-import java.util.*;
-
+import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoEmbed;
 import com.azortis.azorbot.cocoUtil.CocoFiles;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
@@ -11,6 +9,11 @@ import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class A2AWatchdog extends ListenerAdapter {
     private static final int defaultThreshold = 80;
@@ -99,15 +102,15 @@ public class A2AWatchdog extends ListenerAdapter {
      */
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e){
-        if (e.getMessage().getContentRaw().startsWith(Main.prefix)) return;
+        if (e.getMessage().getContentRaw().startsWith(CocoBot.getPrefix())) return;
 
         ExtractedResult r = FuzzySearch.extractOne(e.getMessage().getContentDisplay(), definitions);
 
         // Make sure the bypass character was not added and score was passed
         if (!e.getMessage().getContentRaw().startsWith("#") && r.getScore() >= threshold){
-            Main.info("Message: (" + e.getMessage().getContentDisplay() + ")");
-            Main.info("flagged as A2A with score: " + r.getScore());
-            Main.info("for item: '" + r.getString() + "'");
+            CocoBot.info("Message: (" + e.getMessage().getContentDisplay() + ")");
+            CocoBot.info("flagged as A2A with score: " + r.getScore());
+            CocoBot.info("for item: '" + r.getString() + "'");
             constructAndSendA2A(e.getMessage());
         }
     }
@@ -136,7 +139,7 @@ public class A2AWatchdog extends ListenerAdapter {
         if (!file.checkExists(true, false)){
 
             // If not, create a new default definitions file
-            Main.info("Created new definitions file with default definitions");
+            CocoBot.info("Created new definitions file with default definitions");
             List<String> out = new ArrayList<>(Collections.singleton(String.valueOf(defaultThreshold)));
             out.addAll(defaultDefinitions);
             file.write(out);

@@ -1,6 +1,5 @@
 package com.azortis.azorbot.cocoUtil;
 
-import com.azortis.azorbot.Main;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -34,7 +33,7 @@ public class CocoScrollable extends ListenerAdapter {
         updateTitles();
         CocoCommandCenter.addEmojiListener(this);
         send();
-        Main.info("Built new scrollable");
+        CocoBot.info("Built new scrollable");
     }
 
     /**
@@ -51,7 +50,7 @@ public class CocoScrollable extends ListenerAdapter {
         CocoCommandCenter.addEmojiListener(this);
         send();
         if (deleteOriginal) message.delete().queue();
-        Main.info("Built new scrollable");
+        CocoBot.info("Built new scrollable");
     }
 
     /**
@@ -67,7 +66,7 @@ public class CocoScrollable extends ListenerAdapter {
         updateTitles();
         CocoCommandCenter.addEmojiListener(this);
         send();
-        Main.info("Built new scrollable");
+        CocoBot.info("Built new scrollable");
     }
 
     /**
@@ -83,13 +82,13 @@ public class CocoScrollable extends ListenerAdapter {
         this.end = LocalDateTime.now().plusHours(2);
         if (embeds.size() == 1){
             embeds.get(0).send(deleteOriginal);
-            Main.info("New scrollable had small size, creating embed instead");
+            CocoBot.info("New scrollable had small size, creating embed instead");
         } else {
             updateTitles();
             CocoCommandCenter.addEmojiListener(this);
             send();
             if (deleteOriginal) message.delete().queue();
-            Main.info("Built new scrollable");
+            CocoBot.info("Built new scrollable");
         }
     }
 
@@ -275,11 +274,11 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls back one page
      */
     public void back(){
-        Main.info("Scrolling back 1 page");
+        CocoBot.info("Scrolling back 1 page");
         current -= 1;
         if (current < 0){
             current = 0;
-            Main.info("Already as far left as possible");
+            CocoBot.info("Already as far left as possible");
             return;
         }
         update();
@@ -289,7 +288,7 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls all the way back
      */
     public void wayBack(){
-        Main.info("Scrolling back to first page");
+        CocoBot.info("Scrolling back to first page");
         current = 0;
         update();
     }
@@ -298,11 +297,11 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls forward one page
      */
     public void forward(){
-        Main.info("Scrolling forward 1 page");
+        CocoBot.info("Scrolling forward 1 page");
         current += 1;
         if (current > embeds.size() - 1){
             current = embeds.size() - 1;
-            Main.info("Already as far right as possible");
+            CocoBot.info("Already as far right as possible");
             return;
         }
         update();
@@ -312,7 +311,7 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls all the way forward
      */
     public void wayForward(){
-        Main.info("Scrolling forward to last page");
+        CocoBot.info("Scrolling forward to last page");
         current = embeds.size() - 1;
         update();
     }
@@ -330,7 +329,7 @@ public class CocoScrollable extends ListenerAdapter {
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent e){
         if (LocalDateTime.now().isAfter(end)) CocoCommandCenter.removeEmojiListener(this);
         if (e.getMessageIdLong() == ID){
-            Main.info("Scrollable was reacted on! Emoji: " + eventToEmoji(e));
+            CocoBot.info("Scrollable was reacted on! Emoji: " + eventToEmoji(e));
             checkReactions(eventToEmoji(e));
             e.getReaction().removeReaction(e.getUser()).queue();
         }

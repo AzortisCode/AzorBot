@@ -284,7 +284,7 @@ public class CocoCommand extends ListenerAdapter {
         if (noPermission(Objects.requireNonNull(e.getMember()).getRoles(), e.getAuthor().getId())) return;
 
         // Convert args
-        List<String> args = new LinkedList<>(Arrays.asList(e.getMessage().getContentRaw().replace(Main.prefix, "").split(" ")));
+        List<String> args = new LinkedList<>(Arrays.asList(e.getMessage().getContentRaw().replace(CocoBot.getPrefix(), "").split(" ")));
 
         // Check match command
         if (!checkCommand(args.get(0))) return;
@@ -403,13 +403,13 @@ public class CocoCommand extends ListenerAdapter {
     public void sendHelp(Message message){
         CocoEmbed embed = new CocoEmbed(getName() + " Command Usage", message);
 
-        String cmd = Main.prefix + getName().substring(0, 1).toUpperCase() + getName().substring(1);
+        String cmd = CocoBot.getPrefix() + getName().substring(0, 1).toUpperCase() + getName().substring(1);
         if (getCommands().size() < 2){
             embed.addField(cmd, "`*no aliases*`\n" + getDescription(), true);
         } else {
             embed.addField(
                     cmd,
-                    "\n`" + Main.prefix +
+                    "\n`" + CocoBot.getPrefix() +
                             (getCommands().size() == 1 ?
                                     getCommands().get(0) :
                                     " " + getCommands().toString()
@@ -419,7 +419,7 @@ public class CocoCommand extends ListenerAdapter {
             );
         }
         if (getExample() != null){
-            embed.addField("**Usage**", "`" + Main.prefix + getExample() + "`", false);
+            embed.addField("**Usage**", "`" + CocoBot.getPrefix() + getExample() + "`", false);
         }
         if (getRoles() != null && getRoles().size() != 0){
             embed.addField("**Permitted for role(s)**", "`" + getRoles().toString() + "`", false);
@@ -440,21 +440,21 @@ public class CocoCommand extends ListenerAdapter {
         getSubcommands().forEach(command -> {
 
             // Collect command
-            String cmd = Main.prefix + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
+            String cmd = CocoBot.getPrefix() + command.getName().substring(0, 1).toUpperCase() + command.getName().substring(1);
 
             // Process command properties
             if (command.getCommands().size() < 2){
                 embed.addField(cmd, "`*no aliases*`\n" + command.getDescription(), true);
             } else {
                 String body =
-                        "\n`" + Main.prefix +
+                        "\n`" + CocoBot.getPrefix() +
                                 (command.getCommands().size() == 1 ?
                                         command.getCommands().get(0) :
                                         " " + command.getCommands().toString()
                                         .replace("[", "").replace("]", "")) +
                                 "`\n" +
                                 command.getDescription() +
-                                (command.getExample() != null ? "\n**Usage**\n`" + Main.prefix + command.getExample() + "`": "");
+                                (command.getExample() != null ? "\n**Usage**\n`" + CocoBot.getPrefix() + command.getExample() + "`": "");
                 embed.addField(
                         cmd,
                         body,
@@ -469,7 +469,7 @@ public class CocoCommand extends ListenerAdapter {
      * Command debug logs
      * @param msg Message to send
      */
-    public void info(String msg){
-        Main.LOGGER.info("CMD {}", msg);
+    public static void info(String msg){
+        CocoBot.raw("CMD {}", msg);
     }
 }

@@ -162,7 +162,7 @@ public class CocoEmbed extends EmbedBuilder {
     public void send(Message message, TextChannel channel, boolean deleteMSG, int deleteAfterMS, List<String> reactions){
         if (reactions == null) reactions = new ArrayList<>();
         if (message == null && channel == null){
-            Main.error("No channel and message specified.");
+            CocoBot.error("No channel and message specified.");
         } else if (message != null){
             List<String> finalReactions = reactions;
             message.getChannel().sendMessage(this.build()).queue(msg ->{
