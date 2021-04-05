@@ -17,6 +17,7 @@ public class WikiImporter {
     private final String path;
     private final String docs;
     private final JSONObject wiki;
+    private final JSONObject flatWiki = new JSONObject();
 
     /**
      * Imports a wiki
@@ -142,7 +143,8 @@ public class WikiImporter {
             } else {
 
                 // Store the line
-                map.put(info.get(0), makePage(info.get(2)));
+                Map<String, Object> page = makePage(info.get(2));
+                map.put(info.get(0), page);
             }
 
         }
@@ -166,19 +168,21 @@ public class WikiImporter {
      * @param s Path to page to index to
      * @return Map with: path (full path), page (array of strings)
      */
-    private Map<String, Object> makePage(String s){
-        s = path + s;
+    private Map<String, Object> makePage(String s) {
         Map<String, Object> page = new HashMap<>();
         // Try retrieving the page from github
+        List<String> PGs = null;
         try {
-            List<String> PGs = Objects.requireNonNull(scrape(new URL(s)));
+            PGs = Objects.requireNonNull(scrape(new URL(path + s)));
             PGs.forEach(l -> l = l.replace(":", "#69420#"));
             page.put("page", PGs);
-        } catch (IOException e){
-            Main.error("Exception while retrieving page information for page: " + s);
+        } catch (IOException e) {
+            Main.error("Exception while retrieving page information for page: " + path + s);
             page.put("page", new ArrayList<>());
         }
-        page.put("path", s);
+        page.put("path", path + s);
+
+        flatWiki.put(s, PGs);
         return page;
     }
 
@@ -321,5 +325,13 @@ public class WikiImporter {
      */
     private String capitalize(String str){
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    /**
+     * Get the flat wiki generated during creation.
+     * @return A JSON with URLs as keys and an arraylist of strings per key for a page
+     */
+    public JSONObject getFlatWiki() {
+        return this.flatWiki;
     }
 }
