@@ -1,5 +1,6 @@
 package com.azortis.azorbot.cocoUtil;
 
+import com.azortis.azorbot.Test;
 import com.azortis.azorbot.commands.Shutdown;
 import com.azortis.azorbot.commands.*;
 import com.azortis.azorbot.listeners.A2AWatchdog;
@@ -39,7 +40,10 @@ public class CocoCommandCenter extends ListenerAdapter {
             new PingWatchdog(),
 
             // Command command
-            new Commands()
+            new Commands(),
+
+            // Test command
+            new Test()
     );
     private static final List<ListenerAdapter> listeners = Arrays.asList(
             new A2AWatchdog(),
