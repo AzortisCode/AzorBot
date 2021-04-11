@@ -55,7 +55,7 @@ public class Commands extends CocoCommand {
                         )
                         .append("`\n")
                         .append(command.getDescription())
-                        .append(command.getExample() != null ? "\n**Usage**\n" + command.getExample() : "");
+                        .append(command.getUsage() != null ? "\n**Usage**\n`" + command.getUsage() + "`" : "");
                 if (command.getRoles() != null && command.getRoles().size() != 0){
                     if (command.getRoles().size() == 1){
                         body.append("\n__Required:__ ").append(command.getRoles().get(0));
