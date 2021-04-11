@@ -1,6 +1,5 @@
 package com.azortis.azorbot.cocoUtil;
 
-import com.azortis.azorbot.Main;
 import lombok.Getter;
 import lombok.NonNull;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,7 +23,7 @@ public class CocoCommand extends ListenerAdapter {
     public final List<String> roles;
     public final String description;
     public final boolean needsArguments;
-    public final String example;
+    public final String usage;
     public final boolean category;
     public final List<CocoCommand> subcommands;
 
@@ -44,7 +43,7 @@ public class CocoCommand extends ListenerAdapter {
         this.commands = new ArrayList<>(Collections.singleton(name));
         this.roles = new ArrayList<>();
         this.needsArguments = false;
-        this.example = null;
+        this.usage = null;
         this.category = false;
         this.subcommands = null;
     }
@@ -72,7 +71,7 @@ public class CocoCommand extends ListenerAdapter {
         // Other
         this.roles = new ArrayList<>();
         this.needsArguments = false;
-        this.example = null;
+        this.usage = null;
         this.category = false;
         this.subcommands = null;
     }
@@ -107,7 +106,7 @@ public class CocoCommand extends ListenerAdapter {
 
         // Other
         this.needsArguments = false;
-        this.example = null;
+        this.usage = null;
         this.category = false;
         this.subcommands = null;
     }
@@ -145,7 +144,7 @@ public class CocoCommand extends ListenerAdapter {
         this.needsArguments = needsArguments;
 
         // Other
-        this.example = null;
+        this.usage = null;
         this.category = false;
         this.subcommands = null;
     }
@@ -157,9 +156,9 @@ public class CocoCommand extends ListenerAdapter {
      * @param roles Array of roles the command requires (only one is enough for permission)
      * @param description Description of the command
      * @param needsArguments Toggle for requiring arguments (helps with preventing argument-less calls)
-     * @param example Example of command usage.
+     * @param usage Example of command usage.
      */
-    public CocoCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String example){
+    public CocoCommand(String name, String[] commands, String[] roles, String description, boolean needsArguments, String usage){
         // Name
         this.name = name;
 
@@ -184,7 +183,7 @@ public class CocoCommand extends ListenerAdapter {
         this.needsArguments = needsArguments;
 
         // Example
-        this.example = example;
+        this.usage = usage;
 
         // Other
         this.category = false;
@@ -220,7 +219,7 @@ public class CocoCommand extends ListenerAdapter {
 
         // Other
         this.roles = new ArrayList<>();
-        this.example = null;
+        this.usage = null;
         this.needsArguments = true;
     }
 
@@ -260,7 +259,7 @@ public class CocoCommand extends ListenerAdapter {
         this.category = true;
 
         // Other
-        this.example = null;
+        this.usage = null;
         this.needsArguments = true;
     }
 
@@ -418,8 +417,8 @@ public class CocoCommand extends ListenerAdapter {
                     true
             );
         }
-        if (getExample() != null){
-            embed.addField("**Usage**", "`" + CocoBot.getPrefix() + getExample() + "`", false);
+        if (getUsage() != null){
+            embed.addField("**Usage**", "`" + CocoBot.getPrefix() + getUsage() + "`", false);
         }
         if (getRoles() != null && getRoles().size() != 0){
             embed.addField("**Permitted for role(s)**", "`" + getRoles().toString() + "`", false);
@@ -454,7 +453,7 @@ public class CocoCommand extends ListenerAdapter {
                                         .replace("[", "").replace("]", "")) +
                                 "`\n" +
                                 command.getDescription() +
-                                (command.getExample() != null ? "\n**Usage**\n`" + CocoBot.getPrefix() + command.getExample() + "`": "");
+                                (command.getUsage() != null ? "\n**Usage**\n`" + CocoBot.getPrefix() + command.getUsage() + "`": "");
                 embed.addField(
                         cmd,
                         body,
