@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class AnExampleCommand extends CocoCommand {
-    public AnExampleCommand(){
+public class ExampleCommand extends CocoCommand {
+    public ExampleCommand(){
         super(
                 "CommandName",
                 new String[]{"CommandAlias1", "Alias2", "Alias3"},
