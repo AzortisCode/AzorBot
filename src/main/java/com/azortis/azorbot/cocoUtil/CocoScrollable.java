@@ -59,7 +59,7 @@ public class CocoScrollable extends ListenerAdapter {
      * @param embed The embed template to use (title etc)
      * @param message Message of which we use the channel
      */
-    public CocoScrollable(String string, CocoEmbed embed, Message message) {
+    public CocoScrollable(String string, CocoEmbed embed, Message message){
         this.channel = message.getChannel();
         this.embeds = makeEmbedsFromString(string, embed);
         this.end = LocalDateTime.now().plusHours(2);
@@ -76,7 +76,7 @@ public class CocoScrollable extends ListenerAdapter {
      * @param message Message of which we use the channel
      * @param deleteOriginal If true, deletes original message
      */
-    public CocoScrollable(String string, CocoEmbed embed, Message message, boolean deleteOriginal) {
+    public CocoScrollable(String string, CocoEmbed embed, Message message, boolean deleteOriginal){
         this.channel = message.getChannel();
         this.embeds = makeEmbedsFromString(string, embed);
         this.end = LocalDateTime.now().plusHours(2);
@@ -98,7 +98,7 @@ public class CocoScrollable extends ListenerAdapter {
      * @param template the embed template to use
      * @return A list of CocoEmbeds
      */
-    public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template) {
+    public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template){
         return makeEmbedsFromString(string, template, "");
     }
 
@@ -109,13 +109,13 @@ public class CocoScrollable extends ListenerAdapter {
      * @param codeType the type of code-block. If empty (""), no code block.
      * @return A list of CocoEmbeds
      */
-    public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template, String codeType) {
+    public static List<CocoEmbed> makeEmbedsFromString(String string, CocoEmbed template, String codeType){
 
         // Set size per field (cap for in embed)
         int sizePerField = 1000;
 
         // Check if we should make a scrollable embed
-        if (string.length() > sizePerField) {
+        if (string.length() > sizePerField){
 
             // Embeds list
             List<CocoEmbed> embeds = new ArrayList<>();
@@ -154,7 +154,7 @@ public class CocoScrollable extends ListenerAdapter {
                 if (!codeType.equals("")) str.append("```");
 
                 // Save newline position
-                if (!(newLinePos == closeNew)) {
+                if (!(newLinePos == closeNew)){
                     newLinePos = closeNew;
                 } else {
                     break;
@@ -185,7 +185,7 @@ public class CocoScrollable extends ListenerAdapter {
      * @param string in this string
      * @return position
      */
-    private static int findNewline(int index, String string) {
+    private static int findNewline(int index, String string){
         if (index > string.length()) index = string.length();
         string = string.substring(0, index);
         if (!string.contains("\n")) return index;

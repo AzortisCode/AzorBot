@@ -46,9 +46,9 @@ public class Test extends CocoCommand {
 
     public static void viewTable(Connection con) throws SQLException {
         String query = "select COF_NAME, SUP_ID, PRICE, SALES, TOTAL from COFFEES";
-        try (Statement stmt = con.createStatement()) {
+        try (Statement stmt = con.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
+            while (rs.next()){
                 String coffeeName = rs.getString("COF_NAME");
                 int supplierID = rs.getInt("SUP_ID");
                 float price = rs.getFloat("PRICE");
@@ -57,7 +57,7 @@ public class Test extends CocoCommand {
                 System.out.println(coffeeName + ", " + supplierID + ", " + price +
                         ", " + sales + ", " + total);
             }
-        } catch (SQLException e) {
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }

@@ -75,13 +75,13 @@ public class CocoBot {
         loadToken();
 
         // Build and log into JDA
-        if (!buildJDA()) {
+        if (!buildJDA()){
             log("Failed to login");
             return;
         }
 
         // Load own info
-        if (!loadInfo()) {
+        if (!loadInfo()){
             log("Failed to load info from bot. User not instantiated.");
             return;
         }
@@ -139,10 +139,10 @@ public class CocoBot {
         // Try logging in, and wait for ready.
         try {
             jda = builder.build().awaitReady();
-        } catch (LoginException e) {
+        } catch (LoginException e){
             log("Error while logging into bot. Please double-check your token");
             return false;
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e){
             log("Interrupted while waiting on login. Please check server stability");
             return false;
         }
@@ -155,7 +155,7 @@ public class CocoBot {
      * Load information for this bot
      * @return True if botUser exists, false if not.
      */
-    private static boolean loadInfo() {
+    private static boolean loadInfo(){
         botID = jda.getSelfUser().getIdLong();
         botUser = jda.getUserById(botID);
         botSelfUser = jda.getSelfUser();
@@ -167,7 +167,7 @@ public class CocoBot {
     /**
      * Sets bot presence
      */
-    private static void setPresence() {
+    private static void setPresence(){
         jda.getPresence().setStatus(Objects.requireNonNullElse(status, OnlineStatus.ONLINE));
         jda.getPresence().setActivity(Objects.requireNonNullElseGet(activity, () -> Activity.listening(" to " + prefix)));
     }
@@ -219,7 +219,7 @@ public class CocoBot {
      * @param message Message <p>({} replaced with below; object)</p>
      * @param object object to input into message
      */
-    public static void raw(String message, Object object) {
+    public static void raw(String message, Object object){
         LOGGER.info(message, object);
     }
 
