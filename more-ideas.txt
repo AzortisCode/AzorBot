@@ -1,0 +1,2 @@
+auto-let-me-google
+auto command in text detection and wiki link 
