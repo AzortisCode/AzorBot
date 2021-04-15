@@ -176,19 +176,27 @@ public class WikiImporter {
      */
     private Map<String, Object> makePage(String s){
         Map<String, Object> page = new HashMap<>();
+
         // Try retrieving the page from github
-        List<String> PGs = null;
+        List<String> content = null;
         try {
-            PGs = Objects.requireNonNull(scrape(new URL(path + s)));
-            PGs.forEach(l -> l = l.replace(":", "#69420#"));
-            page.put("page", PGs);
+            content = cleanupPage(Objects.requireNonNull(scrape(new URL(path + s))));
+            content.forEach(l -> l = l.replace(":", "#69420#"));
+            page.put("page", cleanupPage(content));
         } catch (IOException e){
             CocoBot.error("Exception while retrieving page information for page: " + path + s);
             page.put("page", new ArrayList<>());
         }
+
+        // Throw error if failed
+        if (content == null) throw new NullPointerException("Page (" + path + s + ") content was null");
+
+        // Add the path to the page
         page.put("path", path + s);
 
-        flatWiki.put(s, PGs);
+        // Add this page to the flat wiki. Used for searching
+        flatWiki.put(s, content);
+
         return page;
     }
 
@@ -331,5 +339,31 @@ public class WikiImporter {
      */
     public Map<String, List<String>> getFlatWiki(){
         return this.flatWiki;
+    }
+
+    /**
+     * Cleans up
+     * @param page this page
+     * @return the cleaned up page
+     */
+    private List<String> cleanupPage(List<String> page){
+        List<String> clean = new ArrayList<>();
+        page.forEach(line -> {
+            String newLine = line.replace("{% tab title=\\", "Tab:")
+                    .replace("{% hint style=\\\"danger\\\" %}", "Hint (Danger):")
+                    .replace("{% hint style=\\\"info\\\" %}", "Hint (Info):")
+                    .replace("{% hint style=\\\"warning\\\" %}", "Hint (Warning):")
+                    .replace("{% hint style=\\\"success\\\" %}", "Hint (Success):");
+            if (!newLine.equals(line)){
+                if (newLine.startsWith("####")) newLine = "__" + newLine.replace("####", "") + "__";
+                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("####", "") + "**";
+                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("####", "") + "**__";
+                else if (newLine.startsWith("$$")) newLine = "Equation";
+            }
+            if (!newLine.startsWith("%{")){
+                clean.add(newLine);
+            }
+        });
+        return clean;
     }
 }
