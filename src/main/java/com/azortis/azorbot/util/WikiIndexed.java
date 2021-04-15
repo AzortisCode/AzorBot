@@ -445,11 +445,8 @@ public class WikiIndexed {
         // Go over all pages in the wiki
         this.flatWiki.keySet().forEach(key -> {
 
-            // Retrieve the item as a list
-            List<String> item = cleanupPage(flatWiki.get(key));
-
             // Query the page
-            List<List<String>> snippets = searchMessage(item, args);
+            List<List<String>> snippets = searchMessage(flatWiki.get(key), args);
 
             // Return if empty
             if (snippets.size() == 0) return;
@@ -459,36 +456,12 @@ public class WikiIndexed {
             snippets.forEach(snip -> results.put(url, snip));
         });
 
+        // Create alternative entry options
+        Map<String, List<String>> Alternatives = Map.of("Options", new ArrayList<>(Collections.singleton(args.get(0))));
+
         // Return
         return results.size() != 0 ?
-                results :
-                Map.of("Options", new ArrayList<>(Collections.singleton(args.get(0))));
-    }
-
-    /**
-     * Cleans up
-     * @param page this page
-     * @return the cleaned up page
-     */
-    private List<String> cleanupPage(List<String> page){
-        List<String> newPage = new ArrayList<>();
-        page.forEach(line -> {
-            String newLine = line.replace("{% tab title=\\", "Tab:")
-                    .replace("{% hint style=\\\"danger\\\" %}", "Hint (Danger):")
-                    .replace("{% hint style=\\\"info\\\" %}", "Hint (Info):")
-                    .replace("{% hint style=\\\"warning\\\" %}", "Hint (Warning):")
-                    .replace("{% hint style=\\\"success\\\" %}", "Hint (Success):");
-            if (!newLine.equals(line)){
-                if (newLine.startsWith("####")) newLine = "__" + newLine.replace("####", "") + "__";
-                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("####", "") + "**";
-                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("####", "") + "**__";
-                else if (newLine.startsWith("$$")) newLine = "Equation";
-            }
-            if (!newLine.startsWith("%{")) {
-                newPage.add(newLine);
-            }
-        });
-        return newPage;
+                results : Alternatives;
     }
 
     /**
@@ -499,30 +472,27 @@ public class WikiIndexed {
      * <p>If empty, there are no found matches</p>
      */
     private List<List<String>> searchMessage(List<String> message, List<String> query){
-        if (!done){
-            CocoFiles file = new CocoFiles(Main.configPath + "example.txt");
-            file.write(message);
-            CocoFiles file2 = new CocoFiles(Main.configPath + "example2.txt");
-            file2.write(query);
-            done = true;
+        Map<Integer, List<String>> queried = new HashMap<>();
+        for (int i = 0; i < message.size(); i++){
+            String l = message.get(i);
+            int finalI = i;
+            query.forEach(q -> {
+                if (l.contains(q)){
+                    if (queried.containsKey(finalI)){
+                        List<String> temp = queried.get(finalI);
+                        temp.add(q);
+                        queried.put(finalI, temp);
+                    }
+                    queried.put(finalI, Collections.singletonList(q));
+                }
+            });
         }
-        List<List<String>> results = new ArrayList<>();
-        /*
-         * Query item 1 is found
-         * add a snippet to the results list
-         *
-         * A snippet is basically a collection of lines that together form some useful information
-         *
-         * Full query match = 100% match
-         * 1e 2e query word match = 95% match
-         * is
-         */
         return new ArrayList<>(Collections.singleton(message));
     }
 
     /**
      * Deletes this wiki
-     * @return true if successful
+     * @return true if successfully removed file. Wiki will be deleted successfully always. File may fail.
      */
     public boolean delete(){
         wikis.remove(this);
