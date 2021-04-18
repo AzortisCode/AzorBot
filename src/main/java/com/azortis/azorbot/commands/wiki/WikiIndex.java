@@ -14,7 +14,7 @@ public class WikiIndex extends CocoCommand {
     public WikiIndex(){
         super(
                 "Index",
-                new String[]{"ind", "i", "list"},
+                new String[]{"ind", "i"},
                 null,
                 "Prints the index of the entered wiki",
                 true,
