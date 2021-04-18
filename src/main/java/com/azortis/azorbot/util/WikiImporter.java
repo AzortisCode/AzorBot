@@ -347,23 +347,45 @@ public class WikiImporter {
      * @return the cleaned up page
      */
     private List<String> cleanupPage(List<String> page){
+
+        // Make a list for storing clean pages
         List<String> clean = new ArrayList<>();
-        page.forEach(line -> {
+
+        // Previous line empty
+        boolean wasBlank = false;
+
+        // Loop over all pages and clean them up
+        for (String line : page) {
+
+            // Replace hints
             String newLine = line.replace("{% tab title=\\", "Tab:")
-                    .replace("{% hint style=\\\"danger\\\" %}", "Hint (Danger):")
-                    .replace("{% hint style=\\\"info\\\" %}", "Hint (Info):")
-                    .replace("{% hint style=\\\"warning\\\" %}", "Hint (Warning):")
-                    .replace("{% hint style=\\\"success\\\" %}", "Hint (Success):");
-            if (!newLine.equals(line)){
+                    .replace("{% hint style=\"danger\" %}", "Hint (Danger):")
+                    .replace("{% hint style=\"info\" %}", "Hint (Info):")
+                    .replace("{% hint style=\"warning\" %}", "Hint (Warning):")
+                    .replace("{% hint style=\"success\" %}", "Hint (Success):");
+
+            // Markup headers etc accordingly
+            if (newLine.equals(line)) {
                 if (newLine.startsWith("####")) newLine = "__" + newLine.replace("####", "") + "__";
-                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("####", "") + "**";
-                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("####", "") + "**__";
-                else if (newLine.startsWith("$$")) newLine = "Equation";
+                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("###", "") + "**";
+                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("##", "") + "**__";
+                else if (newLine.startsWith("$$")) newLine = "";
             }
-            if (!newLine.startsWith("%{")){
-                clean.add(newLine);
+
+            // Add the line if it doesn't start with these characters
+            if (!newLine.startsWith("{%") && !newLine.equals("---")) {
+                if (!newLine.isBlank()) {
+                    wasBlank = false;
+                    clean.add(newLine);
+                } else {
+                    if (wasBlank) continue;
+                    wasBlank = true;
+                    clean.add(line);
+                }
             }
-        });
+        }
+
+        // Return the list of cleaned lines
         return clean;
     }
 }
