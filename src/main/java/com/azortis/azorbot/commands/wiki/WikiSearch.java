@@ -68,6 +68,7 @@ public class WikiSearch extends CocoCommand {
 
             if (wiki == null){
                 embed.setDescription("Failed to search for wiki, specified wiki: `" + CocoText.capitalize(args.get(0)) + "` can not be found");
+                embed.addField("Loaded wikis:", WikiIndexed.getLoadedWikis(), false);
                 embed.send(true, 15000);
                 return;
             } else {
