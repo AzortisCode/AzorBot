@@ -546,9 +546,6 @@ public class WikiIndexed {
         // Make an arraylist in which we will store the snippets
         List<List<String>> snips = new ArrayList<>();
 
-        // TODO: Fix the retrieving of multiple instances of the same query on a single page.
-        // I Think it would be nice to search for the same section (alinea in Dutch) only.
-
         // Build a snip from the message and line number
         for (Integer key : queried.keySet()){
             List<String> snip = getSnippetFromLines(message, key, queried.get(key));
@@ -568,6 +565,8 @@ public class WikiIndexed {
      * @param queried The list of strings that hit on this line
      */
     private List<String> getSnippetFromLines(List<String> lines, Integer lineNumber, List<String> queried){
+
+        // TODO: Limit this to 1000 characters in a nice manner (stop at newline)
 
         // Amount of lines to display / search in before and after the indicated linenumber
         int takeBefore = 5;
