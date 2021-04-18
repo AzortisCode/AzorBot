@@ -20,7 +20,7 @@ public class WikiList extends CocoCommand {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent e){
         CocoEmbed embed = new CocoEmbed("List of wikis", e.getMessage());
-        embed.setDescription("Loaded wikis are: `" + WikiIndexed.getLoadedWikis() + "`");
+        embed.setDescription("Loaded wikis are: \n" + WikiIndexed.getLoadedWikis());
         embed.send(true);
     }
 }
