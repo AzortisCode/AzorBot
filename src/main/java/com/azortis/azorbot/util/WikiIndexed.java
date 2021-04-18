@@ -422,7 +422,9 @@ public class WikiIndexed {
                             .replace("]","")
                             .replace(",", " ->")
             + "`").replace("``", "`Main page`"));
-            embed.addField("Snippet", matches.get(key).get(1), false);
+            StringBuilder sb = new StringBuilder();
+            matches.get(key).forEach(line -> sb.append(line).append("\n"));
+            embed.addField("Snippet", sb.toString(), false);
             pages.add(embed);
         }
 
@@ -453,7 +455,6 @@ public class WikiIndexed {
             // Return all them snippets
             String url = docs + key.replace(".md", "").replace("README", "");
             snippets.forEach(snip -> results.put(url, snip));
-            snippets.forEach(snip -> results.put(url, snip));
         });
 
         // Return
@@ -478,7 +479,7 @@ public class WikiIndexed {
         for (int i = 0; i < message.size(); i++){
 
             // Retrieve the line
-            String l = message.get(i);
+            String l = message.get(i).toLowerCase(Locale.ROOT);
 
             // Store the current line index (required since forEach)
             int finalI = i;
@@ -487,7 +488,7 @@ public class WikiIndexed {
             query.forEach(q -> {
 
                 // Check if the queried word is in the line
-                if (l.contains(q)){
+                if (l.contains(q.toLowerCase(Locale.ROOT))){
 
                     // If the line already has a queried entry stored in the hash
                     if (queried.containsKey(finalI)) {
@@ -506,10 +507,17 @@ public class WikiIndexed {
         // Make an arraylist in which we will store the snippets
         List<List<String>> snips = new ArrayList<>();
 
+        // TODO: Fix the snippet getter (the index is messed up. Snippet getter works nicely)
+        // TODO: Fix the retrieving of multiple instances of the same query on a single page.
+        // I Think it would be nice to search for the same section (alinea in Dutch) only.
+
         // Build a snip from the message and line number
         for (Integer key : queried.keySet()){
+            CocoBot.error(message.get(key));
             List<String> snip = getSnippetFromLines(message, key);
-            if (snip != null) snips.add(snip);
+            if (snip != null) {
+                snips.add(snip);
+            }
         }
 
         // Return the snippets
@@ -523,24 +531,29 @@ public class WikiIndexed {
      */
     private List<String> getSnippetFromLines(List<String> lines, Integer lineNumber){
 
+        // Amount of lines to display / search in before and after the indicated linenumber
+        int takeBefore = 5; // The header search looks 2*this back
+        int takeAfter = 25;
+
+        CocoBot.info("Getting snippet from lines: " + lineNumber + " = " + lines.get(lineNumber));
         // Prevent out of bounds
-        if (lineNumber < 0 || lineNumber > lines.size()){
+        if (lineNumber > lines.size()){
             CocoBot.error("Getting snippet with index: " + lineNumber + " while size is " + lines.size());
             return null;
         }
 
         // Offset line
-        int low = Math.max(lineNumber - 5, 0);
+        int low = Math.max(lineNumber - takeBefore, 0);
 
         // Try to find a header
-        for (int i = low; i < low + 5; i++){
+        for (int i = low; i < low + takeBefore * 2; i++){
             if (lines.get(i).startsWith("#")){
-                return lines.subList(i, Math.min(i + 15, lines.size()));
+                return lines.subList(i, Math.min(i + takeAfter, lines.size()));
             }
         }
 
         // Return default offset since no header found
-        return lines.subList(low, Math.min(low + 15, lines.size()));
+        return lines.subList(low, Math.min(low + takeAfter, lines.size()));
     }
 
     /**
