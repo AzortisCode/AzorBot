@@ -33,7 +33,7 @@ public class CocoScrollable extends ListenerAdapter {
         updateTitles();
         CocoCommandCenter.addEmojiListener(this);
         send();
-        CocoBot.info("Built new scrollable");
+        CocoBot.debug("Built new scrollable");
     }
 
     /**
@@ -274,11 +274,11 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls back one page
      */
     public void back(){
-        CocoBot.info("Scrolling back 1 page");
+        CocoBot.debug("Scrolling back 1 page");
         current -= 1;
         if (current < 0){
             current = 0;
-            CocoBot.info("Already as far left as possible");
+            CocoBot.debug("Already as far left as possible");
             return;
         }
         update();
@@ -288,7 +288,7 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls all the way back
      */
     public void wayBack(){
-        CocoBot.info("Scrolling back to first page");
+        CocoBot.debug("Scrolling back to first page");
         current = 0;
         update();
     }
@@ -297,11 +297,11 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls forward one page
      */
     public void forward(){
-        CocoBot.info("Scrolling forward 1 page");
+        CocoBot.debug("Scrolling forward 1 page");
         current += 1;
         if (current > embeds.size() - 1){
             current = embeds.size() - 1;
-            CocoBot.info("Already as far right as possible");
+            CocoBot.debug("Already as far right as possible");
             return;
         }
         update();
@@ -311,7 +311,7 @@ public class CocoScrollable extends ListenerAdapter {
      * Scrolls all the way forward
      */
     public void wayForward(){
-        CocoBot.info("Scrolling forward to last page");
+        CocoBot.debug("Scrolling forward to last page");
         current = embeds.size() - 1;
         update();
     }
