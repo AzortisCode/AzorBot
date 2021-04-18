@@ -366,10 +366,17 @@ public class WikiImporter {
 
             // Markup headers etc accordingly
             if (newLine.equals(line)) {
-                if (newLine.startsWith("####")) newLine = "__" + newLine.replace("####", "") + "__";
-                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("###", "") + "**";
-                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("##", "") + "**__";
+                if (newLine.startsWith("####")) newLine = "__" + newLine.replace("####", "").stripLeading() + "__";
+                else if (newLine.startsWith("###")) newLine = "**" + newLine.replace("###", "").stripLeading() + "**";
+                else if (newLine.startsWith("##")) newLine = "__**" + newLine.replace("##", "").stripLeading() + "**__";
                 else if (newLine.startsWith("$$")) newLine = "";
+                else if (newLine.startsWith("![")) {
+                    newLine = "*Picture* " + // Picture indicator
+                            newLine.substring(1).split("]")[0] + // Name of picture as indicated. Contains leading [
+                            "](" + // Connector
+                            path + // Raw github path
+                            newLine.split("]")[1].substring(1); // Path to image. Contains closing )
+                }
             }
 
             // Add the line if it doesn't start with these characters

@@ -394,7 +394,17 @@ public class WikiIndexed {
         // Get matching pages (key is page name, element is page snippet)
         Map<String, List<String>> matches = findMatchingPages(args);
 
+        // Get matching page names
+        String pageNamesMatching = findMatchingPageNames(args);
+
         timer.stop();
+
+        if (!pageNamesMatching.isBlank()){
+            // Return a page with the titles of the pages that match
+            CocoEmbed embed = new CocoEmbed("Matching pages by name", msg);
+            embed.setDescription(pageNamesMatching);
+            pages.add(embed);
+        }
 
         if (matches.containsKey("Options")){
             // Return a single error-like embed if no matching pages were found
@@ -430,6 +440,34 @@ public class WikiIndexed {
 
         // Return the pages
         return pages;
+    }
+
+    /**
+     * Finds a list of matching page names and nicely formats them into markup
+     * @param args The arguments to search using
+     * @return A list of lines consisting of the names of each of the pages
+     */
+    private String findMatchingPageNames(List<String> args) {
+
+        StringBuilder sb = new StringBuilder();
+
+        this.flatWiki.keySet().forEach(key -> {
+            for (String arg : args) {
+                if (key.contains(arg)){
+                    //- (title)[docs.something.com/key]
+                    sb.append("- [")
+                            .append(CocoText.capitalize(key.replace(".md", "")))
+                            .append("](")
+                            .append(docs)
+                            .append(key)
+                            .append(")")
+                            .append("\n");
+                    break;
+                }
+            }
+        });
+
+        return sb.toString();
     }
 
     /**
@@ -489,6 +527,7 @@ public class WikiIndexed {
 
                 // Check if the queried word is in the line
                 if (l.contains(q.toLowerCase(Locale.ROOT))){
+                    CocoBot.info("Query (" + q + ") in line: " + l);
 
                     // If the line already has a queried entry stored in the hash
                     if (queried.containsKey(finalI)) {
@@ -507,14 +546,12 @@ public class WikiIndexed {
         // Make an arraylist in which we will store the snippets
         List<List<String>> snips = new ArrayList<>();
 
-        // TODO: Fix the snippet getter (the index is messed up. Snippet getter works nicely)
         // TODO: Fix the retrieving of multiple instances of the same query on a single page.
         // I Think it would be nice to search for the same section (alinea in Dutch) only.
 
         // Build a snip from the message and line number
         for (Integer key : queried.keySet()){
-            CocoBot.error(message.get(key));
-            List<String> snip = getSnippetFromLines(message, key);
+            List<String> snip = getSnippetFromLines(message, key, queried.get(key));
             if (snip != null) {
                 snips.add(snip);
             }
@@ -528,14 +565,17 @@ public class WikiIndexed {
      * Retrieve a snippet from a list of lines and a line number
      * @param lines the lines to retrieve from
      * @param lineNumber the line number to query with
+     * @param queried The list of strings that hit on this line
      */
-    private List<String> getSnippetFromLines(List<String> lines, Integer lineNumber){
+    private List<String> getSnippetFromLines(List<String> lines, Integer lineNumber, List<String> queried){
 
         // Amount of lines to display / search in before and after the indicated linenumber
-        int takeBefore = 5; // The header search looks 2*this back
-        int takeAfter = 25;
+        int takeBefore = 5;
+        int takeAfter = 20;
 
-        CocoBot.info("Getting snippet from lines: " + lineNumber + " = " + lines.get(lineNumber));
+        // Max size of snippet (characters)
+        int maxSize = 1000;
+
         // Prevent out of bounds
         if (lineNumber > lines.size()){
             CocoBot.error("Getting snippet with index: " + lineNumber + " while size is " + lines.size());
@@ -545,15 +585,32 @@ public class WikiIndexed {
         // Offset line
         int low = Math.max(lineNumber - takeBefore, 0);
 
+        // Store lines
+        List<String> result = null;
+
         // Try to find a header
-        for (int i = low; i < low + takeBefore * 2; i++){
+        for (int i = low; i < low + takeBefore; i++){
             if (lines.get(i).startsWith("#")){
-                return lines.subList(i, Math.min(i + takeAfter, lines.size()));
+                result = lines.subList(i, Math.min(i + takeAfter, lines.size()));
             }
         }
 
         // Return default offset since no header found
-        return lines.subList(low, Math.min(low + takeAfter, lines.size()));
+        if (result == null) {
+            result = lines.subList(low, Math.min(low + takeAfter, lines.size()));
+        }
+
+        // Mark elements in results that were part of the query
+        for (int i = 0; i < result.size(); i++) {
+            String line = result.get(i);
+            for (String query : queried) {
+                line = line.replace(query, "`>`**" + query + "**`<`");
+            }
+            result.set(i, line);
+        }
+
+        // Return
+        return result;
     }
 
     /**

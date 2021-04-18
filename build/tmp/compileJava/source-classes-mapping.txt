@@ -62,10 +62,12 @@ com/azortis/azorbot/listeners/PingWatchdogListener.java
  com.azortis.azorbot.listeners.PingWatchdogListener
 com/azortis/azorbot/cocoUtil/CocoBot.java
  com.azortis.azorbot.cocoUtil.CocoBot
-com/azortis/azorbot/Test.java
- com.azortis.azorbot.Test
+com/azortis/azorbot/commands/Wiki.java
+ com.azortis.azorbot.commands.Wiki
 com/azortis/azorbot/cocoUtil/CocoScrollable.java
  com.azortis.azorbot.cocoUtil.CocoScrollable
+com/azortis/azorbot/Test.java
+ com.azortis.azorbot.Test
 com/azortis/azorbot/commands/wiki/WikiInfo.java
  com.azortis.azorbot.commands.wiki.WikiInfo
 com/azortis/azorbot/commands/wiki/WikiSearch.java
@@ -80,8 +82,6 @@ com/azortis/azorbot/commands/wiki/WikiDelete.java
  com.azortis.azorbot.commands.wiki.WikiDelete
 com/azortis/azorbot/util/WikiIndexed.java
  com.azortis.azorbot.util.WikiIndexed
-com/azortis/azorbot/commands/Wiki.java
- com.azortis.azorbot.commands.Wiki
 com/azortis/azorbot/commands/wiki/WikiIndex.java
  com.azortis.azorbot.commands.wiki.WikiIndex
 com/azortis/azorbot/commands/wiki/WikiThreshold.java
