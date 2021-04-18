@@ -141,14 +141,13 @@ public class CocoScrollable extends ListenerAdapter {
                 // Find closest newline
                 int closeNew = findNewline(newLinePos + sizePerField, string);
 
-                // Todo: Search for closest newline instead of appending direct stuff
+                // Append string
                 str.append(
-                        string.substring(
-                                newLinePos,
-                                Math.min(
-                                closeNew,
-                                string.length() - 1
-                                )
+                        string,
+                        newLinePos,
+                        Math.min(
+                            closeNew,
+                            string.length() - 1
                         )
                 );
                 if (!codeType.equals("")) str.append("```");
