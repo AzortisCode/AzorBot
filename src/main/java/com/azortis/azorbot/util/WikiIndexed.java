@@ -17,7 +17,7 @@ import java.util.*;
 
 @Getter
 public class WikiIndexed {
-    private static boolean done = false;
+
     // Global wiki variables
     private static final String absolutePath = Main.configPath + "wikis/{}.json";
     @Getter
@@ -217,7 +217,6 @@ public class WikiIndexed {
                 3. Check if the path contains a README.md extension, indicating it is a SUB category
                     We must then enter this category and add all its stuff as well
              */
-            CocoBot.info(((Map<?, ?>) item).keySet().toString());
 
             // 1. Check if there is NO path: This is a MAIN category, which has no main page
             if (!((Map<?, ?>) item).containsKey("path")){
@@ -439,7 +438,7 @@ public class WikiIndexed {
      */
     private Map<String, List<String>> findMatchingPages(@NotNull List<String> args){
 
-        // Return hash
+        // Make hash
         Map<String, List<String>> results = new HashMap<>();
 
         // Go over all pages in the wiki
@@ -454,14 +453,13 @@ public class WikiIndexed {
             // Return all them snippets
             String url = docs + key.replace(".md", "").replace("README", "");
             snippets.forEach(snip -> results.put(url, snip));
+            snippets.forEach(snip -> results.put(url, snip));
         });
-
-        // Create alternative entry options
-        Map<String, List<String>> Alternatives = Map.of("Options", new ArrayList<>(Collections.singleton(args.get(0))));
 
         // Return
         return results.size() != 0 ?
-                results : Alternatives;
+                results :
+                Map.of("Options", new ArrayList<>(Collections.singleton(args.get(0))));
     }
 
     /**
@@ -472,22 +470,77 @@ public class WikiIndexed {
      * <p>If empty, there are no found matches</p>
      */
     private List<List<String>> searchMessage(List<String> message, List<String> query){
+
+        // Make a hash which will be filled with results
         Map<Integer, List<String>> queried = new HashMap<>();
+
+        // Loop over every line in the message
         for (int i = 0; i < message.size(); i++){
+
+            // Retrieve the line
             String l = message.get(i);
+
+            // Store the current line index (required since forEach)
             int finalI = i;
+
+            // Loop over every term in the query
             query.forEach(q -> {
+
+                // Check if the queried word is in the line
                 if (l.contains(q)){
-                    if (queried.containsKey(finalI)){
-                        List<String> temp = queried.get(finalI);
-                        temp.add(q);
-                        queried.put(finalI, temp);
+
+                    // If the line already has a queried entry stored in the hash
+                    if (queried.containsKey(finalI)) {
+
+                        // Add the new query to the hashed list
+                        queried.get(finalI).add(q);
+                    } else {
+
+                        // Or, if this is the first element, add a singletonList
+                        queried.put(finalI, Collections.singletonList(q));
                     }
-                    queried.put(finalI, Collections.singletonList(q));
                 }
             });
         }
-        return new ArrayList<>(Collections.singleton(message));
+
+        // Make an arraylist in which we will store the snippets
+        List<List<String>> snips = new ArrayList<>();
+
+        // Build a snip from the message and line number
+        for (Integer key : queried.keySet()){
+            List<String> snip = getSnippetFromLines(message, key);
+            if (snip != null) snips.add(snip);
+        }
+
+        // Return the snippets
+        return snips;
+    }
+
+    /**
+     * Retrieve a snippet from a list of lines and a line number
+     * @param lines the lines to retrieve from
+     * @param lineNumber the line number to query with
+     */
+    private List<String> getSnippetFromLines(List<String> lines, Integer lineNumber){
+
+        // Prevent out of bounds
+        if (lineNumber < 0 || lineNumber > lines.size()){
+            CocoBot.error("Getting snippet with index: " + lineNumber + " while size is " + lines.size());
+            return null;
+        }
+
+        // Offset line
+        int low = Math.max(lineNumber - 5, 0);
+
+        // Try to find a header
+        for (int i = low; i < low + 5; i++){
+            if (lines.get(i).startsWith("#")){
+                return lines.subList(i, Math.min(i + 15, lines.size()));
+            }
+        }
+
+        // Return default offset since no header found
+        return lines.subList(low, Math.min(low + 15, lines.size()));
     }
 
     /**
