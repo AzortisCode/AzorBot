@@ -26,14 +26,14 @@ com/azortis/azorbot/cocoUtil/ExampleCategory.java
  com.azortis.azorbot.cocoUtil.ExampleCategory
 com/azortis/azorbot/commands/Shutdown.java
  com.azortis.azorbot.commands.Shutdown
-com/azortis/azorbot/listeners/A2AWatchdog.java
- com.azortis.azorbot.listeners.A2AWatchdog
+com/azortis/azorbot/commands/wiki/WikiDelete.java
+ com.azortis.azorbot.commands.wiki.WikiDelete
 com/azortis/azorbot/cocoUtil/CocoScrollable.java
  com.azortis.azorbot.cocoUtil.CocoScrollable
 com/azortis/azorbot/commands/pingwatchdog/PingWatchdogList.java
  com.azortis.azorbot.commands.pingwatchdog.PingWatchdogList
-com/azortis/azorbot/listeners/PingWatchdogListener.java
- com.azortis.azorbot.listeners.PingWatchdogListener
+com/azortis/azorbot/commands/pingwatchdog/PingWatchdogAdd.java
+ com.azortis.azorbot.commands.pingwatchdog.PingWatchdogAdd
 com/azortis/azorbot/commands/wiki/WikiUpdate.java
  com.azortis.azorbot.commands.wiki.WikiUpdate
 com/azortis/azorbot/commands/a2a/A2ADelete.java
@@ -68,25 +68,25 @@ com/azortis/azorbot/commands/wiki/WikiThreshold.java
  com.azortis.azorbot.commands.wiki.WikiThreshold
 com/azortis/azorbot/cocoUtil/CocoBot.java
  com.azortis.azorbot.cocoUtil.CocoBot
+com/azortis/azorbot/commands/a2a/A2AList.java
+ com.azortis.azorbot.commands.a2a.A2AList
+com/azortis/azorbot/commands/a2a/A2AThreshold.java
+ com.azortis.azorbot.commands.a2a.A2AThreshold
+com/azortis/azorbot/commands/wiki/WikiList.java
+ com.azortis.azorbot.commands.wiki.WikiList
 com/azortis/azorbot/commands/GitBookLogin.java
  com.azortis.azorbot.commands.GitBookLogin
 com/azortis/azorbot/commands/wiki/WikiCreate.java
  com.azortis.azorbot.commands.wiki.WikiCreate
-com/azortis/azorbot/commands/wiki/WikiList.java
- com.azortis.azorbot.commands.wiki.WikiList
-com/azortis/azorbot/commands/wiki/WikiDelete.java
- com.azortis.azorbot.commands.wiki.WikiDelete
+com/azortis/azorbot/listeners/PingWatchdogListener.java
+ com.azortis.azorbot.listeners.PingWatchdogListener
 com/azortis/azorbot/util/WikiIndexed.java
  com.azortis.azorbot.util.WikiIndexed
-com/azortis/azorbot/commands/a2a/A2AThreshold.java
- com.azortis.azorbot.commands.a2a.A2AThreshold
 com/azortis/azorbot/cocoUtil/CocoCommandCenter.java
  com.azortis.azorbot.cocoUtil.CocoCommandCenter
-com/azortis/azorbot/commands/a2a/A2AList.java
- com.azortis.azorbot.commands.a2a.A2AList
-com/azortis/azorbot/commands/pingwatchdog/PingWatchdogAdd.java
- com.azortis.azorbot.commands.pingwatchdog.PingWatchdogAdd
 com/azortis/azorbot/listeners/InlineCommandListener.java
  com.azortis.azorbot.listeners.InlineCommandListener
 com/azortis/azorbot/Main.java
  com.azortis.azorbot.Main
+com/azortis/azorbot/listeners/A2AWatchdog.java
+ com.azortis.azorbot.listeners.A2AWatchdog

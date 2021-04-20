@@ -7,7 +7,6 @@ import com.azortis.azorbot.cocoUtil.CocoFiles;
 import com.azortis.azorbot.cocoUtil.CocoText;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -21,15 +20,12 @@ public class InlineCommandListener extends ListenerAdapter {
     // Search by command. Aliases have same output.
     // Output is string array with 2 elements: description and wiki link URL
     private static final Map<String, String[]> commands = new HashMap<>();
-    private static final Logger LOGGER = CocoBot.getLOGGER();
 
     private static Set<String> regCmd;
 
     private static final String divider = "~";
 
-    public InlineCommandListener(){
-        load();
-    }
+    public InlineCommandListener(){}
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e){
@@ -52,7 +48,7 @@ public class InlineCommandListener extends ListenerAdapter {
     /**
      * Loads the configuration
      */
-    private void load(){
+    public static void load(){
 
         // Get file
         List<String> content = file.read();
@@ -66,7 +62,7 @@ public class InlineCommandListener extends ListenerAdapter {
         // Process rest of the commands
         content.stream().filter(i -> !i.isBlank() && i.split(divider).length >= 3).forEach(cmd -> {
 
-            LOGGER.info("Command for listening: " + cmd);
+            CocoBot.info("Command for listening: " + cmd);
 
             // Retrieve entries
             String[] entry = cmd.split(divider);
@@ -85,7 +81,7 @@ public class InlineCommandListener extends ListenerAdapter {
     /**
      * Updates the command registrar
      */
-    private void updateReg(){
+    private static void updateReg(){
         regCmd = commands.keySet();
     }
 }

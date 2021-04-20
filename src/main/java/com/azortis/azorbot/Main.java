@@ -2,6 +2,7 @@ package com.azortis.azorbot;
 
 import com.azortis.azorbot.cocoUtil.CocoBot;
 import com.azortis.azorbot.cocoUtil.CocoTimer;
+import com.azortis.azorbot.listeners.InlineCommandListener;
 import com.azortis.azorbot.util.WikiIndexed;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -27,6 +28,8 @@ public class Main extends ListenerAdapter {
         CocoTimer timer = new CocoTimer();
 
         WikiIndexed.loadAll();
+
+        InlineCommandListener.load();
 
         timer.stop();
 
