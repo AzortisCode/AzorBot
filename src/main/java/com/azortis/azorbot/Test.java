@@ -6,10 +6,6 @@ import com.azortis.azorbot.cocoUtil.CocoFiles;
 import com.azortis.azorbot.cocoUtil.CocoScrollable;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class Test extends CocoCommand {
@@ -36,29 +32,5 @@ public class Test extends CocoCommand {
     }
 
     public static void main(String[] args){
-        List<String> page = file.read();
-        System.out.println(page.toString());
-        List<String> query = file2.read();
-        System.out.println(query.toString());
-
-
-    }
-
-    public static void viewTable(Connection con) throws SQLException {
-        String query = "select COF_NAME, SUP_ID, PRICE, SALES, TOTAL from COFFEES";
-        try (Statement stmt = con.createStatement()){
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()){
-                String coffeeName = rs.getString("COF_NAME");
-                int supplierID = rs.getInt("SUP_ID");
-                float price = rs.getFloat("PRICE");
-                int sales = rs.getInt("SALES");
-                int total = rs.getInt("TOTAL");
-                System.out.println(coffeeName + ", " + supplierID + ", " + price +
-                        ", " + sales + ", " + total);
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
     }
 }
