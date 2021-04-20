@@ -3,10 +3,7 @@ package com.azortis.azorbot.cocoUtil;
 import com.azortis.azorbot.Test;
 import com.azortis.azorbot.commands.Shutdown;
 import com.azortis.azorbot.commands.*;
-import com.azortis.azorbot.listeners.A2AWatchdog;
-import com.azortis.azorbot.listeners.ChatListener;
-import com.azortis.azorbot.listeners.PingWatchdogListener;
-import com.azortis.azorbot.listeners.Prefix;
+import com.azortis.azorbot.listeners.*;
 import lombok.Getter;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -49,7 +46,8 @@ public class CocoCommandCenter extends ListenerAdapter {
             new A2AWatchdog(),
             new PingWatchdogListener(),
             new Prefix(),
-            new ChatListener()
+            new ChatListener(),
+            new InlineCommandListener()
     );
     private static final List<ListenerAdapter> emojiListeners = new ArrayList<>();
 
