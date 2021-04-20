@@ -5,7 +5,9 @@ import com.azortis.azorbot.cocoUtil.CocoTimer;
 import com.azortis.azorbot.util.WikiIndexed;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
+import java.util.Collections;
 import java.util.Objects;
 
 public class Main extends ListenerAdapter {
@@ -17,6 +19,8 @@ public class Main extends ListenerAdapter {
 
 
     public static void main(String[] args){
+
+        CocoBot.setIntents(Collections.singleton(GatewayIntent.GUILD_MEMBERS));
 
         CocoBot.login();
 
