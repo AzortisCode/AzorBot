@@ -7,6 +7,7 @@ import com.azortis.azorbot.cocoUtil.CocoFiles;
 import com.azortis.azorbot.cocoUtil.CocoText;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.json.JSONArray;
 
 import java.util.*;
 
@@ -79,9 +80,57 @@ public class InlineCommandListener extends ListenerAdapter {
     }
 
     /**
+     * Saves the current set of commands to file.
+     * <p>Note: This does not store commands with the same description & link like you can do with the input</p>
+     */
+    private static void save(){
+        List<String> out = new ArrayList<>();
+        regCmd.forEach(cmd -> out.add(commands.get(cmd)[0] + divider + commands.get(cmd)[1] + divider + cmd));
+        file.write(out);
+    }
+
+    /**
      * Updates the command registrar
      */
     private static void updateReg(){
         regCmd = commands.keySet();
+    }
+
+    /**
+     * Loads the commands from a wiki page,
+     * <p>cross-references it with the currently loaded set in the file, and</p>
+     * <p>adds missing entries</p>
+     * @param page The page to look into for commands
+     * @param docsURL The URL to this docs
+     */
+    public static void loadFromWiki(JSONArray page, String docsURL){
+        CocoBot.info(page.toString());
+        String current = "none";
+        StringBuilder description = new StringBuilder();
+        String link = null;
+        String[] commands;
+        for (Object o : page) {
+            if (!(o instanceof String)){
+                continue;
+            }
+            String s = (String) o;
+            if (current.equals("example")){
+                description.append("\n`").append(s).append("`");
+            }
+            if (s.startsWith("#") && s.replace("#", "").stripLeading().startsWith("/")){
+                if (!description.toString().equals("")){
+                    CocoBot.info("Actual command processed: " + link + " / " + description + " / " + s);
+                }
+                current = "command";
+                link = docsURL + "commands#" + s.replace("\\(", "-")
+                        .replace(", ", "-").replace(",", "-")
+                        .replace(" +", "").replace(" -", "")
+                        .replace(" ", "-".replace("\\)", "-"));
+                CocoBot.info("Command found: " + s);
+                CocoBot.info("Guessed link: " + link);
+            } else if (s.startsWith("```")){
+                current = "example";
+            }
+        }
     }
 }

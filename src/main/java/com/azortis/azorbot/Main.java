@@ -27,7 +27,7 @@ public class Main extends ListenerAdapter {
 
         CocoTimer timer = new CocoTimer();
 
-        WikiIndexed.loadAll();
+        WikiIndexed.loadAll(true);
 
         InlineCommandListener.load();
 

@@ -2,10 +2,12 @@ package com.azortis.azorbot.util;
 
 import com.azortis.azorbot.Main;
 import com.azortis.azorbot.cocoUtil.*;
+import com.azortis.azorbot.listeners.InlineCommandListener;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -275,8 +277,15 @@ public class WikiIndexed {
 
     /**
      * Loads all existing wikis
+     * @param addCommandsToListener If true, adds all commands on the command page to the registry used for listening.
+     *                              <p>The commands page must not be in a category on GitBook & it must be named "Commands", else it cannot be found</p><p></p>
+     *                              <p>The command page must be quite specifically formatted:</p>
+     *                              <p>* All lines starting with a #, ## or ### followed by a / are used as a command</p>
+     *                              <p>* All lines after are used as the command description, until:</p>
+     *                              <p>* A line starts with a `, which is when the next line over is used as the command example</p>
+     *                              <p>* Please put other information such as parameter tables & notes after the command example</p>
      */
-    public static void loadAll(){
+    public static void loadAll(boolean addCommandsToListener){
 
         // Check folder exists
         File wikiFolder = new File(absolutePath.replace("{}.json", ""));
@@ -312,7 +321,16 @@ public class WikiIndexed {
             CocoBot.info("Loaded wiki: " + wJson.getString("name"));
 
             // Add wiki (automatically added to wikis)
-            new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"), wJson.getInt("threshold"));
+            WikiIndexed w = new WikiIndexed(wJson.getString("name"), wJson.getString("path"), wJson.getString("docs"), wJson.getInt("threshold"));
+            if (addCommandsToListener){
+                CocoBot.info("Loading wiki Commands");
+                if (!w.getWiki().has("Commands")){
+                    CocoBot.info("Failed to find commands page for " + w.getName());
+                    CocoBot.info("The 'Commands' page could not be found but it was requested");
+                } else {
+                    InlineCommandListener.loadFromWiki((JSONArray) ((JSONObject) w.getWiki().get("Commands")).get("page"), w.getDocs());
+                }
+            }
         }
     }
 
